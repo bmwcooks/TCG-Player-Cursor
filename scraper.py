@@ -64,8 +64,8 @@ def main():
         for url in urls:
             print(f"Scraping: {url}")
             try:
-                # DOM Scraping for visual elements
-                page = session.fetch(url)
+                # Use capture_xhr to intercept the background API request during the main page load
+                page = session.fetch(url, capture_xhr="pricehistory")
                 soup = BeautifulSoup(page.body, 'html.parser')
 
                 product_name = get_product_name(soup)
@@ -75,48 +75,25 @@ def main():
                 current_sellers = extract_metric(soup, "Current Sellers")
                 current_quantity = extract_metric(soup, "Current Quantity")
 
-                # --- DIRECT API QUERY FOR CHART DATA ---
+                # --- EXTRACT CAPTURED XHR CHART DATA ---
                 last_day_sales = "N/A"
-                product_id_match = re.search(r'product/(\d+)', url)
-                
-                if product_id_match:
-                    product_id = product_id_match.group(1)
-                    api_url = f"https://mpapi.tcgplayer.com/v2/product/{product_id}/pricehistory"
-                    
-                    try:
-                        api_page = session.fetch(api_url)
-                        history_data = json.loads(api_page.body)
-                        
-                        # Log a snippet of the raw response to GitHub Actions for debugging
-                        print(f"Raw API Response for {product_id}: {str(history_data)[:250]}")
-                        
-                        # Unwrap 'data', 'results', or 'priceHistory' if the list is inside a dictionary
-                        if isinstance(history_data, dict):
-                            history_data = history_data.get("data", history_data.get("results", history_data.get("priceHistory", [])))
-                        
-                        if isinstance(history_data, list) and len(history_data) > 0:
-                            last_entry = history_data[-1]
+                if hasattr(page, 'captured_xhr') and page.captured_xhr:
+                    # Iterate through captured requests matching our pattern
+                    for xhr in page.captured_xhr:
+                        try:
+                            # Parse the body as JSON
+                            history_data = json.loads(xhr.body)
                             
-                            # Safely extract itemsSold, falling back to other common keys if TCGPlayer changed them
-                            last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", last_entry.get("volume", "N/A"))))
+                            # Unwrap 'data', 'results', or 'priceHistory' if the list is inside a dictionary
+                            if isinstance(history_data, dict):
+                                history_data = history_data.get("data", history_data.get("results", history_data.get("priceHistory", [])))
                             
-                    except Exception as e:
-                        print(f"Could not fetch historical sales for {product_id}: {e}")
-                    # Direct API query to TCGPlayer's internal market API
-                    api_url = f"https://mpapi.tcgplayer.com/v2/product/{product_id}/pricehistory"
-                    
-                    try:
-                        # Use our stealth session to bypass Cloudflare for the API call
-                        api_page = session.fetch(api_url)
-                        history_data = json.loads(api_page.body)
-                        
-                        # The API returns a list of daily data points; we grab the last one
-                        if isinstance(history_data, list) and len(history_data) > 0:
-                            last_entry = history_data[-1]
-                            # Account for slight key variations in TCGPlayer's JSON schemas
-                            last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", "N/A")))
-                    except Exception as e:
-                        print(f"Could not fetch historical sales for {product_id}: {e}")
+                            if isinstance(history_data, list) and len(history_data) > 0:
+                                last_entry = history_data[-1]
+                                last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", last_entry.get("volume", "N/A"))))
+                                break  # Break out of loop once we find the data
+                        except Exception as e:
+                            print(f"Could not parse historical sales XHR for {url}: {e}")
 
                 # Build row for Google Sheets (added Last Day Sales)
                 data_row = [
