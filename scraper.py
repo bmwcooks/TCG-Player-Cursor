@@ -65,8 +65,8 @@ def main():
             print(f"\n======================================")
             print(f"Scraping: {url}")
             try:
-                # Capture all traffic to the internal marketplace API
-                page = session.fetch(url, capture_xhr="mpapi.tcgplayer.com")
+                # Capture API traffic and wait for all background network requests to finish
+                page = session.fetch(url, capture_xhr="mpapi", wait_until="networkidle")
                 soup = BeautifulSoup(page.body, 'html.parser')
 
                 product_name = get_product_name(soup)
@@ -82,7 +82,6 @@ def main():
                     print(f"DEBUG: Found {len(page.captured_xhr)} captured XHR requests for this product.")
                     
                     for xhr in page.captured_xhr:
-                        # Extract the URL to see which endpoint was hit
                         xhr_url = xhr.url if hasattr(xhr, 'url') else "Unknown URL"
                         print(f"\n--- Inspecting XHR: {xhr_url} ---")
                         
@@ -90,7 +89,6 @@ def main():
                             # Handle different response object structures
                             body_content = xhr.body() if callable(getattr(xhr, 'body', None)) else getattr(xhr, 'body', b'')
                             
-                            # Ensure it's a string for logging and JSON parsing
                             if isinstance(body_content, bytes):
                                 body_content = body_content.decode('utf-8', errors='ignore')
                                 
@@ -121,7 +119,7 @@ def main():
                         except Exception as e:
                             print(f"DEBUG: Error inspecting XHR: {e}")
                 else:
-                    print("DEBUG: No XHR requests to mpapi.tcgplayer.com were captured.")
+                    print("DEBUG: No XHR requests to mpapi were captured.")
 
                 # Build row for Google Sheets
                 data_row = [
