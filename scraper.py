@@ -65,8 +65,8 @@ def main():
             print(f"\n======================================")
             print(f"Scraping: {url}")
             try:
-                # Capture API traffic and wait for all background network requests to finish
-                page = session.fetch(url, capture_xhr="mpapi", wait_until="networkidle")
+                # Normal fetch without XHR interception
+                page = session.fetch(url)
                 soup = BeautifulSoup(page.body, 'html.parser')
 
                 product_name = get_product_name(soup)
@@ -76,50 +76,46 @@ def main():
                 current_sellers = extract_metric(soup, "Current Sellers")
                 current_quantity = extract_metric(soup, "Current Quantity")
 
-                # --- EXTRACT CAPTURED XHR CHART DATA WITH DEBUGGING ---
+                # --- DIRECT API QUERY FOR CHART DATA ---
                 last_day_sales = "N/A"
-                if hasattr(page, 'captured_xhr') and page.captured_xhr:
-                    print(f"DEBUG: Found {len(page.captured_xhr)} captured XHR requests for this product.")
+                product_id_match = re.search(r'product/(\d+)', url)
+                
+                if product_id_match:
+                    product_id = product_id_match.group(1)
                     
-                    for xhr in page.captured_xhr:
-                        xhr_url = xhr.url if hasattr(xhr, 'url') else "Unknown URL"
-                        print(f"\n--- Inspecting XHR: {xhr_url} ---")
+                    # Target the specific pricepoints API that drives the chart
+                    api_url = f"https://mpapi.tcgplayer.com/v2/product/{product_id}/pricepoints"
+                    
+                    # Spoof standard browser headers to bypass basic blocks
+                    headers = {
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                        "Accept": "application/json, text/plain, */*",
+                        "Referer": url,
+                        "Origin": "https://www.tcgplayer.com"
+                    }
+                    
+                    try:
+                        print(f"DEBUG: Requesting chart data directly from {api_url}")
+                        api_response = requests.get(api_url, headers=headers, timeout=10)
                         
-                        try:
-                            # Handle different response object structures
-                            body_content = xhr.body() if callable(getattr(xhr, 'body', None)) else getattr(xhr, 'body', b'')
-                            
-                            if isinstance(body_content, bytes):
-                                body_content = body_content.decode('utf-8', errors='ignore')
-                                
-                            print(f"DEBUG Raw Payload Snapshot: {body_content[:250]}...")
-                            
-                            history_data = json.loads(body_content)
+                        if api_response.status_code == 200:
+                            history_data = api_response.json()
                             
                             # Unwrap common JSON wrappers
                             if isinstance(history_data, dict):
                                 data_payload = history_data.get("data", history_data.get("results", history_data.get("priceHistory", history_data)))
                             else:
                                 data_payload = history_data
-                            
+                                
                             if isinstance(data_payload, list) and len(data_payload) > 0:
                                 last_entry = data_payload[-1]
-                                print(f"DEBUG Latest entry keys: {list(last_entry.keys()) if isinstance(last_entry, dict) else 'Not a dict'}")
-                                
-                                # Check for sales volume
-                                if isinstance(last_entry, dict) and any(key in last_entry for key in ["itemsSold", "sales", "volume"]):
-                                    last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", last_entry.get("volume", "N/A"))))
-                                    print(f">>> SUCCESS: Found Sales Data: {last_day_sales}")
-                                    break
-                            else:
-                                print("DEBUG: Payload is not a list or is empty.")
-                        
-                        except json.JSONDecodeError:
-                            print("DEBUG: Failed to parse JSON. Response is likely empty or plain text.")
-                        except Exception as e:
-                            print(f"DEBUG: Error inspecting XHR: {e}")
-                else:
-                    print("DEBUG: No XHR requests to mpapi were captured.")
+                                last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", last_entry.get("volume", "N/A"))))
+                                print(f">>> SUCCESS: Found Sales Data directly: {last_day_sales}")
+                        else:
+                            print(f"DEBUG: Direct API request failed with status {api_response.status_code}")
+                            
+                    except Exception as e:
+                        print(f"DEBUG: Direct API request error: {e}")
 
                 # Build row for Google Sheets
                 data_row = [
