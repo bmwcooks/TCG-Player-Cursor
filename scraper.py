@@ -64,8 +64,8 @@ def main():
         for url in urls:
             print(f"Scraping: {url}")
             try:
-                # Use capture_xhr to intercept the background API request during the main page load
-                page = session.fetch(url, capture_xhr="pricehistory")
+                # Use capture_xhr to intercept all background API requests to the marketplace API
+                page = session.fetch(url, capture_xhr="mpapi.tcgplayer.com")
                 soup = BeautifulSoup(page.body, 'html.parser')
 
                 product_name = get_product_name(soup)
@@ -74,6 +74,35 @@ def main():
                 listed_median = extract_metric(soup, "Listed Median")
                 current_sellers = extract_metric(soup, "Current Sellers")
                 current_quantity = extract_metric(soup, "Current Quantity")
+
+                # --- EXTRACT CAPTURED XHR CHART DATA ---
+                last_day_sales = "N/A"
+                if hasattr(page, 'captured_xhr') and page.captured_xhr:
+                    # Iterate through all captured requests to the TCGPlayer internal API
+                    for xhr in page.captured_xhr:
+                        try:
+                            # Handle different response object structures (callable vs property)
+                            body_content = xhr.body() if callable(getattr(xhr, 'body', None)) else xhr.body
+                            history_data = json.loads(body_content)
+                            
+                            # Unwrap 'data', 'results', etc.
+                            if isinstance(history_data, dict):
+                                data_payload = history_data.get("data", history_data.get("results", history_data.get("priceHistory", [])))
+                            else:
+                                data_payload = history_data
+                            
+                            # Ensure it's a list and look for our sales data
+                            if isinstance(data_payload, list) and len(data_payload) > 0:
+                                last_entry = data_payload[-1]
+                                
+                                # Check if this specific XHR payload contains sales data
+                                if "itemsSold" in last_entry or "sales" in last_entry or "volume" in last_entry:
+                                    last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", last_entry.get("volume", "N/A"))))
+                                    print(f"Successfully extracted sales data from XHR: {last_day_sales}")
+                                    break  # We found the sales data, stop searching other XHRs
+                        except Exception:
+                            # Skip XHRs that aren't valid JSON or don't match our expected structure
+                            continue
 
                 # --- EXTRACT CAPTURED XHR CHART DATA ---
                 last_day_sales = "N/A"
