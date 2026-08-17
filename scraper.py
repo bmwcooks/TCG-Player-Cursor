@@ -81,6 +81,27 @@ def main():
                 
                 if product_id_match:
                     product_id = product_id_match.group(1)
+                    api_url = f"https://mpapi.tcgplayer.com/v2/product/{product_id}/pricehistory"
+                    
+                    try:
+                        api_page = session.fetch(api_url)
+                        history_data = json.loads(api_page.body)
+                        
+                        # Log a snippet of the raw response to GitHub Actions for debugging
+                        print(f"Raw API Response for {product_id}: {str(history_data)[:250]}")
+                        
+                        # Unwrap 'data', 'results', or 'priceHistory' if the list is inside a dictionary
+                        if isinstance(history_data, dict):
+                            history_data = history_data.get("data", history_data.get("results", history_data.get("priceHistory", [])))
+                        
+                        if isinstance(history_data, list) and len(history_data) > 0:
+                            last_entry = history_data[-1]
+                            
+                            # Safely extract itemsSold, falling back to other common keys if TCGPlayer changed them
+                            last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", last_entry.get("volume", "N/A"))))
+                            
+                    except Exception as e:
+                        print(f"Could not fetch historical sales for {product_id}: {e}")
                     # Direct API query to TCGPlayer's internal market API
                     api_url = f"https://mpapi.tcgplayer.com/v2/product/{product_id}/pricehistory"
                     
