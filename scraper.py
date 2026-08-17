@@ -44,24 +44,29 @@ def extract_metric(soup, label):
 def find_latest_sales(obj):
     """Recursively searches JSON arrays backwards to find the most recent sales integer."""
     if isinstance(obj, dict):
-        # Look for our target keys
-        for k in ["itemsSold", "sales", "volume", "sold", "ItemsSold"]:
+        # Look for daily sales volume keys, specifically ignoring averages or totals
+        for k in ["itemsSold", "sales", "volume", "sold", "ItemsSold", "quantitySold"]:
             if k in obj and obj[k] is not None:
-                return str(obj[k])
+                # We want the daily number, not the 'totalQuantitySold' for the quarter
+                if "total" not in k.lower() and "average" not in k.lower():
+                    return str(obj[k])
                 
-        # Target common wrapper keys first to avoid drilling into irrelevant data
-        for key in ["data", "results", "priceHistory", "points", "result"]:
+        # Target common array wrapper keys (added 'timeline' and 'transactions')
+        for key in ["data", "results", "result", "priceHistory", "points", "timeline", "transactions"]:
             if key in obj:
                 res = find_latest_sales(obj[key])
                 if res != "N/A": return res
                 
-        # Fallback to all values
-        for v in obj.values():
+        # Deep search fallback
+        for k, v in obj.items():
+            # Skip drilling into summary stats
+            if "total" in k.lower() or "average" in k.lower():
+                continue
             res = find_latest_sales(v)
             if res != "N/A": return res
             
     elif isinstance(obj, list) and len(obj) > 0:
-        # Search the list backwards to get the most recent date
+        # Search the list backwards (newest dates are typically at the end of the array)
         for item in reversed(obj):
             res = find_latest_sales(item)
             if res != "N/A": return res
