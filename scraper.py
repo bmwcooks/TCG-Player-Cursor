@@ -19,7 +19,6 @@ def get_product_name(soup):
     for h1 in h1s:
         text = h1.get_text(separator=" ", strip=True)
         if text:
-            # Removes "Shop with Affiliates" and any trailing numbers glued to it
             text = re.sub(r'(?i)Shop with Affiliates.*', '', text).strip()
             return text
     return "Unknown Product"
@@ -29,15 +28,11 @@ def extract_metric(soup, label):
     nodes = soup.find_all(string=re.compile(label, re.IGNORECASE))
     for node in nodes:
         parent = node.parent
-        
-        # Check next HTML siblings for a number
         for sibling in parent.next_siblings:
             if sibling.name:
                 sib_text = sibling.get_text(strip=True)
                 if re.search(r'\d+', sib_text):
                     return sib_text
-                    
-        # Check parent container text as a fallback
         if parent.parent:
             full_text = parent.parent.get_text(separator=" ", strip=True)
             pattern = re.compile(rf"{label}.*?(\$?\d+[,\d]*\.?\d*)", re.IGNORECASE)
@@ -53,7 +48,6 @@ def main():
         return
 
     with open(URLS_FILE, 'r') as f:
-        # Read lines, strip whitespace, and ignore empty lines or comments
         urls = [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
     if not urls:
@@ -70,6 +64,7 @@ def main():
         for url in urls:
             print(f"Scraping: {url}")
             try:
+                # DOM Scraping for visual elements
                 page = session.fetch(url)
                 soup = BeautifulSoup(page.body, 'html.parser')
 
@@ -80,10 +75,32 @@ def main():
                 current_sellers = extract_metric(soup, "Current Sellers")
                 current_quantity = extract_metric(soup, "Current Quantity")
 
-                # Build row for Google Sheets (added URL column at the end)
+                # --- DIRECT API QUERY FOR CHART DATA ---
+                last_day_sales = "N/A"
+                product_id_match = re.search(r'product/(\d+)', url)
+                
+                if product_id_match:
+                    product_id = product_id_match.group(1)
+                    # Direct API query to TCGPlayer's internal market API
+                    api_url = f"https://mpapi.tcgplayer.com/v2/product/{product_id}/pricehistory"
+                    
+                    try:
+                        # Use our stealth session to bypass Cloudflare for the API call
+                        api_page = session.fetch(api_url)
+                        history_data = json.loads(api_page.body)
+                        
+                        # The API returns a list of daily data points; we grab the last one
+                        if isinstance(history_data, list) and len(history_data) > 0:
+                            last_entry = history_data[-1]
+                            # Account for slight key variations in TCGPlayer's JSON schemas
+                            last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", "N/A")))
+                    except Exception as e:
+                        print(f"Could not fetch historical sales for {product_id}: {e}")
+
+                # Build row for Google Sheets (added Last Day Sales)
                 data_row = [
                     today_date, product_name, market_price, recent_sale,
-                    listed_median, current_sellers, current_quantity, url
+                    listed_median, current_sellers, current_quantity, last_day_sales, url
                 ]
                 all_data_rows.append(data_row)
 
@@ -91,7 +108,7 @@ def main():
                 block = (
                     f"**{product_name}**\n"
                     f"Market: {market_price} | Recent Sale: {recent_sale} | Median: {listed_median}\n"
-                    f"Sellers: {current_sellers} | Qty: {current_quantity}\n"
+                    f"Sellers: {current_sellers} | Qty: {current_quantity} | Last Day Sales: {last_day_sales}\n"
                     f"[View Listing](<{url}>)"
                 )
                 discord_blocks.append(block)
@@ -121,12 +138,10 @@ def main():
     except gspread.exceptions.WorksheetNotFound:
         worksheet = sh.add_worksheet(title=TAB_NAME, rows="1000", cols="20")
     
-    # Check if headers exist; if not, add them (including URL)
     if not worksheet.get_all_values():
-        headers = ["Date Pulled", "Product Name", "Market Price", "Most Recent Sale", "Listed Median", "Current Sellers", "Current Quantity", "URL"]
+        headers = ["Date Pulled", "Product Name", "Market Price", "Most Recent Sale", "Listed Median", "Current Sellers", "Current Quantity", "Last Day Sales", "URL"]
         worksheet.append_row(headers)
         
-    # Batch append all scraped rows at once
     worksheet.append_rows(all_data_rows)
     print(f"Appended {len(all_data_rows)} rows to Google Sheets.")
 
@@ -136,13 +151,11 @@ def main():
     if not discord_url:
         raise ValueError("DISCORD_WEBHOOK_URL environment variable is missing.")
         
-    # Chunk messages to respect Discord's 2000 character limit
     header = "**TCGPlayer Daily Update** 📊\n\n"
     current_message = header
     messages_to_send = []
 
     for block in discord_blocks:
-        # If adding the next block exceeds limit, save current message and start a new one
         if len(current_message) + len(block) + 4 > 1900:
             messages_to_send.append(current_message)
             current_message = block + "\n\n"
@@ -152,7 +165,6 @@ def main():
     if current_message.strip():
         messages_to_send.append(current_message)
 
-    # Send all chunks
     for i, msg_text in enumerate(messages_to_send):
         response = requests.post(discord_url, json={"content": msg_text})
         if response.status_code in [200, 204]:
