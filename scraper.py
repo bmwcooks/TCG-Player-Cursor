@@ -62,9 +62,10 @@ def main():
     print(f"Initializing Scrapling StealthySession to scrape {len(urls)} URLs...")
     with StealthySession(headless=True, solve_cloudflare=True) as session:
         for url in urls:
+            print(f"\n======================================")
             print(f"Scraping: {url}")
             try:
-                # Use capture_xhr to intercept all background API requests to the marketplace API
+                # Capture all traffic to the internal marketplace API
                 page = session.fetch(url, capture_xhr="mpapi.tcgplayer.com")
                 soup = BeautifulSoup(page.body, 'html.parser')
 
@@ -75,56 +76,54 @@ def main():
                 current_sellers = extract_metric(soup, "Current Sellers")
                 current_quantity = extract_metric(soup, "Current Quantity")
 
-                # --- EXTRACT CAPTURED XHR CHART DATA ---
+                # --- EXTRACT CAPTURED XHR CHART DATA WITH DEBUGGING ---
                 last_day_sales = "N/A"
                 if hasattr(page, 'captured_xhr') and page.captured_xhr:
-                    # Iterate through all captured requests to the TCGPlayer internal API
+                    print(f"DEBUG: Found {len(page.captured_xhr)} captured XHR requests for this product.")
+                    
                     for xhr in page.captured_xhr:
+                        # Extract the URL to see which endpoint was hit
+                        xhr_url = xhr.url if hasattr(xhr, 'url') else "Unknown URL"
+                        print(f"\n--- Inspecting XHR: {xhr_url} ---")
+                        
                         try:
-                            # Handle different response object structures (callable vs property)
-                            body_content = xhr.body() if callable(getattr(xhr, 'body', None)) else xhr.body
+                            # Handle different response object structures
+                            body_content = xhr.body() if callable(getattr(xhr, 'body', None)) else getattr(xhr, 'body', b'')
+                            
+                            # Ensure it's a string for logging and JSON parsing
+                            if isinstance(body_content, bytes):
+                                body_content = body_content.decode('utf-8', errors='ignore')
+                                
+                            print(f"DEBUG Raw Payload Snapshot: {body_content[:250]}...")
+                            
                             history_data = json.loads(body_content)
                             
-                            # Unwrap 'data', 'results', etc.
+                            # Unwrap common JSON wrappers
                             if isinstance(history_data, dict):
-                                data_payload = history_data.get("data", history_data.get("results", history_data.get("priceHistory", [])))
+                                data_payload = history_data.get("data", history_data.get("results", history_data.get("priceHistory", history_data)))
                             else:
                                 data_payload = history_data
                             
-                            # Ensure it's a list and look for our sales data
                             if isinstance(data_payload, list) and len(data_payload) > 0:
                                 last_entry = data_payload[-1]
+                                print(f"DEBUG Latest entry keys: {list(last_entry.keys()) if isinstance(last_entry, dict) else 'Not a dict'}")
                                 
-                                # Check if this specific XHR payload contains sales data
-                                if "itemsSold" in last_entry or "sales" in last_entry or "volume" in last_entry:
+                                # Check for sales volume
+                                if isinstance(last_entry, dict) and any(key in last_entry for key in ["itemsSold", "sales", "volume"]):
                                     last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", last_entry.get("volume", "N/A"))))
-                                    print(f"Successfully extracted sales data from XHR: {last_day_sales}")
-                                    break  # We found the sales data, stop searching other XHRs
-                        except Exception:
-                            # Skip XHRs that aren't valid JSON or don't match our expected structure
-                            continue
-
-                # --- EXTRACT CAPTURED XHR CHART DATA ---
-                last_day_sales = "N/A"
-                if hasattr(page, 'captured_xhr') and page.captured_xhr:
-                    # Iterate through captured requests matching our pattern
-                    for xhr in page.captured_xhr:
-                        try:
-                            # Parse the body as JSON
-                            history_data = json.loads(xhr.body)
-                            
-                            # Unwrap 'data', 'results', or 'priceHistory' if the list is inside a dictionary
-                            if isinstance(history_data, dict):
-                                history_data = history_data.get("data", history_data.get("results", history_data.get("priceHistory", [])))
-                            
-                            if isinstance(history_data, list) and len(history_data) > 0:
-                                last_entry = history_data[-1]
-                                last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", last_entry.get("volume", "N/A"))))
-                                break  # Break out of loop once we find the data
+                                    print(f">>> SUCCESS: Found Sales Data: {last_day_sales}")
+                                    break
+                            else:
+                                print("DEBUG: Payload is not a list or is empty.")
+                        
+                        except json.JSONDecodeError:
+                            print("DEBUG: Failed to parse JSON. Response is likely empty or plain text.")
                         except Exception as e:
-                            print(f"Could not parse historical sales XHR for {url}: {e}")
+                            print(f"DEBUG: Error inspecting XHR: {e}")
+                else:
+                    print("DEBUG: No XHR requests to mpapi.tcgplayer.com were captured.")
 
-                # Build row for Google Sheets (added Last Day Sales)
+                # Build row for Google Sheets
                 data_row = [
                     today_date, product_name, market_price, recent_sale,
                     listed_median, current_sellers, current_quantity, last_day_sales, url
@@ -144,11 +143,11 @@ def main():
                 print(f"Failed to scrape {url}: {e}")
 
     if not all_data_rows:
-        print("No data was successfully scraped. Exiting.")
+        print("\nNo data was successfully scraped. Exiting.")
         return
 
     # --- 3. Google Sheets Integration ---
-    print("Connecting to Google Sheets...")
+    print("\nConnecting to Google Sheets...")
     creds_json = os.environ.get("GOOGLE_CREDENTIALS")
     if not creds_json:
         raise ValueError("GOOGLE_CREDENTIALS environment variable is missing.")
