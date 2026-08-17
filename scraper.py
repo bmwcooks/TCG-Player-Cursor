@@ -41,6 +41,33 @@ def extract_metric(soup, label):
                 return match.group(1)
     return "N/A"
 
+def find_latest_sales(obj):
+    """Recursively searches JSON arrays backwards to find the most recent sales integer."""
+    if isinstance(obj, dict):
+        # Look for our target keys
+        for k in ["itemsSold", "sales", "volume", "sold", "ItemsSold"]:
+            if k in obj and obj[k] is not None:
+                return str(obj[k])
+                
+        # Target common wrapper keys first to avoid drilling into irrelevant data
+        for key in ["data", "results", "priceHistory", "points", "result"]:
+            if key in obj:
+                res = find_latest_sales(obj[key])
+                if res != "N/A": return res
+                
+        # Fallback to all values
+        for v in obj.values():
+            res = find_latest_sales(v)
+            if res != "N/A": return res
+            
+    elif isinstance(obj, list) and len(obj) > 0:
+        # Search the list backwards to get the most recent date
+        for item in reversed(obj):
+            res = find_latest_sales(item)
+            if res != "N/A": return res
+            
+    return "N/A"
+
 def main():
     # --- 1. Read URLs ---
     if not os.path.exists(URLS_FILE):
@@ -83,13 +110,12 @@ def main():
                 if product_id_match:
                     product_id = product_id_match.group(1)
                     
-                    # Target the specific pricepoints API that drives the chart
-                    api_url = f"https://mpapi.tcgplayer.com/v2/product/{product_id}/pricepoints"
+                    # Target the infinite-api that drives the Market Price History chart
+                    api_url = f"https://infinite-api.tcgplayer.com/price/history/{product_id}/detailed?range=quarter"
                     
-                    # Spoof standard browser headers to bypass basic blocks
                     headers = {
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                        "Accept": "application/json, text/plain, */*",
+                        "Accept": "application/json",
                         "Referer": url,
                         "Origin": "https://www.tcgplayer.com"
                     }
@@ -100,17 +126,12 @@ def main():
                         
                         if api_response.status_code == 200:
                             history_data = api_response.json()
+                            last_day_sales = find_latest_sales(history_data)
                             
-                            # Unwrap common JSON wrappers
-                            if isinstance(history_data, dict):
-                                data_payload = history_data.get("data", history_data.get("results", history_data.get("priceHistory", history_data)))
+                            if last_day_sales != "N/A":
+                                print(f">>> SUCCESS: Found Sales Data: {last_day_sales}")
                             else:
-                                data_payload = history_data
-                                
-                            if isinstance(data_payload, list) and len(data_payload) > 0:
-                                last_entry = data_payload[-1]
-                                last_day_sales = str(last_entry.get("itemsSold", last_entry.get("sales", last_entry.get("volume", "N/A"))))
-                                print(f">>> SUCCESS: Found Sales Data directly: {last_day_sales}")
+                                print(f"DEBUG: Parsed JSON, but no sales data keys were found. Raw: {str(history_data)[:250]}...")
                         else:
                             print(f"DEBUG: Direct API request failed with status {api_response.status_code}")
                             
