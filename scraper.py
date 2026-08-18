@@ -5,13 +5,12 @@ import datetime
 import re
 from bs4 import BeautifulSoup
 from scrapling.fetchers import StealthySession
-import gspread
-from google.oauth2.service_account import Credentials
 
 # --- Configuration ---
-SHEET_ID = "17yp7twEPAwu4P42p8AGUolW4515IkqvUBu2rvQS8iUM"
-TAB_NAME = "TCGPlayer Data"
 URLS_FILE = "urls.txt"
+DATA_DIR = "data"
+DATA_FILE = os.path.join(DATA_DIR, "tracker_data.json")
+
 
 def get_product_name(soup):
     """Finds the product title and cleans up appended affiliate/tracking text."""
@@ -22,6 +21,7 @@ def get_product_name(soup):
             text = re.sub(r'(?i)Shop with Affiliates.*', '', text).strip()
             return text
     return "Unknown Product"
+
 
 def extract_metric(soup, label):
     """Robustly searches for a text label and extracts the closest number/price."""
@@ -40,6 +40,7 @@ def extract_metric(soup, label):
             if match:
                 return match.group(1)
     return "N/A"
+
 
 def find_latest_sales(obj):
     """Recursively searches JSON arrays backwards to find the most recent sales integer."""
@@ -72,6 +73,62 @@ def find_latest_sales(obj):
             if res != "N/A": return res
             
     return "N/A"
+
+
+def parse_numeric(value, as_float=False):
+    """Normalize scraped strings like '$1,234.56' into chartable numbers. Returns None if unparseable."""
+    if value is None or value == "N/A":
+        return None
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value) if as_float else int(value)
+    text = str(value).replace(",", "").replace("$", "")
+    match = re.search(r"-?\d+(?:\.\d+)?", text)
+    if not match:
+        return None
+    number = float(match.group(0))
+    if as_float:
+        return round(number, 2)
+    return int(round(number))
+
+
+def extract_product_id(url):
+    match = re.search(r"product/(\d+)", url)
+    return match.group(1) if match else None
+
+
+def load_records():
+    if not os.path.exists(DATA_FILE):
+        return []
+    try:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, list) else []
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def save_records(records):
+    os.makedirs(DATA_DIR, exist_ok=True)
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(records, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+
+
+def upsert_records(existing, new_records):
+    """Replace a snapshot when the same product is scraped again on the same date."""
+    index = {(row.get("date"), str(row.get("productId"))): i for i, row in enumerate(existing)}
+    for record in new_records:
+        key = (record.get("date"), str(record.get("productId")))
+        if key in index:
+            existing[index[key]] = record
+        else:
+            existing.append(record)
+            index[key] = len(existing) - 1
+    existing.sort(key=lambda row: (row.get("date") or "", str(row.get("productId") or "")))
+    return existing
+
 
 def main():
     # --- 1. Read URLs ---
@@ -143,12 +200,20 @@ def main():
                     except Exception as e:
                         print(f"DEBUG: Direct API request error: {e}")
 
-                # Build row for Google Sheets
-                data_row = [
-                    today_date, product_name, market_price, recent_sale,
-                    listed_median, current_sellers, current_quantity, last_day_sales, url
-                ]
-                all_data_rows.append(data_row)
+                product_id = extract_product_id(url)
+                record = {
+                    "date": today_date,
+                    "productId": product_id,
+                    "productName": product_name,
+                    "marketPrice": parse_numeric(market_price, as_float=True),
+                    "recentSale": parse_numeric(recent_sale, as_float=True),
+                    "listedMedian": parse_numeric(listed_median, as_float=True),
+                    "currentSellers": parse_numeric(current_sellers),
+                    "currentQuantity": parse_numeric(current_quantity),
+                    "lastDaySales": parse_numeric(last_day_sales),
+                    "url": url,
+                }
+                all_data_rows.append(record)
 
                 # Build text block for Discord
                 block = (
@@ -166,36 +231,19 @@ def main():
         print("\nNo data was successfully scraped. Exiting.")
         return
 
-    # --- 3. Google Sheets Integration ---
-    print("\nConnecting to Google Sheets...")
-    creds_json = os.environ.get("GOOGLE_CREDENTIALS")
-    if not creds_json:
-        raise ValueError("GOOGLE_CREDENTIALS environment variable is missing.")
-    
-    creds_dict = json.loads(creds_json)
-    scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-    credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
-    gc = gspread.authorize(credentials)
-    
-    sh = gc.open_by_key(SHEET_ID)
-    
-    try:
-        worksheet = sh.worksheet(TAB_NAME)
-    except gspread.exceptions.WorksheetNotFound:
-        worksheet = sh.add_worksheet(title=TAB_NAME, rows="1000", cols="20")
-    
-    if not worksheet.get_all_values():
-        headers = ["Date Pulled", "Product Name", "Market Price", "Most Recent Sale", "Listed Median", "Current Sellers", "Current Quantity", "Last Day Sales", "URL"]
-        worksheet.append_row(headers)
-        
-    worksheet.append_rows(all_data_rows)
-    print(f"Appended {len(all_data_rows)} rows to Google Sheets.")
+    # --- 3. Local JSON storage ---
+    print("\nWriting tracker data to local JSON...")
+    existing_records = load_records()
+    merged_records = upsert_records(existing_records, all_data_rows)
+    save_records(merged_records)
+    print(f"Saved {len(all_data_rows)} snapshot(s). Archive now has {len(merged_records)} record(s) in {DATA_FILE}.")
 
     # --- 4. Discord Integration ---
     print("Sending Discord notification...")
     discord_url = os.environ.get("DISCORD_WEBHOOK_URL")
     if not discord_url:
-        raise ValueError("DISCORD_WEBHOOK_URL environment variable is missing.")
+        print("DISCORD_WEBHOOK_URL environment variable is missing; skipping Discord notification.")
+        return
         
     header = "**TCGPlayer Daily Update** 📊\n\n"
     current_message = header

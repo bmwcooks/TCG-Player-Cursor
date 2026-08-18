@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TCG Marketplace Tracker</title>
+  <meta name="description" content="Daily TCGPlayer market tracker for Pokémon booster boxes and high-end listings." />
+  <meta name="theme-color" content="#0c0f14" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      const stored = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const useDark = stored ? stored === "dark" : prefersDark;
+      document.documentElement.classList.toggle("dark", useDark);
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ["Outfit", "system-ui", "sans-serif"],
+            sans: ["Source Sans 3", "system-ui", "sans-serif"],
+          },
+          colors: {
+            ink: {
+              50: "#f6f4ef",
+              100: "#ece7dc",
+              800: "#1c232d",
+              900: "#12161d",
+              950: "#0c0f14",
+            },
+            gold: {
+              400: "#e8b86d",
+              500: "#d4a054",
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+  <style>
+    :root { color-scheme: light; }
+    .dark { color-scheme: dark; }
+    body {
+      background-image:
+        radial-gradient(1200px 500px at 10% -10%, rgba(232, 184, 109, 0.08), transparent 50%),
+        radial-gradient(900px 400px at 100% 0%, rgba(45, 212, 191, 0.06), transparent 45%);
+    }
+    .dark body {
+      background-image:
+        radial-gradient(1200px 500px at 10% -10%, rgba(232, 184, 109, 0.12), transparent 50%),
+        radial-gradient(900px 400px at 100% 0%, rgba(45, 212, 191, 0.08), transparent 45%);
+    }
+    .grid-overlay {
+      background-size: 40px 40px;
+      background-image:
+        linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    }
+    .dark .grid-overlay {
+      background-image:
+        linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+    }
+    .tabular { font-variant-numeric: tabular-nums; }
+    .pill-active {
+      background: #d4a054;
+      color: #12161d;
+    }
+    .dark .pill-active {
+      background: #e8b86d;
+      color: #0c0f14;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-ink-50 text-ink-900 font-sans antialiased dark:bg-ink-950 dark:text-ink-50">
+  <div class="grid-overlay min-h-screen">
+    <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-ink-50/85 backdrop-blur-md dark:border-white/10 dark:bg-ink-950/80">
+      <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <div class="flex items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-500 text-ink-950 shadow-lg shadow-amber-700/20">
+            <i data-lucide="bar-chart-3" class="h-5 w-5"></i>
+          </div>
+          <div>
+            <h1 class="font-display text-lg font-semibold tracking-tight sm:text-xl">TCG Marketplace Tracker</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Pokémon TCGPlayer market snapshots</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <span id="updated-badge" class="hidden items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 dark:border-white/10 dark:bg-ink-900 dark:text-slate-300 sm:inline-flex">
+            <i data-lucide="clock-3" class="h-3.5 w-3.5"></i>
+            <span>Waiting for data</span>
+          </span>
+          <a href="https://github.com/bmwcooks/TCG-Player-Cursor" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 hover:text-ink-900 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200 dark:hover:text-white" aria-label="Open GitHub repository">
+            <i data-lucide="github" class="h-4 w-4"></i>
+            <span class="hidden sm:inline">GitHub</span>
+          </a>
+          <button id="theme-toggle" type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200" aria-label="Toggle color theme">
+            <i data-lucide="sun" class="hidden h-4 w-4 dark:block"></i>
+            <i data-lucide="moon" class="h-4 w-4 dark:hidden"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <section id="status-banner" class="mb-6 hidden rounded-2xl border border-amber-300/60 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100"></section>
+
+      <section class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" id="metric-cards">
+        <article class="rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Tracked Items</p>
+            <i data-lucide="layers" class="h-4 w-4 text-gold-500"></i>
+          </div>
+          <p id="metric-tracked" class="mt-3 font-display text-3xl font-semibold tabular">—</p>
+        </article>
+        <article class="rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Highest Volume Today</p>
+            <i data-lucide="flame" class="h-4 w-4 text-gold-500"></i>
+          </div>
+          <p id="metric-volume-name" class="mt-3 font-display text-lg font-semibold leading-tight">—</p>
+          <p id="metric-volume-value" class="mt-1 text-sm tabular text-slate-500 dark:text-slate-400">No sales yet</p>
+        </article>
+        <article class="rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Average Market Price</p>
+            <i data-lucide="badge-dollar-sign" class="h-4 w-4 text-gold-500"></i>
+          </div>
+          <p id="metric-avg-price" class="mt-3 font-display text-3xl font-semibold tabular">—</p>
+        </article>
+        <article class="rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">24-Hour Total Sales</p>
+            <i data-lucide="shopping-bag" class="h-4 w-4 text-gold-500"></i>
+          </div>
+          <p id="metric-total-sales" class="mt-3 font-display text-3xl font-semibold tabular">—</p>
+        </article>
+      </section>
+
+      <section class="mb-8 rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80 sm:p-6">
+        <div class="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h2 class="font-display text-xl font-semibold">Daily Number of Sales</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Units sold on the most recent recorded day for each snapshot</p>
+          </div>
+          <div id="product-pills" class="flex flex-wrap gap-2"></div>
+        </div>
+        <div class="relative h-72 sm:h-80">
+          <canvas id="sales-chart"></canvas>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80 sm:p-6">
+        <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 class="font-display text-xl font-semibold">Tracked Listings</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Latest snapshot for each product</p>
+          </div>
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <label class="relative block">
+              <span class="sr-only">Search products</span>
+              <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></i>
+              <input id="table-search" type="search" placeholder="Search products…" class="w-full rounded-lg border border-slate-200 bg-ink-50 py-2 pl-9 pr-3 text-sm outline-none ring-gold-400 focus:ring-2 dark:border-white/10 dark:bg-ink-950 sm:w-64" />
+            </label>
+            <label class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+              Sort
+              <select id="table-sort" class="rounded-lg border border-slate-200 bg-ink-50 px-3 py-2 text-sm text-ink-900 outline-none ring-gold-400 focus:ring-2 dark:border-white/10 dark:bg-ink-950 dark:text-ink-50">
+                <option value="sales-desc">Sales volume</option>
+                <option value="price-desc">Market price</option>
+                <option value="qty-desc">Available quantity</option>
+                <option value="sellers-desc">Current sellers</option>
+                <option value="name-asc">Name</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-left text-sm">
+            <thead class="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500 dark:border-white/10 dark:text-slate-400">
+              <tr>
+                <th class="px-3 py-3 font-medium">Product</th>
+                <th class="px-3 py-3 font-medium">Market Price</th>
+                <th class="px-3 py-3 font-medium">Last Day Sales</th>
+                <th class="px-3 py-3 font-medium">Available Qty</th>
+                <th class="px-3 py-3 font-medium">Sellers</th>
+                <th class="px-3 py-3 font-medium">Listing</th>
+              </tr>
+            </thead>
+            <tbody id="listings-body" class="divide-y divide-slate-100 dark:divide-white/5"></tbody>
+          </table>
+        </div>
+        <p id="table-empty" class="hidden px-3 py-8 text-center text-sm text-slate-500 dark:text-slate-400">No products match that search.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const REPO_URL = "https://github.com/bmwcooks/TCG-Player-Cursor";
+    const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+    const integer = new Intl.NumberFormat("en-US");
+
+    let records = [];
+    let selectedProductId = "all";
+    let salesChart = null;
+    let latestByProduct = [];
+
+    function currentTheme() {
+      return document.documentElement.classList.contains("dark") ? "dark" : "light";
+    }
+
+    function chartColors() {
+      const dark = currentTheme() === "dark";
+      return {
+        text: dark ? "#ece7dc" : "#1c232d",
+        muted: dark ? "#94a3b8" : "#64748b",
+        grid: dark ? "rgba(148, 163, 184, 0.12)" : "rgba(148, 163, 184, 0.25)",
+        tooltipBg: dark ? "#12161d" : "#ffffff",
+        tooltipBorder: dark ? "rgba(255,255,255,0.12)" : "rgba(15,23,42,0.08)",
+        line: dark ? "#e8b86d" : "#d4a054",
+        fill: dark ? "rgba(232, 184, 109, 0.18)" : "rgba(212, 160, 84, 0.16)",
+      };
+    }
+
+    function setTheme(next) {
+      document.documentElement.classList.toggle("dark", next === "dark");
+      localStorage.setItem("theme", next);
+      if (salesChart) renderChart();
+    }
+
+    function toggleTheme() {
+      setTheme(currentTheme() === "dark" ? "light" : "dark");
+    }
+
+    function uniqueProducts(data) {
+      const map = new Map();
+      data.forEach((row) => {
+        if (!row.productId) return;
+        map.set(String(row.productId), row.productName || `Product ${row.productId}`);
+      });
+      return [...map.entries()].map(([id, name]) => ({ id, name }));
+    }
+
+    function latestSnapshots(data) {
+      const latest = new Map();
+      data.forEach((row) => {
+        const key = String(row.productId);
+        const current = latest.get(key);
+        if (!current || (row.date || "") >= (current.date || "")) {
+          latest.set(key, row);
+        }
+      });
+      return [...latest.values()];
+    }
+
+    function latestDate(data) {
+      return data.reduce((max, row) => ((row.date || "") > max ? row.date : max), "");
+    }
+
+    function formatMoney(value) {
+      return value == null ? "—" : money.format(value);
+    }
+
+    function formatInt(value) {
+      return value == null ? "—" : integer.format(value);
+    }
+
+    function showBanner(message) {
+      const banner = document.getElementById("status-banner");
+      banner.textContent = message;
+      banner.classList.remove("hidden");
+    }
+
+    function renderMetrics(latest, all) {
+      const asOf = latestDate(all);
+      const todayRows = all.filter((row) => row.date === asOf);
+      document.getElementById("metric-tracked").textContent = integer.format(latest.length);
+
+      const top = [...todayRows].sort((a, b) => (b.lastDaySales || 0) - (a.lastDaySales || 0))[0];
+      document.getElementById("metric-volume-name").textContent = top ? top.productName : "—";
+      document.getElementById("metric-volume-value").textContent = top
+        ? `${formatInt(top.lastDaySales)} units on ${asOf}`
+        : "No sales yet";
+
+      const priced = latest.filter((row) => row.marketPrice != null);
+      const avg = priced.length
+        ? priced.reduce((sum, row) => sum + row.marketPrice, 0) / priced.length
+        : null;
+      document.getElementById("metric-avg-price").textContent = formatMoney(avg);
+
+      const totalSales = todayRows.reduce((sum, row) => sum + (row.lastDaySales || 0), 0);
+      document.getElementById("metric-total-sales").textContent = formatInt(totalSales);
+
+      const badge = document.getElementById("updated-badge");
+      badge.classList.remove("hidden");
+      badge.classList.add("inline-flex");
+      badge.querySelector("span").textContent = asOf ? `Updated ${asOf}` : "No snapshots yet";
+    }
+
+    function renderPills(products) {
+      const host = document.getElementById("product-pills");
+      const options = [{ id: "all", name: "All products" }, ...products];
+      host.innerHTML = options.map((product) => `
+        <button type="button" data-product-id="${product.id}" class="pill rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-gold-500 dark:border-white/10 dark:text-slate-300 ${selectedProductId === product.id ? "pill-active" : "bg-ink-50 dark:bg-ink-950"}">
+          ${product.name}
+        </button>
+      `).join("");
+      host.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          selectedProductId = button.dataset.productId;
+          renderPills(products);
+          renderChart();
+        });
+      });
+    }
+
+    function seriesForSelection() {
+      const filtered = selectedProductId === "all"
+        ? records
+        : records.filter((row) => String(row.productId) === selectedProductId);
+      const byDate = new Map();
+      filtered.forEach((row) => {
+        if (!row.date) return;
+        byDate.set(row.date, (byDate.get(row.date) || 0) + (row.lastDaySales || 0));
+      });
+      const labels = [...byDate.keys()].sort();
+      return { labels, values: labels.map((date) => byDate.get(date)) };
+    }
+
+    function renderChart() {
+      const ctx = document.getElementById("sales-chart");
+      const colors = chartColors();
+      const { labels, values } = seriesForSelection();
+      const config = {
+        type: "line",
+        data: {
+          labels,
+          datasets: [{
+            label: "Daily sales",
+            data: values,
+            borderColor: colors.line,
+            backgroundColor: colors.fill,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointBackgroundColor: colors.line,
+            borderWidth: 2,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { intersect: false, mode: "index" },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: colors.tooltipBg,
+              titleColor: colors.text,
+              bodyColor: colors.text,
+              borderColor: colors.tooltipBorder,
+              borderWidth: 1,
+              callbacks: {
+                label: (item) => ` ${integer.format(item.parsed.y)} sold`,
+              },
+            },
+          },
+          scales: {
+            x: {
+              ticks: { color: colors.muted, maxRotation: 0 },
+              grid: { color: colors.grid },
+              border: { display: false },
+            },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: colors.muted,
+                precision: 0,
+                callback: (value) => integer.format(value),
+              },
+              grid: { color: colors.grid },
+              border: { display: false },
+            },
+          },
+        },
+      };
+
+      if (salesChart) {
+        salesChart.data = config.data;
+        salesChart.options = config.options;
+        salesChart.update();
+        return;
+      }
+      salesChart = new Chart(ctx, config);
+    }
+
+    function sortedLatest() {
+      const query = document.getElementById("table-search").value.trim().toLowerCase();
+      const sort = document.getElementById("table-sort").value;
+      const [key, direction] = sort.split("-");
+      const rows = latestByProduct.filter((row) =>
+        (row.productName || "").toLowerCase().includes(query)
+      );
+      const valueOf = (row) => {
+        if (key === "sales") return row.lastDaySales ?? -1;
+        if (key === "price") return row.marketPrice ?? -1;
+        if (key === "qty") return row.currentQuantity ?? -1;
+        if (key === "sellers") return row.currentSellers ?? -1;
+        return (row.productName || "").toLowerCase();
+      };
+      rows.sort((a, b) => {
+        const av = valueOf(a);
+        const bv = valueOf(b);
+        if (av < bv) return direction === "asc" ? -1 : 1;
+        if (av > bv) return direction === "asc" ? 1 : -1;
+        return 0;
+      });
+      return rows;
+    }
+
+    function renderTable() {
+      const rows = sortedLatest();
+      const body = document.getElementById("listings-body");
+      const empty = document.getElementById("table-empty");
+      if (!rows.length) {
+        body.innerHTML = "";
+        empty.classList.remove("hidden");
+        return;
+      }
+      empty.classList.add("hidden");
+      body.innerHTML = rows.map((row) => `
+        <tr class="hover:bg-ink-50/80 dark:hover:bg-white/5">
+          <td class="px-3 py-3">
+            <div class="font-medium">${row.productName || "Unknown product"}</div>
+            <div class="text-xs text-slate-500">ID ${row.productId || "—"} · ${row.date || ""}</div>
+          </td>
+          <td class="px-3 py-3 tabular font-medium">${formatMoney(row.marketPrice)}</td>
+          <td class="px-3 py-3 tabular">${formatInt(row.lastDaySales)}</td>
+          <td class="px-3 py-3 tabular">${formatInt(row.currentQuantity)}</td>
+          <td class="px-3 py-3 tabular">${formatInt(row.currentSellers)}</td>
+          <td class="px-3 py-3">
+            ${row.url ? `<a href="${row.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-medium text-amber-700 hover:underline dark:text-gold-400">View <i data-lucide="external-link" class="h-3.5 w-3.5"></i></a>` : "—"}
+          </td>
+        </tr>
+      `).join("");
+      lucide.createIcons();
+    }
+
+    async function init() {
+      lucide.createIcons();
+      document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
+      document.getElementById("table-search").addEventListener("input", renderTable);
+      document.getElementById("table-sort").addEventListener("change", renderTable);
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        if (!localStorage.getItem("theme")) {
+          document.documentElement.classList.toggle("dark", event.matches);
+          if (salesChart) renderChart();
+        }
+      });
+
+      try {
+        const response = await fetch(`data/tracker_data.json?t=${Date.now()}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        records = await response.json();
+        if (!Array.isArray(records)) records = [];
+      } catch (error) {
+        showBanner("Could not load tracker data yet. Run the daily scraper (or open this page over HTTP) to populate snapshots.");
+        records = [];
+      }
+
+      latestByProduct = latestSnapshots(records);
+      renderMetrics(latestByProduct, records);
+      renderPills(uniqueProducts(records));
+      renderChart();
+      renderTable();
+    }
+
+    init();
+  </script>
+</body>
+</html>
