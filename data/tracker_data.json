@@ -58,5 +58,29 @@
     "currentQuantity": 241,
     "lastDaySales": 16,
     "url": "https://www.tcgplayer.com/product/672404/pokemon-me03-perfect-order-perfect-order-pokemon-center-elite-trainer-box?page=1&Language=English"
+  },
+  {
+    "date": "2026-08-21",
+    "productId": "672394",
+    "productName": "Perfect Order Booster Box - ME03: Perfect Order (POR)",
+    "marketPrice": 173.23,
+    "recentSale": 174.82,
+    "listedMedian": 228.95,
+    "currentSellers": 153,
+    "currentQuantity": 1768,
+    "lastDaySales": 41,
+    "url": "https://www.tcgplayer.com/product/672394/pokemon-me03-perfect-order-perfect-order-booster-box?page=1&Language=English"
+  },
+  {
+    "date": "2026-08-21",
+    "productId": "672404",
+    "productName": "Perfect Order Pokemon Center Elite Trainer Box - ME03: Perfect Order (POR)",
+    "marketPrice": 120.18,
+    "recentSale": 124.9,
+    "listedMedian": 145.0,
+    "currentSellers": 122,
+    "currentQuantity": 239,
+    "lastDaySales": 15,
+    "url": "https://www.tcgplayer.com/product/672404/pokemon-me03-perfect-order-perfect-order-pokemon-center-elite-trainer-box?page=1&Language=English"
   }
 ]
