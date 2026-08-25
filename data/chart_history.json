@@ -4,6 +4,7 @@
     {
       "productId": "672394",
       "productName": "Perfect Order Booster Box - ME03: Perfect Order (POR)",
+      "setName": "Perfect Order",
       "url": "https://www.tcgplayer.com/product/672394/pokemon-me03-perfect-order-perfect-order-booster-box?page=1&Language=English",
       "ranges": {
         "1M": {
@@ -244,11 +245,11 @@
             },
             {
               "date": "2026-08-25",
-              "quantitySold": 1,
-              "transactionCount": 1,
-              "marketPrice": 170.94,
+              "quantitySold": 2,
+              "transactionCount": 2,
+              "marketPrice": 170.87,
               "lowSalePrice": 170.0,
-              "highSalePrice": 170.0
+              "highSalePrice": 172.99
             }
           ]
         },
@@ -920,12 +921,12 @@
             }
           ]
         }
-      },
-      "setName": "Perfect Order"
+      }
     },
     {
       "productId": "672404",
       "productName": "Perfect Order Pokemon Center Elite Trainer Box - ME03: Perfect Order (POR)",
+      "setName": "Perfect Order",
       "url": "https://www.tcgplayer.com/product/672404/pokemon-me03-perfect-order-perfect-order-pokemon-center-elite-trainer-box?page=1&Language=English",
       "ranges": {
         "1M": {
@@ -1842,12 +1843,11 @@
             }
           ]
         }
-      },
-      "setName": "Perfect Order"
+      }
     },
     {
       "productId": "672401",
-      "productName": "Perfect Order Elite Trainer Box",
+      "productName": "Perfect Order Elite Trainer Box - ME03: Perfect Order (POR)",
       "setName": "Perfect Order",
       "url": "https://www.tcgplayer.com/product/672401/pokemon-me03-perfect-order-perfect-order-elite-trainer-box?page=1&Language=English",
       "ranges": {
