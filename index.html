@@ -112,7 +112,11 @@
     </header>
 
     <div class="mx-auto max-w-7xl px-4 pt-4 sm:px-6">
-      <div class="inline-flex rounded-xl border border-slate-200 bg-white/90 p-1 dark:border-white/10 dark:bg-ink-900/80" role="tablist">
+      <div class="mb-3">
+        <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Sets</p>
+        <div id="set-tabs" class="flex flex-wrap gap-2"></div>
+      </div>
+      <div class="inline-flex rounded-xl border border-slate-200 bg-white/90 p-1 dark:border-white/10 dark:bg-ink-900/80" role="tablist" aria-label="View">
         <button type="button" data-tab="overview" class="tab-btn pill-active rounded-lg px-4 py-2 text-sm font-medium">Overview</button>
         <button type="button" data-tab="sales" class="tab-btn rounded-lg px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300">Latest Sales</button>
       </div>
@@ -175,7 +179,7 @@
         <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 class="font-display text-xl font-semibold">Tracked Listings</h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400">Latest snapshot for each product</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Latest snapshot for each product in this set</p>
           </div>
           <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
             <label class="relative block">
@@ -268,6 +272,7 @@
     let chartHistory = { products: [] };
     let latestSales = [];
     let selectedProductId = "all";
+    let selectedSet = "";
     let selectedRange = "1M";
     let activeTab = "overview";
     let salesChart = null;
@@ -313,6 +318,38 @@
         map.set(String(row.productId), row.productName || `Product ${row.productId}`);
       });
       return [...map.entries()].map(([id, name]) => ({ id, name }));
+    }
+
+    function setNameOf(row) {
+      if (row && row.setName) return row.setName;
+      const name = (row && row.productName) || "";
+      const match = name.match(/(?:ME|SV|PR|SWSH|SM|XY|B[WP])\d+:\s*([^(]+)/i);
+      if (match) return match[1].trim();
+      return "Other";
+    }
+
+    function availableSets() {
+      const names = new Set();
+      records.forEach((row) => names.add(setNameOf(row)));
+      (chartHistory.products || []).forEach((row) => names.add(setNameOf(row)));
+      latestSales.forEach((row) => names.add(setNameOf(row)));
+      const list = [...names].filter(Boolean).sort((a, b) => a.localeCompare(b));
+      if (list.includes("Other")) {
+        return [...list.filter((name) => name !== "Other"), "Other"];
+      }
+      return list;
+    }
+
+    function recordsInSet() {
+      return records.filter((row) => setNameOf(row) === selectedSet);
+    }
+
+    function chartProductsInSet() {
+      return (chartHistory.products || []).filter((row) => setNameOf(row) === selectedSet);
+    }
+
+    function salesInSet() {
+      return latestSales.filter((row) => setNameOf(row) === selectedSet);
     }
 
     function latestSnapshots(data) {
@@ -398,6 +435,43 @@
       badge.querySelector("span").textContent = asOf ? `Updated ${asOf}` : "No snapshots yet";
     }
 
+    function renderSetTabs() {
+      const host = document.getElementById("set-tabs");
+      const sets = availableSets();
+      if (!sets.length) {
+        host.innerHTML = `<span class="text-sm text-slate-500">No sets yet. Add a # Set: Name group in urls.txt.</span>`;
+        return;
+      }
+      if (!sets.includes(selectedSet)) {
+        selectedSet = sets[0];
+      }
+      host.innerHTML = sets.map((name) => `
+        <button type="button" data-set="${escapeHtml(name)}" class="pill rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-gold-500 dark:border-white/10 dark:text-slate-200 ${selectedSet === name ? "pill-active" : "bg-white dark:bg-ink-900"}">
+          ${escapeHtml(name)}
+        </button>
+      `).join("");
+      host.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          selectedSet = button.dataset.set;
+          selectedProductId = "all";
+          localStorage.setItem("selectedSet", selectedSet);
+          renderSetTabs();
+          refreshSetView();
+        });
+      });
+    }
+
+    function refreshSetView() {
+      const scoped = recordsInSet();
+      latestByProduct = latestSnapshots(scoped);
+      renderMetrics(latestByProduct, scoped);
+      renderPills(uniqueProducts(scoped));
+      renderChart();
+      renderTable();
+      populateSalesProductFilter();
+      renderSalesTable();
+    }
+
     function setActiveTab(tab) {
       activeTab = tab;
       document.getElementById("panel-overview").classList.toggle("hidden", tab !== "overview");
@@ -444,7 +518,7 @@
     }
 
     function historyPointsForSelection() {
-      const products = chartHistory.products || [];
+      const products = chartProductsInSet();
       const selected = selectedProductId === "all"
         ? products
         : products.filter((product) => String(product.productId) === selectedProductId);
@@ -635,7 +709,7 @@
 
     function populateSalesProductFilter() {
       const select = document.getElementById("sales-product");
-      const products = uniqueProducts(records);
+      const products = uniqueProducts(recordsInSet());
       select.innerHTML = `<option value="all">All products</option>` + products.map((product) =>
         `<option value="${escapeHtml(product.id)}">${escapeHtml(product.name)}</option>`
       ).join("");
@@ -644,7 +718,7 @@
     function filteredSales() {
       const query = document.getElementById("sales-search").value.trim().toLowerCase();
       const productId = document.getElementById("sales-product").value;
-      return latestSales.filter((row) => {
+      return salesInSet().filter((row) => {
         if (productId !== "all" && String(row.productId) !== productId) return false;
         if (!query) return true;
         const haystack = [row.productName, row.condition, row.variant, row.language].join(" ").toLowerCase();
@@ -682,7 +756,7 @@
           </tr>
         `;
       }).join("");
-      count.textContent = `Showing ${integer.format(rows.length)} of ${integer.format(latestSales.length)} captured transactions`;
+      count.textContent = `Showing ${integer.format(rows.length)} of ${integer.format(salesInSet().length)} captured transactions in ${selectedSet || "this set"}`;
     }
 
     async function loadJson(path, fallback) {
@@ -730,14 +804,10 @@
         latestSales = [];
       }
 
-      latestByProduct = latestSnapshots(records);
-      renderMetrics(latestByProduct, records);
+      selectedSet = localStorage.getItem("selectedSet") || "";
       renderRangePills();
-      renderPills(uniqueProducts(records));
-      renderChart();
-      renderTable();
-      populateSalesProductFilter();
-      renderSalesTable();
+      renderSetTabs();
+      refreshSetView();
       if (location.hash === "#sales") setActiveTab("sales");
     }
 

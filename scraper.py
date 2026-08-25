@@ -125,7 +125,7 @@ def latest_completed_sales(buckets, today_date):
     return str(completed[-1]["quantitySold"])
 
 
-def history_records_for_product(product_id, product_name, url, buckets, today_date):
+def history_records_for_product(product_id, product_name, url, buckets, today_date, set_name=None):
     """Dated snapshots for every completed chart day so the dashboard can plot true daily volume."""
     records = []
     for bucket in buckets:
@@ -135,6 +135,7 @@ def history_records_for_product(product_id, product_name, url, buckets, today_da
             "date": bucket["date"],
             "productId": product_id,
             "productName": product_name,
+            "setName": set_name,
             "marketPrice": bucket.get("marketPrice"),
             "recentSale": None,
             "listedMedian": None,
@@ -167,6 +168,45 @@ def parse_numeric(value, as_float=False):
 def extract_product_id(url):
     match = re.search(r"product/(\d+)", url)
     return match.group(1) if match else None
+
+
+def infer_set_name(url, product_name="", explicit=None):
+    """Resolve a dashboard set tab name from urls.txt, the product title, or the URL slug."""
+    if explicit:
+        return explicit.strip()
+    name = product_name or ""
+    match = re.search(r"(?:ME|SV|PR|SWSH|SM|XY|B[WP])\d+:\s*([^(]+)", name, re.I)
+    if match:
+        return match.group(1).strip()
+    slug = re.search(r"/pokemon-[a-z0-9]+-([a-z0-9-]+)", url or "", re.I)
+    if slug:
+        parts = slug.group(1).split("-")
+        if len(parts) >= 2:
+            return " ".join(part.title() for part in parts[:2])
+    return "Other"
+
+
+def read_tracked_urls():
+    """Read product URLs and optional `# Set: Name` grouping from urls.txt."""
+    if not os.path.exists(URLS_FILE):
+        return []
+    entries = []
+    current_set = None
+    with open(URLS_FILE, "r", encoding="utf-8") as handle:
+        for raw in handle:
+            line = raw.strip()
+            if not line:
+                continue
+            if line.startswith("#"):
+                set_match = re.match(r"#\s*set\s*:\s*(.+)$", line, re.I)
+                if set_match:
+                    current_set = set_match.group(1).strip()
+                continue
+            entries.append({
+                "url": line,
+                "setName": current_set,
+            })
+    return entries
 
 
 def load_records():
@@ -208,12 +248,13 @@ def fetch_price_history(product_id, range_name, referer):
     return parse_history_buckets(response.json())
 
 
-def normalize_sale(row, product_id, product_name, url):
+def normalize_sale(row, product_id, product_name, url, set_name=None):
     if not isinstance(row, dict):
         return None
     return {
         "productId": product_id,
         "productName": product_name,
+        "setName": set_name,
         "url": url,
         "orderDate": row.get("orderDate") or row.get("soldDate") or row.get("date"),
         "purchasePrice": parse_numeric(row.get("purchasePrice") or row.get("price"), as_float=True),
@@ -339,10 +380,8 @@ def main():
         print(f"Error: {URLS_FILE} not found. Please create it and add some URLs.")
         return
 
-    with open(URLS_FILE, 'r') as f:
-        urls = [line.strip() for line in f if line.strip() and not line.startswith('#')]
-
-    if not urls:
+    entries = read_tracked_urls()
+    if not entries:
         print(f"No valid URLs found in {URLS_FILE}.")
         return
 
@@ -356,9 +395,10 @@ def main():
     from bs4 import BeautifulSoup
     from scrapling.fetchers import StealthySession
 
-    print(f"Initializing Scrapling StealthySession to scrape {len(urls)} URLs...")
+    print(f"Initializing Scrapling StealthySession to scrape {len(entries)} URLs...")
     with StealthySession(headless=True, solve_cloudflare=True) as session:
-        for url in urls:
+        for entry in entries:
+            url = entry["url"]
             print(f"\n======================================")
             print(f"Scraping: {url}")
             try:
@@ -372,6 +412,7 @@ def main():
                 soup = BeautifulSoup(page.body, 'html.parser')
 
                 product_name = get_product_name(soup)
+                set_name = infer_set_name(url, product_name, entry.get("setName"))
                 market_price = extract_metric(soup, "Market Price")
                 recent_sale = extract_metric(soup, "Most Recent Sale")
                 listed_median = extract_metric(soup, "Listed Median")
@@ -412,7 +453,7 @@ def main():
                             captured_sales = fallback_sales
                     normalized = [
                         sale for sale in (
-                            normalize_sale(row, product_id, product_name, url)
+                            normalize_sale(row, product_id, product_name, url, set_name)
                             for row in captured_sales
                         )
                         if sale and sale.get("orderDate")
@@ -424,6 +465,7 @@ def main():
                     chart_products.append({
                         "productId": product_id,
                         "productName": product_name,
+                        "setName": set_name,
                         "url": url,
                         "ranges": range_payload,
                     })
@@ -432,6 +474,7 @@ def main():
                     "date": today_date,
                     "productId": product_id,
                     "productName": product_name,
+                    "setName": set_name,
                     "marketPrice": parse_numeric(market_price, as_float=True),
                     "recentSale": parse_numeric(recent_sale, as_float=True),
                     "listedMedian": parse_numeric(listed_median, as_float=True),
@@ -442,7 +485,7 @@ def main():
                 }
                 all_data_rows.append(record)
                 all_data_rows.extend(
-                    history_records_for_product(product_id, product_name, url, daily_buckets, today_date)
+                    history_records_for_product(product_id, product_name, url, daily_buckets, today_date, set_name)
                 )
 
                 # Build text block for Discord

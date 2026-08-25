@@ -1,8 +1,17 @@
+# Group products under a set with `# Set: Name`.
+# New sets get their own tab on the dashboard.
+
+# Set: Perfect Order
+
 # Perfect Order Booster Box
 https://www.tcgplayer.com/product/672394/pokemon-me03-perfect-order-perfect-order-booster-box?page=1&Language=English
 
-# Perfect Order Elite Trainer Box
+# Perfect Order Pokemon Center Elite Trainer Box
 https://www.tcgplayer.com/product/672404/pokemon-me03-perfect-order-perfect-order-pokemon-center-elite-trainer-box?page=1&Language=English
 
-# Add your next link below:
+# Perfect Order Elite Trainer Box
+https://www.tcgplayer.com/product/672401/pokemon-me03-perfect-order-perfect-order-elite-trainer-box?page=1&Language=English
+
+# Add your next set/link below:
+# Set: Example Set
 # https://www.tcgplayer.com/product/...

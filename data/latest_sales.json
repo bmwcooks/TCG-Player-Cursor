@@ -12,7 +12,8 @@
       "condition": "Unopened",
       "variant": "Normal",
       "language": "English",
-      "listingType": "ListingWithoutPhotos"
+      "listingType": "ListingWithoutPhotos",
+      "setName": "Perfect Order"
     },
     {
       "productId": "672394",
@@ -25,7 +26,8 @@
       "condition": "Unopened",
       "variant": "Normal",
       "language": "English",
-      "listingType": "ListingWithoutPhotos"
+      "listingType": "ListingWithoutPhotos",
+      "setName": "Perfect Order"
     },
     {
       "productId": "672394",
@@ -38,7 +40,8 @@
       "condition": "Unopened",
       "variant": "Normal",
       "language": "English",
-      "listingType": "ListingWithoutPhotos"
+      "listingType": "ListingWithoutPhotos",
+      "setName": "Perfect Order"
     },
     {
       "productId": "672394",
@@ -51,7 +54,8 @@
       "condition": "Unopened",
       "variant": "Normal",
       "language": "English",
-      "listingType": "ListingWithoutPhotos"
+      "listingType": "ListingWithoutPhotos",
+      "setName": "Perfect Order"
     },
     {
       "productId": "672394",
@@ -64,7 +68,8 @@
       "condition": "Unopened",
       "variant": "Normal",
       "language": "English",
-      "listingType": "ListingWithoutPhotos"
+      "listingType": "ListingWithoutPhotos",
+      "setName": "Perfect Order"
     },
     {
       "productId": "672404",
@@ -77,7 +82,8 @@
       "condition": "Unopened",
       "variant": "Normal",
       "language": "English",
-      "listingType": "ListingWithoutPhotos"
+      "listingType": "ListingWithoutPhotos",
+      "setName": "Perfect Order"
     },
     {
       "productId": "672404",
@@ -90,7 +96,8 @@
       "condition": "Unopened",
       "variant": "Normal",
       "language": "English",
-      "listingType": "ListingWithoutPhotos"
+      "listingType": "ListingWithoutPhotos",
+      "setName": "Perfect Order"
     },
     {
       "productId": "672404",
@@ -103,7 +110,8 @@
       "condition": "Unopened",
       "variant": "Normal",
       "language": "English",
-      "listingType": "ListingWithoutPhotos"
+      "listingType": "ListingWithoutPhotos",
+      "setName": "Perfect Order"
     },
     {
       "productId": "672404",
@@ -116,7 +124,8 @@
       "condition": "Unopened",
       "variant": "Normal",
       "language": "English",
-      "listingType": "ListingWithoutPhotos"
+      "listingType": "ListingWithoutPhotos",
+      "setName": "Perfect Order"
     },
     {
       "productId": "672404",
@@ -124,6 +133,77 @@
       "url": "https://www.tcgplayer.com/product/672404/pokemon-me03-perfect-order-perfect-order-pokemon-center-elite-trainer-box?page=1&Language=English",
       "orderDate": "2026-08-24T04:45:19.83+00:00",
       "purchasePrice": 122.81,
+      "shippingPrice": 0.0,
+      "quantity": 1,
+      "condition": "Unopened",
+      "variant": "Normal",
+      "language": "English",
+      "listingType": "ListingWithoutPhotos",
+      "setName": "Perfect Order"
+    },
+    {
+      "productId": "672401",
+      "productName": "Perfect Order Elite Trainer Box",
+      "setName": "Perfect Order",
+      "url": "https://www.tcgplayer.com/product/672401/pokemon-me03-perfect-order-perfect-order-elite-trainer-box?page=1&Language=English",
+      "orderDate": "2026-08-25T06:56:58.9+00:00",
+      "purchasePrice": 73.99,
+      "shippingPrice": 0.0,
+      "quantity": 1,
+      "condition": "Unopened",
+      "variant": "Normal",
+      "language": "English",
+      "listingType": "ListingWithoutPhotos"
+    },
+    {
+      "productId": "672401",
+      "productName": "Perfect Order Elite Trainer Box",
+      "setName": "Perfect Order",
+      "url": "https://www.tcgplayer.com/product/672401/pokemon-me03-perfect-order-perfect-order-elite-trainer-box?page=1&Language=English",
+      "orderDate": "2026-08-25T06:31:24.963+00:00",
+      "purchasePrice": 74.98,
+      "shippingPrice": 0.0,
+      "quantity": 1,
+      "condition": "Unopened",
+      "variant": "Normal",
+      "language": "English",
+      "listingType": "ListingWithoutPhotos"
+    },
+    {
+      "productId": "672401",
+      "productName": "Perfect Order Elite Trainer Box",
+      "setName": "Perfect Order",
+      "url": "https://www.tcgplayer.com/product/672401/pokemon-me03-perfect-order-perfect-order-elite-trainer-box?page=1&Language=English",
+      "orderDate": "2026-08-25T02:42:34.12+00:00",
+      "purchasePrice": 74.96,
+      "shippingPrice": 0.0,
+      "quantity": 1,
+      "condition": "Unopened",
+      "variant": "Normal",
+      "language": "English",
+      "listingType": "ListingWithoutPhotos"
+    },
+    {
+      "productId": "672401",
+      "productName": "Perfect Order Elite Trainer Box",
+      "setName": "Perfect Order",
+      "url": "https://www.tcgplayer.com/product/672401/pokemon-me03-perfect-order-perfect-order-elite-trainer-box?page=1&Language=English",
+      "orderDate": "2026-08-25T00:26:46.887+00:00",
+      "purchasePrice": 74.96,
+      "shippingPrice": 0.0,
+      "quantity": 1,
+      "condition": "Unopened",
+      "variant": "Normal",
+      "language": "English",
+      "listingType": "ListingWithoutPhotos"
+    },
+    {
+      "productId": "672401",
+      "productName": "Perfect Order Elite Trainer Box",
+      "setName": "Perfect Order",
+      "url": "https://www.tcgplayer.com/product/672401/pokemon-me03-perfect-order-perfect-order-elite-trainer-box?page=1&Language=English",
+      "orderDate": "2026-08-24T22:55:06.933+00:00",
+      "purchasePrice": 74.96,
       "shippingPrice": 0.0,
       "quantity": 1,
       "condition": "Unopened",
