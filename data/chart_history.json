@@ -1,0 +1,1847 @@
+{
+  "updatedAt": "2026-08-25",
+  "products": [
+    {
+      "productId": "672394",
+      "productName": "Perfect Order Booster Box - ME03: Perfect Order (POR)",
+      "url": "https://www.tcgplayer.com/product/672394/pokemon-me03-perfect-order-perfect-order-booster-box?page=1&Language=English",
+      "ranges": {
+        "1M": {
+          "interval": "day",
+          "label": "1M · daily",
+          "points": [
+            {
+              "date": "2026-07-27",
+              "quantitySold": 19,
+              "transactionCount": 18,
+              "marketPrice": 181.59,
+              "lowSalePrice": 170.0,
+              "highSalePrice": 199.99
+            },
+            {
+              "date": "2026-07-28",
+              "quantitySold": 26,
+              "transactionCount": 21,
+              "marketPrice": 181.95,
+              "lowSalePrice": 174.0,
+              "highSalePrice": 185.0
+            },
+            {
+              "date": "2026-07-29",
+              "quantitySold": 33,
+              "transactionCount": 19,
+              "marketPrice": 178.75,
+              "lowSalePrice": 167.99,
+              "highSalePrice": 185.0
+            },
+            {
+              "date": "2026-07-30",
+              "quantitySold": 40,
+              "transactionCount": 32,
+              "marketPrice": 176.79,
+              "lowSalePrice": 160.0,
+              "highSalePrice": 179.99
+            },
+            {
+              "date": "2026-07-31",
+              "quantitySold": 38,
+              "transactionCount": 34,
+              "marketPrice": 175.86,
+              "lowSalePrice": 169.95,
+              "highSalePrice": 179.89
+            },
+            {
+              "date": "2026-08-01",
+              "quantitySold": 29,
+              "transactionCount": 29,
+              "marketPrice": 174.86,
+              "lowSalePrice": 165.99,
+              "highSalePrice": 180.22
+            },
+            {
+              "date": "2026-08-02",
+              "quantitySold": 44,
+              "transactionCount": 37,
+              "marketPrice": 170.58,
+              "lowSalePrice": 161.03,
+              "highSalePrice": 218.49
+            },
+            {
+              "date": "2026-08-03",
+              "quantitySold": 41,
+              "transactionCount": 32,
+              "marketPrice": 172.87,
+              "lowSalePrice": 165.0,
+              "highSalePrice": 189.99
+            },
+            {
+              "date": "2026-08-04",
+              "quantitySold": 48,
+              "transactionCount": 24,
+              "marketPrice": 174.59,
+              "lowSalePrice": 169.95,
+              "highSalePrice": 189.99
+            },
+            {
+              "date": "2026-08-05",
+              "quantitySold": 40,
+              "transactionCount": 29,
+              "marketPrice": 174.45,
+              "lowSalePrice": 169.95,
+              "highSalePrice": 180.0
+            },
+            {
+              "date": "2026-08-06",
+              "quantitySold": 29,
+              "transactionCount": 23,
+              "marketPrice": 173.87,
+              "lowSalePrice": 169.95,
+              "highSalePrice": 174.89
+            },
+            {
+              "date": "2026-08-07",
+              "quantitySold": 31,
+              "transactionCount": 24,
+              "marketPrice": 174.85,
+              "lowSalePrice": 165.99,
+              "highSalePrice": 187.99
+            },
+            {
+              "date": "2026-08-08",
+              "quantitySold": 21,
+              "transactionCount": 19,
+              "marketPrice": 173.53,
+              "lowSalePrice": 158.9,
+              "highSalePrice": 174.89
+            },
+            {
+              "date": "2026-08-09",
+              "quantitySold": 29,
+              "transactionCount": 24,
+              "marketPrice": 169.94,
+              "lowSalePrice": 165.99,
+              "highSalePrice": 175.99
+            },
+            {
+              "date": "2026-08-10",
+              "quantitySold": 29,
+              "transactionCount": 25,
+              "marketPrice": 169.99,
+              "lowSalePrice": 162.35,
+              "highSalePrice": 174.82
+            },
+            {
+              "date": "2026-08-11",
+              "quantitySold": 30,
+              "transactionCount": 26,
+              "marketPrice": 172.98,
+              "lowSalePrice": 166.95,
+              "highSalePrice": 175.99
+            },
+            {
+              "date": "2026-08-12",
+              "quantitySold": 31,
+              "transactionCount": 30,
+              "marketPrice": 165.41,
+              "lowSalePrice": 160.0,
+              "highSalePrice": 174.83
+            },
+            {
+              "date": "2026-08-13",
+              "quantitySold": 40,
+              "transactionCount": 32,
+              "marketPrice": 167.92,
+              "lowSalePrice": 160.0,
+              "highSalePrice": 174.82
+            },
+            {
+              "date": "2026-08-14",
+              "quantitySold": 28,
+              "transactionCount": 24,
+              "marketPrice": 168.59,
+              "lowSalePrice": 165.0,
+              "highSalePrice": 174.83
+            },
+            {
+              "date": "2026-08-15",
+              "quantitySold": 37,
+              "transactionCount": 33,
+              "marketPrice": 164.7,
+              "lowSalePrice": 149.99,
+              "highSalePrice": 180.0
+            },
+            {
+              "date": "2026-08-16",
+              "quantitySold": 24,
+              "transactionCount": 22,
+              "marketPrice": 170.55,
+              "lowSalePrice": 160.0,
+              "highSalePrice": 174.82
+            },
+            {
+              "date": "2026-08-17",
+              "quantitySold": 22,
+              "transactionCount": 21,
+              "marketPrice": 172.68,
+              "lowSalePrice": 163.98,
+              "highSalePrice": 174.83
+            },
+            {
+              "date": "2026-08-18",
+              "quantitySold": 38,
+              "transactionCount": 24,
+              "marketPrice": 167.33,
+              "lowSalePrice": 161.98,
+              "highSalePrice": 173.94
+            },
+            {
+              "date": "2026-08-19",
+              "quantitySold": 103,
+              "transactionCount": 89,
+              "marketPrice": 169.2,
+              "lowSalePrice": 159.99,
+              "highSalePrice": 169.99
+            },
+            {
+              "date": "2026-08-20",
+              "quantitySold": 36,
+              "transactionCount": 29,
+              "marketPrice": 172.9,
+              "lowSalePrice": 165.0,
+              "highSalePrice": 183.99
+            },
+            {
+              "date": "2026-08-21",
+              "quantitySold": 16,
+              "transactionCount": 14,
+              "marketPrice": 172.38,
+              "lowSalePrice": 164.97,
+              "highSalePrice": 174.82
+            },
+            {
+              "date": "2026-08-22",
+              "quantitySold": 19,
+              "transactionCount": 17,
+              "marketPrice": 171.76,
+              "lowSalePrice": 168.56,
+              "highSalePrice": 174.71
+            },
+            {
+              "date": "2026-08-23",
+              "quantitySold": 21,
+              "transactionCount": 20,
+              "marketPrice": 172.96,
+              "lowSalePrice": 164.7,
+              "highSalePrice": 174.82
+            },
+            {
+              "date": "2026-08-24",
+              "quantitySold": 19,
+              "transactionCount": 16,
+              "marketPrice": 171.13,
+              "lowSalePrice": 164.7,
+              "highSalePrice": 180.0
+            },
+            {
+              "date": "2026-08-25",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 170.94,
+              "lowSalePrice": 170.0,
+              "highSalePrice": 170.0
+            }
+          ]
+        },
+        "3M": {
+          "interval": "3-day",
+          "label": "3M · 3-day totals",
+          "points": [
+            {
+              "date": "2026-05-28",
+              "quantitySold": 99,
+              "transactionCount": 77,
+              "marketPrice": 220.12,
+              "lowSalePrice": 189.99,
+              "highSalePrice": 306.4
+            },
+            {
+              "date": "2026-05-31",
+              "quantitySold": 54,
+              "transactionCount": 46,
+              "marketPrice": 217.63,
+              "lowSalePrice": 204.11,
+              "highSalePrice": 239.95
+            },
+            {
+              "date": "2026-06-03",
+              "quantitySold": 46,
+              "transactionCount": 40,
+              "marketPrice": 218.7,
+              "lowSalePrice": 200.0,
+              "highSalePrice": 230.99
+            },
+            {
+              "date": "2026-06-06",
+              "quantitySold": 28,
+              "transactionCount": 26,
+              "marketPrice": 220.23,
+              "lowSalePrice": 212.5,
+              "highSalePrice": 229.9
+            },
+            {
+              "date": "2026-06-09",
+              "quantitySold": 37,
+              "transactionCount": 28,
+              "marketPrice": 209.83,
+              "lowSalePrice": 197.37,
+              "highSalePrice": 229.9
+            },
+            {
+              "date": "2026-06-12",
+              "quantitySold": 35,
+              "transactionCount": 31,
+              "marketPrice": 209.34,
+              "lowSalePrice": 192.7,
+              "highSalePrice": 224.59
+            },
+            {
+              "date": "2026-06-15",
+              "quantitySold": 28,
+              "transactionCount": 27,
+              "marketPrice": 217.74,
+              "lowSalePrice": 201.31,
+              "highSalePrice": 239.96
+            },
+            {
+              "date": "2026-06-18",
+              "quantitySold": 36,
+              "transactionCount": 24,
+              "marketPrice": 219.03,
+              "lowSalePrice": 206.56,
+              "highSalePrice": 224.98
+            },
+            {
+              "date": "2026-06-21",
+              "quantitySold": 29,
+              "transactionCount": 25,
+              "marketPrice": 221.18,
+              "lowSalePrice": 205.0,
+              "highSalePrice": 224.99
+            },
+            {
+              "date": "2026-06-24",
+              "quantitySold": 27,
+              "transactionCount": 23,
+              "marketPrice": 218.99,
+              "lowSalePrice": 205.0,
+              "highSalePrice": 233.9
+            },
+            {
+              "date": "2026-06-27",
+              "quantitySold": 28,
+              "transactionCount": 24,
+              "marketPrice": 223.19,
+              "lowSalePrice": 210.3,
+              "highSalePrice": 239.99
+            },
+            {
+              "date": "2026-06-30",
+              "quantitySold": 19,
+              "transactionCount": 19,
+              "marketPrice": 223.05,
+              "lowSalePrice": 211.48,
+              "highSalePrice": 239.95
+            },
+            {
+              "date": "2026-07-03",
+              "quantitySold": 16,
+              "transactionCount": 13,
+              "marketPrice": 224.39,
+              "lowSalePrice": 215.99,
+              "highSalePrice": 229.99
+            },
+            {
+              "date": "2026-07-06",
+              "quantitySold": 19,
+              "transactionCount": 19,
+              "marketPrice": 225.45,
+              "lowSalePrice": 219.99,
+              "highSalePrice": 229.95
+            },
+            {
+              "date": "2026-07-09",
+              "quantitySold": 44,
+              "transactionCount": 37,
+              "marketPrice": 217.84,
+              "lowSalePrice": 210.0,
+              "highSalePrice": 229.99
+            },
+            {
+              "date": "2026-07-12",
+              "quantitySold": 35,
+              "transactionCount": 31,
+              "marketPrice": 210.82,
+              "lowSalePrice": 199.97,
+              "highSalePrice": 229.99
+            },
+            {
+              "date": "2026-07-15",
+              "quantitySold": 191,
+              "transactionCount": 150,
+              "marketPrice": 183.73,
+              "lowSalePrice": 162.92,
+              "highSalePrice": 203.95
+            },
+            {
+              "date": "2026-07-18",
+              "quantitySold": 387,
+              "transactionCount": 241,
+              "marketPrice": 173.31,
+              "lowSalePrice": 158.91,
+              "highSalePrice": 210.0
+            },
+            {
+              "date": "2026-07-21",
+              "quantitySold": 262,
+              "transactionCount": 190,
+              "marketPrice": 171.55,
+              "lowSalePrice": 153.0,
+              "highSalePrice": 191.3
+            },
+            {
+              "date": "2026-07-24",
+              "quantitySold": 136,
+              "transactionCount": 105,
+              "marketPrice": 178.32,
+              "lowSalePrice": 163.98,
+              "highSalePrice": 199.99
+            },
+            {
+              "date": "2026-07-27",
+              "quantitySold": 78,
+              "transactionCount": 58,
+              "marketPrice": 180.76,
+              "lowSalePrice": 167.99,
+              "highSalePrice": 199.99
+            },
+            {
+              "date": "2026-07-30",
+              "quantitySold": 107,
+              "transactionCount": 95,
+              "marketPrice": 175.84,
+              "lowSalePrice": 160.0,
+              "highSalePrice": 180.22
+            },
+            {
+              "date": "2026-08-02",
+              "quantitySold": 133,
+              "transactionCount": 93,
+              "marketPrice": 172.68,
+              "lowSalePrice": 161.03,
+              "highSalePrice": 218.49
+            },
+            {
+              "date": "2026-08-05",
+              "quantitySold": 100,
+              "transactionCount": 76,
+              "marketPrice": 174.39,
+              "lowSalePrice": 165.99,
+              "highSalePrice": 187.99
+            },
+            {
+              "date": "2026-08-08",
+              "quantitySold": 79,
+              "transactionCount": 68,
+              "marketPrice": 171.15,
+              "lowSalePrice": 158.9,
+              "highSalePrice": 175.99
+            },
+            {
+              "date": "2026-08-11",
+              "quantitySold": 101,
+              "transactionCount": 88,
+              "marketPrice": 168.77,
+              "lowSalePrice": 160.0,
+              "highSalePrice": 175.99
+            },
+            {
+              "date": "2026-08-14",
+              "quantitySold": 89,
+              "transactionCount": 79,
+              "marketPrice": 167.95,
+              "lowSalePrice": 149.99,
+              "highSalePrice": 180.0
+            },
+            {
+              "date": "2026-08-17",
+              "quantitySold": 163,
+              "transactionCount": 134,
+              "marketPrice": 169.74,
+              "lowSalePrice": 159.99,
+              "highSalePrice": 174.83
+            },
+            {
+              "date": "2026-08-20",
+              "quantitySold": 71,
+              "transactionCount": 60,
+              "marketPrice": 172.35,
+              "lowSalePrice": 164.97,
+              "highSalePrice": 183.99
+            },
+            {
+              "date": "2026-08-23",
+              "quantitySold": 42,
+              "transactionCount": 38,
+              "marketPrice": 171.65,
+              "lowSalePrice": 164.7,
+              "highSalePrice": 180.0
+            }
+          ]
+        },
+        "1Y": {
+          "interval": "week",
+          "label": "1Y · weekly totals",
+          "points": [
+            {
+              "date": "2025-09-01",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-09-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-09-15",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-09-22",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-09-29",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-10-06",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-10-13",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-10-20",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-10-27",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-11-03",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-11-10",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-11-17",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-11-24",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-12-01",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-12-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-12-15",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-12-22",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-12-29",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-01-05",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-01-12",
+              "quantitySold": 27,
+              "transactionCount": 19,
+              "marketPrice": 244.99,
+              "lowSalePrice": 243.63,
+              "highSalePrice": 245.95
+            },
+            {
+              "date": "2026-01-19",
+              "quantitySold": 37,
+              "transactionCount": 32,
+              "marketPrice": 243.17,
+              "lowSalePrice": 243.07,
+              "highSalePrice": 243.6
+            },
+            {
+              "date": "2026-01-26",
+              "quantitySold": 51,
+              "transactionCount": 39,
+              "marketPrice": 242.68,
+              "lowSalePrice": 241.88,
+              "highSalePrice": 245.81
+            },
+            {
+              "date": "2026-02-02",
+              "quantitySold": 66,
+              "transactionCount": 45,
+              "marketPrice": 224.34,
+              "lowSalePrice": 219.89,
+              "highSalePrice": 241.87
+            },
+            {
+              "date": "2026-02-09",
+              "quantitySold": 264,
+              "transactionCount": 172,
+              "marketPrice": 197.58,
+              "lowSalePrice": 194.25,
+              "highSalePrice": 224.33
+            },
+            {
+              "date": "2026-02-16",
+              "quantitySold": 449,
+              "transactionCount": 307,
+              "marketPrice": 199.57,
+              "lowSalePrice": 194.25,
+              "highSalePrice": 229.95
+            },
+            {
+              "date": "2026-02-23",
+              "quantitySold": 436,
+              "transactionCount": 295,
+              "marketPrice": 225.94,
+              "lowSalePrice": 198.03,
+              "highSalePrice": 229.95
+            },
+            {
+              "date": "2026-03-02",
+              "quantitySold": 285,
+              "transactionCount": 220,
+              "marketPrice": 248.82,
+              "lowSalePrice": 210.0,
+              "highSalePrice": 249.95
+            },
+            {
+              "date": "2026-03-09",
+              "quantitySold": 393,
+              "transactionCount": 305,
+              "marketPrice": 231.4,
+              "lowSalePrice": 220.0,
+              "highSalePrice": 249.95
+            },
+            {
+              "date": "2026-03-16",
+              "quantitySold": 486,
+              "transactionCount": 383,
+              "marketPrice": 232.95,
+              "lowSalePrice": 219.1,
+              "highSalePrice": 275.99
+            },
+            {
+              "date": "2026-03-23",
+              "quantitySold": 871,
+              "transactionCount": 689,
+              "marketPrice": 212.4,
+              "lowSalePrice": 186.98,
+              "highSalePrice": 275.99
+            },
+            {
+              "date": "2026-03-30",
+              "quantitySold": 500,
+              "transactionCount": 422,
+              "marketPrice": 206.36,
+              "lowSalePrice": 174.51,
+              "highSalePrice": 227.17
+            },
+            {
+              "date": "2026-04-06",
+              "quantitySold": 312,
+              "transactionCount": 268,
+              "marketPrice": 207.54,
+              "lowSalePrice": 175.0,
+              "highSalePrice": 239.96
+            },
+            {
+              "date": "2026-04-13",
+              "quantitySold": 275,
+              "transactionCount": 240,
+              "marketPrice": 197.13,
+              "lowSalePrice": 175.0,
+              "highSalePrice": 214.99
+            },
+            {
+              "date": "2026-04-20",
+              "quantitySold": 252,
+              "transactionCount": 222,
+              "marketPrice": 208.27,
+              "lowSalePrice": 189.99,
+              "highSalePrice": 239.96
+            },
+            {
+              "date": "2026-04-27",
+              "quantitySold": 225,
+              "transactionCount": 211,
+              "marketPrice": 209.45,
+              "lowSalePrice": 189.0,
+              "highSalePrice": 260.0
+            },
+            {
+              "date": "2026-05-04",
+              "quantitySold": 170,
+              "transactionCount": 159,
+              "marketPrice": 208.14,
+              "lowSalePrice": 198.1,
+              "highSalePrice": 274.99
+            },
+            {
+              "date": "2026-05-11",
+              "quantitySold": 227,
+              "transactionCount": 184,
+              "marketPrice": 209.85,
+              "lowSalePrice": 167.98,
+              "highSalePrice": 229.95
+            },
+            {
+              "date": "2026-05-18",
+              "quantitySold": 106,
+              "transactionCount": 95,
+              "marketPrice": 221.61,
+              "lowSalePrice": 196.07,
+              "highSalePrice": 280.0
+            },
+            {
+              "date": "2026-05-25",
+              "quantitySold": 159,
+              "transactionCount": 131,
+              "marketPrice": 218.72,
+              "lowSalePrice": 189.99,
+              "highSalePrice": 306.4
+            },
+            {
+              "date": "2026-06-01",
+              "quantitySold": 100,
+              "transactionCount": 87,
+              "marketPrice": 219.04,
+              "lowSalePrice": 200.0,
+              "highSalePrice": 239.95
+            },
+            {
+              "date": "2026-06-08",
+              "quantitySold": 84,
+              "transactionCount": 70,
+              "marketPrice": 214.14,
+              "lowSalePrice": 192.7,
+              "highSalePrice": 229.9
+            },
+            {
+              "date": "2026-06-15",
+              "quantitySold": 74,
+              "transactionCount": 61,
+              "marketPrice": 220.67,
+              "lowSalePrice": 201.31,
+              "highSalePrice": 239.96
+            },
+            {
+              "date": "2026-06-22",
+              "quantitySold": 67,
+              "transactionCount": 57,
+              "marketPrice": 223.35,
+              "lowSalePrice": 205.0,
+              "highSalePrice": 239.99
+            },
+            {
+              "date": "2026-06-29",
+              "quantitySold": 42,
+              "transactionCount": 37,
+              "marketPrice": 224.66,
+              "lowSalePrice": 211.48,
+              "highSalePrice": 239.95
+            },
+            {
+              "date": "2026-07-06",
+              "quantitySold": 73,
+              "transactionCount": 65,
+              "marketPrice": 214.81,
+              "lowSalePrice": 209.94,
+              "highSalePrice": 229.99
+            },
+            {
+              "date": "2026-07-13",
+              "quantitySold": 496,
+              "transactionCount": 354,
+              "marketPrice": 174.35,
+              "lowSalePrice": 159.86,
+              "highSalePrice": 214.88
+            },
+            {
+              "date": "2026-07-20",
+              "quantitySold": 505,
+              "transactionCount": 354,
+              "marketPrice": 182.09,
+              "lowSalePrice": 153.0,
+              "highSalePrice": 199.99
+            },
+            {
+              "date": "2026-07-27",
+              "quantitySold": 229,
+              "transactionCount": 190,
+              "marketPrice": 170.58,
+              "lowSalePrice": 160.0,
+              "highSalePrice": 218.49
+            },
+            {
+              "date": "2026-08-03",
+              "quantitySold": 239,
+              "transactionCount": 175,
+              "marketPrice": 169.94,
+              "lowSalePrice": 158.9,
+              "highSalePrice": 189.99
+            },
+            {
+              "date": "2026-08-10",
+              "quantitySold": 219,
+              "transactionCount": 192,
+              "marketPrice": 170.55,
+              "lowSalePrice": 149.99,
+              "highSalePrice": 180.0
+            },
+            {
+              "date": "2026-08-17",
+              "quantitySold": 255,
+              "transactionCount": 214,
+              "marketPrice": 172.96,
+              "lowSalePrice": 159.99,
+              "highSalePrice": 183.99
+            },
+            {
+              "date": "2026-08-24",
+              "quantitySold": 21,
+              "transactionCount": 18,
+              "marketPrice": 170.87,
+              "lowSalePrice": 164.7,
+              "highSalePrice": 180.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "productId": "672404",
+      "productName": "Perfect Order Pokemon Center Elite Trainer Box - ME03: Perfect Order (POR)",
+      "url": "https://www.tcgplayer.com/product/672404/pokemon-me03-perfect-order-perfect-order-pokemon-center-elite-trainer-box?page=1&Language=English",
+      "ranges": {
+        "1M": {
+          "interval": "day",
+          "label": "1M · daily",
+          "points": [
+            {
+              "date": "2026-07-27",
+              "quantitySold": 6,
+              "transactionCount": 4,
+              "marketPrice": 119.85,
+              "lowSalePrice": 110.0,
+              "highSalePrice": 120.0
+            },
+            {
+              "date": "2026-07-28",
+              "quantitySold": 12,
+              "transactionCount": 10,
+              "marketPrice": 119.43,
+              "lowSalePrice": 108.0,
+              "highSalePrice": 130.0
+            },
+            {
+              "date": "2026-07-29",
+              "quantitySold": 5,
+              "transactionCount": 4,
+              "marketPrice": 120.23,
+              "lowSalePrice": 115.88,
+              "highSalePrice": 125.99
+            },
+            {
+              "date": "2026-07-30",
+              "quantitySold": 3,
+              "transactionCount": 3,
+              "marketPrice": 119.39,
+              "lowSalePrice": 114.5,
+              "highSalePrice": 118.0
+            },
+            {
+              "date": "2026-07-31",
+              "quantitySold": 3,
+              "transactionCount": 3,
+              "marketPrice": 119.79,
+              "lowSalePrice": 122.99,
+              "highSalePrice": 125.99
+            },
+            {
+              "date": "2026-08-01",
+              "quantitySold": 15,
+              "transactionCount": 6,
+              "marketPrice": 118.6,
+              "lowSalePrice": 105.0,
+              "highSalePrice": 126.0
+            },
+            {
+              "date": "2026-08-02",
+              "quantitySold": 9,
+              "transactionCount": 6,
+              "marketPrice": 118.73,
+              "lowSalePrice": 112.99,
+              "highSalePrice": 121.0
+            },
+            {
+              "date": "2026-08-03",
+              "quantitySold": 5,
+              "transactionCount": 5,
+              "marketPrice": 117.22,
+              "lowSalePrice": 108.0,
+              "highSalePrice": 119.99
+            },
+            {
+              "date": "2026-08-04",
+              "quantitySold": 3,
+              "transactionCount": 3,
+              "marketPrice": 117.9,
+              "lowSalePrice": 110.0,
+              "highSalePrice": 124.79
+            },
+            {
+              "date": "2026-08-05",
+              "quantitySold": 4,
+              "transactionCount": 4,
+              "marketPrice": 118.51,
+              "lowSalePrice": 121.0,
+              "highSalePrice": 127.99
+            },
+            {
+              "date": "2026-08-06",
+              "quantitySold": 2,
+              "transactionCount": 2,
+              "marketPrice": 118.23,
+              "lowSalePrice": 121.0,
+              "highSalePrice": 121.0
+            },
+            {
+              "date": "2026-08-07",
+              "quantitySold": 3,
+              "transactionCount": 3,
+              "marketPrice": 119.35,
+              "lowSalePrice": 125.69,
+              "highSalePrice": 125.69
+            },
+            {
+              "date": "2026-08-08",
+              "quantitySold": 7,
+              "transactionCount": 6,
+              "marketPrice": 121.54,
+              "lowSalePrice": 121.0,
+              "highSalePrice": 125.69
+            },
+            {
+              "date": "2026-08-09",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 121.26,
+              "lowSalePrice": 111.01,
+              "highSalePrice": 111.01
+            },
+            {
+              "date": "2026-08-10",
+              "quantitySold": 4,
+              "transactionCount": 4,
+              "marketPrice": 121.81,
+              "lowSalePrice": 110.7,
+              "highSalePrice": 125.69
+            },
+            {
+              "date": "2026-08-11",
+              "quantitySold": 3,
+              "transactionCount": 3,
+              "marketPrice": 122.38,
+              "lowSalePrice": 111.01,
+              "highSalePrice": 126.0
+            },
+            {
+              "date": "2026-08-12",
+              "quantitySold": 5,
+              "transactionCount": 5,
+              "marketPrice": 120.98,
+              "lowSalePrice": 111.01,
+              "highSalePrice": 122.99
+            },
+            {
+              "date": "2026-08-13",
+              "quantitySold": 8,
+              "transactionCount": 8,
+              "marketPrice": 120.26,
+              "lowSalePrice": 108.0,
+              "highSalePrice": 125.99
+            },
+            {
+              "date": "2026-08-14",
+              "quantitySold": 8,
+              "transactionCount": 5,
+              "marketPrice": 119.8,
+              "lowSalePrice": 102.0,
+              "highSalePrice": 125.99
+            },
+            {
+              "date": "2026-08-15",
+              "quantitySold": 4,
+              "transactionCount": 4,
+              "marketPrice": 120.39,
+              "lowSalePrice": 119.66,
+              "highSalePrice": 126.0
+            },
+            {
+              "date": "2026-08-16",
+              "quantitySold": 4,
+              "transactionCount": 4,
+              "marketPrice": 120.61,
+              "lowSalePrice": 108.67,
+              "highSalePrice": 126.95
+            },
+            {
+              "date": "2026-08-17",
+              "quantitySold": 10,
+              "transactionCount": 5,
+              "marketPrice": 121.12,
+              "lowSalePrice": 109.91,
+              "highSalePrice": 128.95
+            },
+            {
+              "date": "2026-08-18",
+              "quantitySold": 4,
+              "transactionCount": 4,
+              "marketPrice": 120.44,
+              "lowSalePrice": 109.91,
+              "highSalePrice": 125.0
+            },
+            {
+              "date": "2026-08-19",
+              "quantitySold": 5,
+              "transactionCount": 5,
+              "marketPrice": 119.79,
+              "lowSalePrice": 118.0,
+              "highSalePrice": 123.0
+            },
+            {
+              "date": "2026-08-20",
+              "quantitySold": 5,
+              "transactionCount": 4,
+              "marketPrice": 120.18,
+              "lowSalePrice": 113.0,
+              "highSalePrice": 124.9
+            },
+            {
+              "date": "2026-08-21",
+              "quantitySold": 5,
+              "transactionCount": 3,
+              "marketPrice": 120.36,
+              "lowSalePrice": 125.0,
+              "highSalePrice": 125.0
+            },
+            {
+              "date": "2026-08-22",
+              "quantitySold": 6,
+              "transactionCount": 5,
+              "marketPrice": 121.57,
+              "lowSalePrice": 118.0,
+              "highSalePrice": 127.49
+            },
+            {
+              "date": "2026-08-23",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 122.41,
+              "lowSalePrice": 114.82,
+              "highSalePrice": 114.82
+            },
+            {
+              "date": "2026-08-24",
+              "quantitySold": 6,
+              "transactionCount": 6,
+              "marketPrice": 121.73,
+              "lowSalePrice": 120.0,
+              "highSalePrice": 122.81
+            },
+            {
+              "date": "2026-08-25",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 121.73,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            }
+          ]
+        },
+        "3M": {
+          "interval": "3-day",
+          "label": "3M · 3-day totals",
+          "points": [
+            {
+              "date": "2026-05-30",
+              "quantitySold": 23,
+              "transactionCount": 16,
+              "marketPrice": 143.16,
+              "lowSalePrice": 134.09,
+              "highSalePrice": 149.99
+            },
+            {
+              "date": "2026-06-02",
+              "quantitySold": 15,
+              "transactionCount": 12,
+              "marketPrice": 141.09,
+              "lowSalePrice": 126.99,
+              "highSalePrice": 159.99
+            },
+            {
+              "date": "2026-06-05",
+              "quantitySold": 13,
+              "transactionCount": 13,
+              "marketPrice": 142.21,
+              "lowSalePrice": 140.0,
+              "highSalePrice": 145.0
+            },
+            {
+              "date": "2026-06-08",
+              "quantitySold": 15,
+              "transactionCount": 13,
+              "marketPrice": 143.07,
+              "lowSalePrice": 133.01,
+              "highSalePrice": 146.95
+            },
+            {
+              "date": "2026-06-11",
+              "quantitySold": 15,
+              "transactionCount": 15,
+              "marketPrice": 140.85,
+              "lowSalePrice": 127.99,
+              "highSalePrice": 146.98
+            },
+            {
+              "date": "2026-06-14",
+              "quantitySold": 10,
+              "transactionCount": 9,
+              "marketPrice": 139.23,
+              "lowSalePrice": 128.95,
+              "highSalePrice": 144.99
+            },
+            {
+              "date": "2026-06-17",
+              "quantitySold": 10,
+              "transactionCount": 10,
+              "marketPrice": 138.72,
+              "lowSalePrice": 125.0,
+              "highSalePrice": 149.79
+            },
+            {
+              "date": "2026-06-20",
+              "quantitySold": 7,
+              "transactionCount": 7,
+              "marketPrice": 139.17,
+              "lowSalePrice": 124.0,
+              "highSalePrice": 139.99
+            },
+            {
+              "date": "2026-06-23",
+              "quantitySold": 15,
+              "transactionCount": 15,
+              "marketPrice": 135.97,
+              "lowSalePrice": 115.0,
+              "highSalePrice": 139.99
+            },
+            {
+              "date": "2026-06-26",
+              "quantitySold": 18,
+              "transactionCount": 13,
+              "marketPrice": 133.37,
+              "lowSalePrice": 130.0,
+              "highSalePrice": 140.0
+            },
+            {
+              "date": "2026-06-29",
+              "quantitySold": 8,
+              "transactionCount": 8,
+              "marketPrice": 134.57,
+              "lowSalePrice": 129.01,
+              "highSalePrice": 135.0
+            },
+            {
+              "date": "2026-07-02",
+              "quantitySold": 14,
+              "transactionCount": 12,
+              "marketPrice": 130.89,
+              "lowSalePrice": 101.0,
+              "highSalePrice": 135.0
+            },
+            {
+              "date": "2026-07-05",
+              "quantitySold": 20,
+              "transactionCount": 18,
+              "marketPrice": 121.52,
+              "lowSalePrice": 100.0,
+              "highSalePrice": 139.99
+            },
+            {
+              "date": "2026-07-08",
+              "quantitySold": 15,
+              "transactionCount": 15,
+              "marketPrice": 123.05,
+              "lowSalePrice": 116.01,
+              "highSalePrice": 129.97
+            },
+            {
+              "date": "2026-07-11",
+              "quantitySold": 14,
+              "transactionCount": 14,
+              "marketPrice": 122.55,
+              "lowSalePrice": 119.97,
+              "highSalePrice": 135.89
+            },
+            {
+              "date": "2026-07-14",
+              "quantitySold": 17,
+              "transactionCount": 14,
+              "marketPrice": 122.28,
+              "lowSalePrice": 110.0,
+              "highSalePrice": 127.98
+            },
+            {
+              "date": "2026-07-17",
+              "quantitySold": 35,
+              "transactionCount": 31,
+              "marketPrice": 122.06,
+              "lowSalePrice": 120.0,
+              "highSalePrice": 125.95
+            },
+            {
+              "date": "2026-07-20",
+              "quantitySold": 27,
+              "transactionCount": 22,
+              "marketPrice": 122.39,
+              "lowSalePrice": 110.0,
+              "highSalePrice": 125.0
+            },
+            {
+              "date": "2026-07-23",
+              "quantitySold": 31,
+              "transactionCount": 17,
+              "marketPrice": 120.81,
+              "lowSalePrice": 110.0,
+              "highSalePrice": 127.49
+            },
+            {
+              "date": "2026-07-26",
+              "quantitySold": 23,
+              "transactionCount": 18,
+              "marketPrice": 120.04,
+              "lowSalePrice": 108.0,
+              "highSalePrice": 130.0
+            },
+            {
+              "date": "2026-07-29",
+              "quantitySold": 11,
+              "transactionCount": 10,
+              "marketPrice": 119.8,
+              "lowSalePrice": 114.5,
+              "highSalePrice": 125.99
+            },
+            {
+              "date": "2026-08-01",
+              "quantitySold": 29,
+              "transactionCount": 17,
+              "marketPrice": 118.18,
+              "lowSalePrice": 105.0,
+              "highSalePrice": 126.0
+            },
+            {
+              "date": "2026-08-04",
+              "quantitySold": 9,
+              "transactionCount": 9,
+              "marketPrice": 118.21,
+              "lowSalePrice": 110.0,
+              "highSalePrice": 127.99
+            },
+            {
+              "date": "2026-08-07",
+              "quantitySold": 11,
+              "transactionCount": 10,
+              "marketPrice": 120.72,
+              "lowSalePrice": 111.01,
+              "highSalePrice": 125.69
+            },
+            {
+              "date": "2026-08-10",
+              "quantitySold": 12,
+              "transactionCount": 12,
+              "marketPrice": 121.72,
+              "lowSalePrice": 110.7,
+              "highSalePrice": 126.0
+            },
+            {
+              "date": "2026-08-13",
+              "quantitySold": 20,
+              "transactionCount": 17,
+              "marketPrice": 120.15,
+              "lowSalePrice": 102.0,
+              "highSalePrice": 126.0
+            },
+            {
+              "date": "2026-08-16",
+              "quantitySold": 18,
+              "transactionCount": 13,
+              "marketPrice": 120.72,
+              "lowSalePrice": 108.67,
+              "highSalePrice": 128.95
+            },
+            {
+              "date": "2026-08-19",
+              "quantitySold": 15,
+              "transactionCount": 12,
+              "marketPrice": 120.11,
+              "lowSalePrice": 113.0,
+              "highSalePrice": 125.0
+            },
+            {
+              "date": "2026-08-22",
+              "quantitySold": 13,
+              "transactionCount": 12,
+              "marketPrice": 121.9,
+              "lowSalePrice": 114.82,
+              "highSalePrice": 127.49
+            },
+            {
+              "date": "2026-08-25",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 121.9,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            }
+          ]
+        },
+        "1Y": {
+          "interval": "week",
+          "label": "1Y · weekly totals",
+          "points": [
+            {
+              "date": "2025-09-01",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-09-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-09-15",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-09-22",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-09-29",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-10-06",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-10-13",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-10-20",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-10-27",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-11-03",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-11-10",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-11-17",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-11-24",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-12-01",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-12-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-12-15",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-12-22",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2025-12-29",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-01-05",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 0.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-01-12",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 0.0,
+              "lowSalePrice": 396.7,
+              "highSalePrice": 396.7
+            },
+            {
+              "date": "2026-01-19",
+              "quantitySold": 2,
+              "transactionCount": 2,
+              "marketPrice": 390.55,
+              "lowSalePrice": 386.97,
+              "highSalePrice": 387.97
+            },
+            {
+              "date": "2026-01-26",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 378.88,
+              "lowSalePrice": 343.9,
+              "highSalePrice": 343.9
+            },
+            {
+              "date": "2026-02-02",
+              "quantitySold": 3,
+              "transactionCount": 2,
+              "marketPrice": 303.92,
+              "lowSalePrice": 203.93,
+              "highSalePrice": 203.97
+            },
+            {
+              "date": "2026-02-09",
+              "quantitySold": 13,
+              "transactionCount": 8,
+              "marketPrice": 250.2,
+              "lowSalePrice": 199.0,
+              "highSalePrice": 203.85
+            },
+            {
+              "date": "2026-02-16",
+              "quantitySold": 11,
+              "transactionCount": 11,
+              "marketPrice": 226.47,
+              "lowSalePrice": 199.0,
+              "highSalePrice": 250.0
+            },
+            {
+              "date": "2026-02-23",
+              "quantitySold": 12,
+              "transactionCount": 11,
+              "marketPrice": 226.67,
+              "lowSalePrice": 250.0,
+              "highSalePrice": 250.0
+            },
+            {
+              "date": "2026-03-02",
+              "quantitySold": 13,
+              "transactionCount": 11,
+              "marketPrice": 268.08,
+              "lowSalePrice": 250.0,
+              "highSalePrice": 340.0
+            },
+            {
+              "date": "2026-03-09",
+              "quantitySold": 3,
+              "transactionCount": 3,
+              "marketPrice": 280.99,
+              "lowSalePrice": 328.0,
+              "highSalePrice": 349.37
+            },
+            {
+              "date": "2026-03-16",
+              "quantitySold": 3,
+              "transactionCount": 3,
+              "marketPrice": 294.36,
+              "lowSalePrice": 325.0,
+              "highSalePrice": 335.0
+            },
+            {
+              "date": "2026-03-23",
+              "quantitySold": 422,
+              "transactionCount": 319,
+              "marketPrice": 133.44,
+              "lowSalePrice": 111.0,
+              "highSalePrice": 335.0
+            },
+            {
+              "date": "2026-03-30",
+              "quantitySold": 274,
+              "transactionCount": 213,
+              "marketPrice": 134.93,
+              "lowSalePrice": 110.0,
+              "highSalePrice": 150.0
+            },
+            {
+              "date": "2026-04-06",
+              "quantitySold": 147,
+              "transactionCount": 110,
+              "marketPrice": 135.89,
+              "lowSalePrice": 115.0,
+              "highSalePrice": 150.0
+            },
+            {
+              "date": "2026-04-13",
+              "quantitySold": 95,
+              "transactionCount": 79,
+              "marketPrice": 133.52,
+              "lowSalePrice": 122.99,
+              "highSalePrice": 150.0
+            },
+            {
+              "date": "2026-04-20",
+              "quantitySold": 88,
+              "transactionCount": 72,
+              "marketPrice": 131.2,
+              "lowSalePrice": 118.0,
+              "highSalePrice": 140.99
+            },
+            {
+              "date": "2026-04-27",
+              "quantitySold": 103,
+              "transactionCount": 82,
+              "marketPrice": 132.82,
+              "lowSalePrice": 115.0,
+              "highSalePrice": 140.99
+            },
+            {
+              "date": "2026-05-04",
+              "quantitySold": 101,
+              "transactionCount": 79,
+              "marketPrice": 136.1,
+              "lowSalePrice": 105.0,
+              "highSalePrice": 159.99
+            },
+            {
+              "date": "2026-05-11",
+              "quantitySold": 64,
+              "transactionCount": 48,
+              "marketPrice": 129.49,
+              "lowSalePrice": 100.0,
+              "highSalePrice": 140.99
+            },
+            {
+              "date": "2026-05-18",
+              "quantitySold": 63,
+              "transactionCount": 47,
+              "marketPrice": 135.88,
+              "lowSalePrice": 122.99,
+              "highSalePrice": 149.99
+            },
+            {
+              "date": "2026-05-25",
+              "quantitySold": 65,
+              "transactionCount": 53,
+              "marketPrice": 143.54,
+              "lowSalePrice": 131.55,
+              "highSalePrice": 150.0
+            },
+            {
+              "date": "2026-06-01",
+              "quantitySold": 39,
+              "transactionCount": 35,
+              "marketPrice": 142.13,
+              "lowSalePrice": 126.99,
+              "highSalePrice": 159.99
+            },
+            {
+              "date": "2026-06-08",
+              "quantitySold": 33,
+              "transactionCount": 31,
+              "marketPrice": 138.99,
+              "lowSalePrice": 127.99,
+              "highSalePrice": 146.98
+            },
+            {
+              "date": "2026-06-15",
+              "quantitySold": 22,
+              "transactionCount": 21,
+              "marketPrice": 139.58,
+              "lowSalePrice": 125.0,
+              "highSalePrice": 149.79
+            },
+            {
+              "date": "2026-06-22",
+              "quantitySold": 35,
+              "transactionCount": 30,
+              "marketPrice": 133.14,
+              "lowSalePrice": 115.0,
+              "highSalePrice": 140.0
+            },
+            {
+              "date": "2026-06-29",
+              "quantitySold": 28,
+              "transactionCount": 25,
+              "marketPrice": 122.86,
+              "lowSalePrice": 100.0,
+              "highSalePrice": 135.0
+            },
+            {
+              "date": "2026-07-06",
+              "quantitySold": 41,
+              "transactionCount": 40,
+              "marketPrice": 123.08,
+              "lowSalePrice": 104.0,
+              "highSalePrice": 139.99
+            },
+            {
+              "date": "2026-07-13",
+              "quantitySold": 54,
+              "transactionCount": 47,
+              "marketPrice": 123.97,
+              "lowSalePrice": 110.0,
+              "highSalePrice": 127.98
+            },
+            {
+              "date": "2026-07-20",
+              "quantitySold": 63,
+              "transactionCount": 43,
+              "marketPrice": 120.85,
+              "lowSalePrice": 110.0,
+              "highSalePrice": 127.49
+            },
+            {
+              "date": "2026-07-27",
+              "quantitySold": 53,
+              "transactionCount": 36,
+              "marketPrice": 118.73,
+              "lowSalePrice": 105.0,
+              "highSalePrice": 130.0
+            },
+            {
+              "date": "2026-08-03",
+              "quantitySold": 25,
+              "transactionCount": 24,
+              "marketPrice": 121.26,
+              "lowSalePrice": 108.0,
+              "highSalePrice": 127.99
+            },
+            {
+              "date": "2026-08-10",
+              "quantitySold": 36,
+              "transactionCount": 33,
+              "marketPrice": 120.61,
+              "lowSalePrice": 102.0,
+              "highSalePrice": 126.95
+            },
+            {
+              "date": "2026-08-17",
+              "quantitySold": 36,
+              "transactionCount": 27,
+              "marketPrice": 122.41,
+              "lowSalePrice": 109.91,
+              "highSalePrice": 128.95
+            },
+            {
+              "date": "2026-08-24",
+              "quantitySold": 6,
+              "transactionCount": 6,
+              "marketPrice": 121.73,
+              "lowSalePrice": 120.0,
+              "highSalePrice": 122.81
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
