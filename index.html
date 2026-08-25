@@ -111,8 +111,17 @@
       </div>
     </header>
 
+    <div class="mx-auto max-w-7xl px-4 pt-4 sm:px-6">
+      <div class="inline-flex rounded-xl border border-slate-200 bg-white/90 p-1 dark:border-white/10 dark:bg-ink-900/80" role="tablist">
+        <button type="button" data-tab="overview" class="tab-btn pill-active rounded-lg px-4 py-2 text-sm font-medium">Overview</button>
+        <button type="button" data-tab="sales" class="tab-btn rounded-lg px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300">Latest Sales</button>
+      </div>
+    </div>
+
     <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
       <section id="status-banner" class="mb-6 hidden rounded-2xl border border-amber-300/60 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100"></section>
+
+      <div id="panel-overview">
 
       <section class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" id="metric-cards">
         <article class="rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
@@ -149,10 +158,13 @@
       <section class="mb-8 rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80 sm:p-6">
         <div class="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 class="font-display text-xl font-semibold">Daily Number of Sales</h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400">Items sold each day from TCGPlayer’s 1M Market Price History chart</p>
+            <h2 id="chart-title" class="font-display text-xl font-semibold">Market Price History</h2>
+            <p id="chart-subtitle" class="text-sm text-slate-500 dark:text-slate-400">Daily items sold and market price from TCGPlayer’s 1M chart</p>
           </div>
-          <div id="product-pills" class="flex flex-wrap gap-2"></div>
+          <div class="flex flex-col items-start gap-3 lg:items-end">
+            <div id="range-pills" class="flex flex-wrap gap-2"></div>
+            <div id="product-pills" class="flex flex-wrap gap-2"></div>
+          </div>
         </div>
         <div class="relative h-72 sm:h-80">
           <canvas id="sales-chart"></canvas>
@@ -200,6 +212,50 @@
         </div>
         <p id="table-empty" class="hidden px-3 py-8 text-center text-sm text-slate-500 dark:text-slate-400">No products match that search.</p>
       </section>
+      </div>
+
+      <div id="panel-sales" class="hidden">
+        <section class="rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80 sm:p-6">
+          <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 class="font-display text-xl font-semibold">Latest Sold Transactions</h2>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Up to 100 most recent TCGPlayer sales per product, with price and quantity</p>
+            </div>
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <label class="relative block">
+                <span class="sr-only">Search sales</span>
+                <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></i>
+                <input id="sales-search" type="search" placeholder="Search product, condition…" class="w-full rounded-lg border border-slate-200 bg-ink-50 py-2 pl-9 pr-3 text-sm outline-none ring-gold-400 focus:ring-2 dark:border-white/10 dark:bg-ink-950 sm:w-64" />
+              </label>
+              <label class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                Product
+                <select id="sales-product" class="rounded-lg border border-slate-200 bg-ink-50 px-3 py-2 text-sm text-ink-900 outline-none ring-gold-400 focus:ring-2 dark:border-white/10 dark:bg-ink-950 dark:text-ink-50">
+                  <option value="all">All products</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+              <thead class="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500 dark:border-white/10 dark:text-slate-400">
+                <tr>
+                  <th class="px-3 py-3 font-medium">Sold</th>
+                  <th class="px-3 py-3 font-medium">Product</th>
+                  <th class="px-3 py-3 font-medium">Price</th>
+                  <th class="px-3 py-3 font-medium">Ship</th>
+                  <th class="px-3 py-3 font-medium">Qty</th>
+                  <th class="px-3 py-3 font-medium">Total</th>
+                  <th class="px-3 py-3 font-medium">Condition</th>
+                  <th class="px-3 py-3 font-medium">Variant</th>
+                </tr>
+              </thead>
+              <tbody id="sales-body" class="divide-y divide-slate-100 dark:divide-white/5"></tbody>
+            </table>
+          </div>
+          <p id="sales-empty" class="hidden px-3 py-8 text-center text-sm text-slate-500 dark:text-slate-400">No sold transactions loaded yet. Run the daily scraper to capture the latest sales feed.</p>
+          <p id="sales-count" class="mt-4 text-xs text-slate-500 dark:text-slate-400"></p>
+        </section>
+      </div>
     </main>
   </div>
 
@@ -209,9 +265,19 @@
     const integer = new Intl.NumberFormat("en-US");
 
     let records = [];
+    let chartHistory = { products: [] };
+    let latestSales = [];
     let selectedProductId = "all";
+    let selectedRange = "1M";
+    let activeTab = "overview";
     let salesChart = null;
     let latestByProduct = [];
+
+    const RANGE_COPY = {
+      "1M": { title: "Market Price History · 1M", subtitle: "Daily items sold and market price (TCGPlayer 1M chart)" },
+      "3M": { title: "Market Price History · 3M", subtitle: "3-day sales totals and market price (TCGPlayer 3M chart)" },
+      "1Y": { title: "Market Price History · 1Y", subtitle: "Weekly sales totals and market price (TCGPlayer 1Y chart)" },
+    };
 
     function currentTheme() {
       return document.documentElement.classList.contains("dark") ? "dark" : "light";
@@ -332,6 +398,34 @@
       badge.querySelector("span").textContent = asOf ? `Updated ${asOf}` : "No snapshots yet";
     }
 
+    function setActiveTab(tab) {
+      activeTab = tab;
+      document.getElementById("panel-overview").classList.toggle("hidden", tab !== "overview");
+      document.getElementById("panel-sales").classList.toggle("hidden", tab !== "sales");
+      document.querySelectorAll(".tab-btn").forEach((button) => {
+        const selected = button.dataset.tab === tab;
+        button.classList.toggle("pill-active", selected);
+        button.classList.toggle("text-slate-600", !selected);
+        button.classList.toggle("dark:text-slate-300", !selected);
+      });
+    }
+
+    function renderRangePills() {
+      const host = document.getElementById("range-pills");
+      host.innerHTML = ["1M", "3M", "1Y"].map((range) => `
+        <button type="button" data-range="${range}" class="pill rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-gold-500 dark:border-white/10 dark:text-slate-300 ${selectedRange === range ? "pill-active" : "bg-ink-50 dark:bg-ink-950"}">
+          ${range}
+        </button>
+      `).join("");
+      host.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          selectedRange = button.dataset.range;
+          renderRangePills();
+          renderChart();
+        });
+      });
+    }
+
     function renderPills(products) {
       const host = document.getElementById("product-pills");
       const options = [{ id: "all", name: "All products" }, ...products];
@@ -349,45 +443,82 @@
       });
     }
 
-    function seriesForSelection() {
-      const filtered = selectedProductId === "all"
-        ? records
-        : records.filter((row) => String(row.productId) === selectedProductId);
+    function historyPointsForSelection() {
+      const products = chartHistory.products || [];
+      const selected = selectedProductId === "all"
+        ? products
+        : products.filter((product) => String(product.productId) === selectedProductId);
       const byDate = new Map();
-      filtered.forEach((row) => {
-        if (!row.date || row.lastDaySales == null) return;
-        byDate.set(row.date, (byDate.get(row.date) || 0) + row.lastDaySales);
+      selected.forEach((product) => {
+        const points = product.ranges?.[selectedRange]?.points || [];
+        points.forEach((point) => {
+          if (!point.date) return;
+          const current = byDate.get(point.date) || { quantitySold: 0, marketPriceSum: 0, priceCount: 0 };
+          current.quantitySold += point.quantitySold || 0;
+          if (point.marketPrice != null) {
+            current.marketPriceSum += point.marketPrice;
+            current.priceCount += 1;
+          }
+          byDate.set(point.date, current);
+        });
       });
       const labels = [...byDate.keys()].sort();
-      return { labels, values: labels.map((date) => byDate.get(date)) };
+      return {
+        labels,
+        volumes: labels.map((date) => byDate.get(date).quantitySold),
+        prices: labels.map((date) => {
+          const row = byDate.get(date);
+          return row.priceCount ? row.marketPriceSum / row.priceCount : null;
+        }),
+      };
     }
 
     function renderChart() {
+      const copy = RANGE_COPY[selectedRange] || RANGE_COPY["1M"];
+      document.getElementById("chart-title").textContent = copy.title;
+      document.getElementById("chart-subtitle").textContent = copy.subtitle;
+
       const ctx = document.getElementById("sales-chart");
       const colors = chartColors();
-      const { labels, values } = seriesForSelection();
+      const { labels, volumes, prices } = historyPointsForSelection();
       const config = {
-        type: "line",
         data: {
           labels,
-          datasets: [{
-            label: "Daily sales",
-            data: values,
-            borderColor: colors.line,
-            backgroundColor: colors.fill,
-            fill: true,
-            tension: 0.3,
-            pointRadius: 4,
-            pointBackgroundColor: colors.line,
-            borderWidth: 2,
-          }],
+          datasets: [
+            {
+              type: "bar",
+              label: "Items sold",
+              data: volumes,
+              yAxisID: "y",
+              backgroundColor: colors.fill,
+              borderColor: colors.line,
+              borderWidth: 1,
+              borderRadius: 4,
+              order: 2,
+            },
+            {
+              type: "line",
+              label: "Market price",
+              data: prices,
+              yAxisID: "yPrice",
+              borderColor: "#38bdf8",
+              backgroundColor: "transparent",
+              tension: 0.3,
+              pointRadius: 3,
+              borderWidth: 2,
+              order: 1,
+            },
+          ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           interaction: { intersect: false, mode: "index" },
           plugins: {
-            legend: { display: false },
+            legend: {
+              display: true,
+              labels: { color: colors.muted, boxWidth: 12 },
+            },
             tooltip: {
               backgroundColor: colors.tooltipBg,
               titleColor: colors.text,
@@ -395,18 +526,21 @@
               borderColor: colors.tooltipBorder,
               borderWidth: 1,
               callbacks: {
-                label: (item) => ` ${integer.format(item.parsed.y)} sold`,
+                label: (item) => item.dataset.yAxisID === "yPrice"
+                  ? ` Market ${formatMoney(item.parsed.y)}`
+                  : ` ${integer.format(item.parsed.y)} sold`,
               },
             },
           },
           scales: {
             x: {
-              ticks: { color: colors.muted, maxRotation: 0 },
+              ticks: { color: colors.muted, maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
               grid: { color: colors.grid },
               border: { display: false },
             },
             y: {
               beginAtZero: true,
+              position: "right",
               ticks: {
                 color: colors.muted,
                 precision: 0,
@@ -414,6 +548,18 @@
               },
               grid: { color: colors.grid },
               border: { display: false },
+              title: { display: true, text: "Items sold", color: colors.muted },
+            },
+            yPrice: {
+              beginAtZero: false,
+              position: "left",
+              ticks: {
+                color: colors.muted,
+                callback: (value) => formatMoney(value),
+              },
+              grid: { drawOnChartArea: false },
+              border: { display: false },
+              title: { display: true, text: "Market price", color: colors.muted },
             },
           },
         },
@@ -480,11 +626,81 @@
       lucide.createIcons();
     }
 
+    function formatSoldAt(value) {
+      if (!value) return "—";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return escapeHtml(String(value));
+      return date.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    }
+
+    function populateSalesProductFilter() {
+      const select = document.getElementById("sales-product");
+      const products = uniqueProducts(records);
+      select.innerHTML = `<option value="all">All products</option>` + products.map((product) =>
+        `<option value="${escapeHtml(product.id)}">${escapeHtml(product.name)}</option>`
+      ).join("");
+    }
+
+    function filteredSales() {
+      const query = document.getElementById("sales-search").value.trim().toLowerCase();
+      const productId = document.getElementById("sales-product").value;
+      return latestSales.filter((row) => {
+        if (productId !== "all" && String(row.productId) !== productId) return false;
+        if (!query) return true;
+        const haystack = [row.productName, row.condition, row.variant, row.language].join(" ").toLowerCase();
+        return haystack.includes(query);
+      });
+    }
+
+    function renderSalesTable() {
+      const rows = filteredSales();
+      const body = document.getElementById("sales-body");
+      const empty = document.getElementById("sales-empty");
+      const count = document.getElementById("sales-count");
+      if (!rows.length) {
+        body.innerHTML = "";
+        empty.classList.remove("hidden");
+        count.textContent = "";
+        return;
+      }
+      empty.classList.add("hidden");
+      body.innerHTML = rows.map((row) => {
+        const total = (row.purchasePrice || 0) * (row.quantity || 1) + (row.shippingPrice || 0);
+        return `
+          <tr class="hover:bg-ink-50/80 dark:hover:bg-white/5">
+            <td class="px-3 py-3 tabular whitespace-nowrap">${formatSoldAt(row.orderDate)}</td>
+            <td class="px-3 py-3">
+              <div class="font-medium">${escapeHtml(row.productName || "Unknown product")}</div>
+              <div class="text-xs text-slate-500">${escapeHtml(row.language || "")}</div>
+            </td>
+            <td class="px-3 py-3 tabular font-medium">${formatMoney(row.purchasePrice)}</td>
+            <td class="px-3 py-3 tabular">${formatMoney(row.shippingPrice)}</td>
+            <td class="px-3 py-3 tabular">${formatInt(row.quantity)}</td>
+            <td class="px-3 py-3 tabular">${formatMoney(total)}</td>
+            <td class="px-3 py-3">${escapeHtml(row.condition || "—")}</td>
+            <td class="px-3 py-3">${escapeHtml(row.variant || "—")}</td>
+          </tr>
+        `;
+      }).join("");
+      count.textContent = `Showing ${integer.format(rows.length)} of ${integer.format(latestSales.length)} captured transactions`;
+    }
+
+    async function loadJson(path, fallback) {
+      const response = await fetch(`${path}?t=${Date.now()}`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.json();
+    }
+
     async function init() {
       lucide.createIcons();
       document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
       document.getElementById("table-search").addEventListener("input", renderTable);
       document.getElementById("table-sort").addEventListener("change", renderTable);
+      document.getElementById("sales-search").addEventListener("input", renderSalesTable);
+      document.getElementById("sales-product").addEventListener("change", renderSalesTable);
+      document.querySelectorAll(".tab-btn").forEach((button) => {
+        button.addEventListener("click", () => setActiveTab(button.dataset.tab));
+      });
       window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
         if (!localStorage.getItem("theme")) {
           document.documentElement.classList.toggle("dark", event.matches);
@@ -493,20 +709,36 @@
       });
 
       try {
-        const response = await fetch(`data/tracker_data.json?t=${Date.now()}`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        records = await response.json();
+        records = await loadJson("data/tracker_data.json");
         if (!Array.isArray(records)) records = [];
       } catch (error) {
         showBanner("Could not load tracker data yet. Run the daily scraper (or open this page over HTTP) to populate snapshots.");
         records = [];
       }
 
+      try {
+        chartHistory = await loadJson("data/chart_history.json");
+        if (!chartHistory || !Array.isArray(chartHistory.products)) chartHistory = { products: [] };
+      } catch (error) {
+        chartHistory = { products: [] };
+      }
+
+      try {
+        const salesPayload = await loadJson("data/latest_sales.json");
+        latestSales = Array.isArray(salesPayload.sales) ? salesPayload.sales : [];
+      } catch (error) {
+        latestSales = [];
+      }
+
       latestByProduct = latestSnapshots(records);
       renderMetrics(latestByProduct, records);
+      renderRangePills();
       renderPills(uniqueProducts(records));
       renderChart();
       renderTable();
+      populateSalesProductFilter();
+      renderSalesTable();
+      if (location.hash === "#sales") setActiveTab("sales");
     }
 
     init();

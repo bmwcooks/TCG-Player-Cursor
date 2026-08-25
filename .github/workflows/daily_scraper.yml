@@ -42,7 +42,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/tracker_data.json
+          git add data/tracker_data.json data/chart_history.json data/latest_sales.json
           if git diff --staged --quiet; then
             echo "No tracker data changes to commit."
           else
@@ -54,7 +54,7 @@ jobs:
         run: |
           mkdir -p _site/data
           cp index.html _site/
-          cp data/tracker_data.json _site/data/
+          cp data/*.json _site/data/
           touch _site/.nojekyll
 
       - name: Setup Pages

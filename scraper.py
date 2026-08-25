@@ -8,6 +8,21 @@ import re
 URLS_FILE = "urls.txt"
 DATA_DIR = "data"
 DATA_FILE = os.path.join(DATA_DIR, "tracker_data.json")
+CHART_HISTORY_FILE = os.path.join(DATA_DIR, "chart_history.json")
+LATEST_SALES_FILE = os.path.join(DATA_DIR, "latest_sales.json")
+LATEST_SALES_LIMIT = 100
+
+CHART_RANGES = {
+    "month": {"key": "1M", "interval": "day", "label": "1M · daily"},
+    "quarter": {"key": "3M", "interval": "3-day", "label": "3M · 3-day totals"},
+    "annual": {"key": "1Y", "interval": "week", "label": "1Y · weekly totals"},
+}
+
+API_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "application/json, text/plain, */*",
+    "Origin": "https://www.tcgplayer.com",
+}
 
 
 def get_product_name(soup):
@@ -59,13 +74,8 @@ def select_chart_sku(result_list):
     return max(skus, key=score)
 
 
-def parse_daily_buckets(history_data):
-    """Parse TCGPlayer daily chart buckets into dated quantitySold rows.
-
-    `range=month` returns one bucket per calendar day (the 1M chart).
-    `range=quarter` returns 3-day aggregates and must not be used for daily volume.
-    Buckets arrive newest-first; we sort by bucketStartDate ascending.
-    """
+def parse_history_buckets(history_data):
+    """Parse Infinite API chart buckets (daily, 3-day, or weekly) into dated rows."""
     if not isinstance(history_data, dict):
         return []
     result = history_data.get("result") or history_data.get("results") or []
@@ -83,10 +93,25 @@ def parse_daily_buckets(history_data):
         rows.append({
             "date": str(raw_date)[:10],
             "quantitySold": parse_numeric(bucket.get("quantitySold")),
+            "transactionCount": parse_numeric(bucket.get("transactionCount")),
             "marketPrice": parse_numeric(bucket.get("marketPrice"), as_float=True),
+            "lowSalePrice": parse_numeric(bucket.get("lowSalePrice"), as_float=True),
+            "highSalePrice": parse_numeric(bucket.get("highSalePrice"), as_float=True),
         })
     rows.sort(key=lambda row: row["date"])
     return rows
+
+
+def parse_daily_buckets(history_data):
+    """Daily 1M buckets used for the dated tracker archive."""
+    return [
+        {
+            "date": row["date"],
+            "quantitySold": row["quantitySold"],
+            "marketPrice": row["marketPrice"],
+        }
+        for row in parse_history_buckets(history_data)
+    ]
 
 
 def latest_completed_sales(buckets, today_date):
@@ -155,11 +180,139 @@ def load_records():
         return []
 
 
-def save_records(records):
+def save_json(path, payload):
     os.makedirs(DATA_DIR, exist_ok=True)
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(records, f, indent=2, ensure_ascii=False)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
         f.write("\n")
+
+
+def save_records(records):
+    save_json(DATA_FILE, records)
+
+
+def request_headers(referer=None):
+    headers = dict(API_HEADERS)
+    if referer:
+        headers["Referer"] = referer
+    return headers
+
+
+def fetch_price_history(product_id, range_name, referer):
+    api_url = f"https://infinite-api.tcgplayer.com/price/history/{product_id}/detailed?range={range_name}"
+    print(f"DEBUG: Requesting {range_name} chart data from {api_url}")
+    response = requests.get(api_url, headers=request_headers(referer), timeout=15)
+    if response.status_code != 200:
+        print(f"DEBUG: {range_name} chart request failed with status {response.status_code}")
+        return []
+    return parse_history_buckets(response.json())
+
+
+def normalize_sale(row, product_id, product_name, url):
+    if not isinstance(row, dict):
+        return None
+    return {
+        "productId": product_id,
+        "productName": product_name,
+        "url": url,
+        "orderDate": row.get("orderDate") or row.get("soldDate") or row.get("date"),
+        "purchasePrice": parse_numeric(row.get("purchasePrice") or row.get("price"), as_float=True),
+        "shippingPrice": parse_numeric(row.get("shippingPrice"), as_float=True) or 0.0,
+        "quantity": parse_numeric(row.get("quantity") or row.get("qty")) or 1,
+        "condition": row.get("condition") or "",
+        "variant": row.get("variant") or "",
+        "language": row.get("language") or "",
+        "listingType": row.get("listingType") or "",
+    }
+
+
+def fetch_latest_sales_http(product_id, referer, limit=LATEST_SALES_LIMIT):
+    """Fallback POST used when the stealth browser capture is empty."""
+    api_url = f"https://mpapi.tcgplayer.com/v2/product/{product_id}/latestsales?mpfev=5429"
+    body = {
+        "conditions": [],
+        "languages": [],
+        "variants": [],
+        "listingType": "All",
+        "limit": min(limit, 25),
+        "offset": 0,
+    }
+    try:
+        response = requests.post(api_url, headers=request_headers(referer), json=body, timeout=15)
+        if response.status_code != 200:
+            print(f"DEBUG: Latest sales HTTP request failed with status {response.status_code}")
+            return []
+        payload = response.json()
+        return payload.get("data") or []
+    except Exception as exc:
+        print(f"DEBUG: Latest sales HTTP request error: {exc}")
+        return []
+
+
+LATEST_SALES_JS = """
+async ([productId, limit]) => {
+  const all = [];
+  const seen = new Set();
+  let offset = 0;
+  const pageSize = 25;
+  for (let i = 0; i < 20 && all.length < limit; i++) {
+    const res = await fetch(
+      `https://mpapi.tcgplayer.com/v2/product/${productId}/latestsales?mpfev=5429`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          conditions: [],
+          languages: [],
+          variants: [],
+          listingType: "All",
+          limit: pageSize,
+          offset,
+        }),
+      }
+    );
+    if (!res.ok) {
+      return { error: res.status, sales: all };
+    }
+    const json = await res.json();
+    const batch = Array.isArray(json.data) ? json.data : [];
+    if (!batch.length) break;
+    let added = 0;
+    for (const row of batch) {
+      const key = [row.orderDate, row.purchasePrice, row.quantity, row.customListingId, row.condition].join("|");
+      if (seen.has(key)) continue;
+      seen.add(key);
+      all.push(row);
+      added += 1;
+    }
+    if (added === 0) break;
+    offset += batch.length;
+    if (batch.length < pageSize) break;
+  }
+  return { sales: all.slice(0, limit) };
+}
+"""
+
+
+def capture_latest_sales_action(product_id, sink):
+    def page_action(page):
+        try:
+            evaluate = getattr(page, "evaluate")
+            try:
+                result = evaluate(LATEST_SALES_JS, [str(product_id), LATEST_SALES_LIMIT], isolated_context=False)
+            except TypeError:
+                result = evaluate(LATEST_SALES_JS, [str(product_id), LATEST_SALES_LIMIT])
+            sales = result.get("sales") if isinstance(result, dict) else result
+            if isinstance(sales, list):
+                sink.extend(sales)
+        except Exception as exc:
+            print(f"DEBUG: Browser latest-sales capture failed: {exc}")
+        return page
+    return page_action
 
 
 def upsert_records(existing, new_records):
@@ -196,6 +349,8 @@ def main():
     # --- 2. Scrape Data ---
     all_data_rows = []
     discord_blocks = []
+    chart_products = []
+    latest_sales_rows = []
     today_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
     from bs4 import BeautifulSoup
@@ -207,8 +362,13 @@ def main():
             print(f"\n======================================")
             print(f"Scraping: {url}")
             try:
-                # Normal fetch without XHR interception
-                page = session.fetch(url)
+                product_id = extract_product_id(url)
+                captured_sales = []
+                fetch_kwargs = {}
+                if product_id:
+                    fetch_kwargs["page_action"] = capture_latest_sales_action(product_id, captured_sales)
+
+                page = session.fetch(url, **fetch_kwargs)
                 soup = BeautifulSoup(page.body, 'html.parser')
 
                 product_name = get_product_name(soup)
@@ -218,45 +378,56 @@ def main():
                 current_sellers = extract_metric(soup, "Current Sellers")
                 current_quantity = extract_metric(soup, "Current Quantity")
 
-                # --- DIRECT API QUERY FOR CHART DATA ---
                 last_day_sales = "N/A"
                 daily_buckets = []
-                product_id_match = re.search(r'product/(\d+)', url)
-                
-                if product_id_match:
-                    product_id = product_id_match.group(1)
-                    
-                    # range=month matches the 1M Market Price History chart (one bar per day).
-                    # range=quarter is 3-day aggregates and must not be used for daily volume.
-                    api_url = f"https://infinite-api.tcgplayer.com/price/history/{product_id}/detailed?range=month"
-                    
-                    headers = {
-                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                        "Accept": "application/json",
-                        "Referer": url,
-                        "Origin": "https://www.tcgplayer.com"
-                    }
-                    
-                    try:
-                        print(f"DEBUG: Requesting chart data directly from {api_url}")
-                        api_response = requests.get(api_url, headers=headers, timeout=10)
-                        
-                        if api_response.status_code == 200:
-                            history_data = api_response.json()
-                            daily_buckets = parse_daily_buckets(history_data)
-                            last_day_sales = latest_completed_sales(daily_buckets, today_date)
-                            
-                            if last_day_sales != "N/A":
-                                print(f">>> SUCCESS: Found Sales Data: {last_day_sales} across {len(daily_buckets)} daily buckets")
-                            else:
-                                print(f"DEBUG: Parsed JSON, but no completed daily buckets were found. Raw: {str(history_data)[:250]}...")
-                        else:
-                            print(f"DEBUG: Direct API request failed with status {api_response.status_code}")
-                            
-                    except Exception as e:
-                        print(f"DEBUG: Direct API request error: {e}")
+                range_payload = {}
 
-                product_id = extract_product_id(url)
+                if product_id:
+                    try:
+                        for range_name, meta in CHART_RANGES.items():
+                            points = fetch_price_history(product_id, range_name, url)
+                            range_payload[meta["key"]] = {
+                                "interval": meta["interval"],
+                                "label": meta["label"],
+                                "points": points,
+                            }
+                            print(f">>> {meta['key']}: {len(points)} {meta['interval']} buckets")
+                        daily_buckets = [
+                            {
+                                "date": point["date"],
+                                "quantitySold": point["quantitySold"],
+                                "marketPrice": point["marketPrice"],
+                            }
+                            for point in (range_payload.get("1M") or {}).get("points") or []
+                        ]
+                        last_day_sales = latest_completed_sales(daily_buckets, today_date)
+                        if last_day_sales != "N/A":
+                            print(f">>> SUCCESS: Found Sales Data: {last_day_sales} across {len(daily_buckets)} daily buckets")
+                    except Exception as e:
+                        print(f"DEBUG: Chart history request error: {e}")
+
+                    if len(captured_sales) < LATEST_SALES_LIMIT:
+                        fallback_sales = fetch_latest_sales_http(product_id, url)
+                        if len(fallback_sales) > len(captured_sales):
+                            captured_sales = fallback_sales
+                    normalized = [
+                        sale for sale in (
+                            normalize_sale(row, product_id, product_name, url)
+                            for row in captured_sales
+                        )
+                        if sale and sale.get("orderDate")
+                    ]
+                    normalized.sort(key=lambda row: row.get("orderDate") or "", reverse=True)
+                    latest_sales_rows.extend(normalized[:LATEST_SALES_LIMIT])
+                    print(f">>> Latest transactions captured: {min(len(normalized), LATEST_SALES_LIMIT)}")
+
+                    chart_products.append({
+                        "productId": product_id,
+                        "productName": product_name,
+                        "url": url,
+                        "ranges": range_payload,
+                    })
+
                 record = {
                     "date": today_date,
                     "productId": product_id,
@@ -296,6 +467,13 @@ def main():
     merged_records = upsert_records(existing_records, all_data_rows)
     save_records(merged_records)
     print(f"Saved {len(all_data_rows)} snapshot(s). Archive now has {len(merged_records)} record(s) in {DATA_FILE}.")
+
+    if chart_products:
+        save_json(CHART_HISTORY_FILE, {"updatedAt": today_date, "products": chart_products})
+        print(f"Wrote chart history for {len(chart_products)} product(s) to {CHART_HISTORY_FILE}.")
+    if latest_sales_rows:
+        save_json(LATEST_SALES_FILE, {"updatedAt": today_date, "sales": latest_sales_rows})
+        print(f"Wrote {len(latest_sales_rows)} latest transaction(s) to {LATEST_SALES_FILE}.")
 
     # --- 4. Discord Integration ---
     print("Sending Discord notification...")
