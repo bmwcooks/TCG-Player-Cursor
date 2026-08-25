@@ -3,8 +3,6 @@ import os
 import requests
 import datetime
 import re
-from bs4 import BeautifulSoup
-from scrapling.fetchers import StealthySession
 
 # --- Configuration ---
 URLS_FILE = "urls.txt"
@@ -42,37 +40,85 @@ def extract_metric(soup, label):
     return "N/A"
 
 
-def find_latest_sales(obj):
-    """Recursively searches JSON arrays backwards to find the most recent sales integer."""
-    if isinstance(obj, dict):
-        # Look for daily sales volume keys, specifically ignoring averages or totals
-        for k in ["itemsSold", "sales", "volume", "sold", "ItemsSold", "quantitySold"]:
-            if k in obj and obj[k] is not None:
-                # We want the daily number, not the 'totalQuantitySold' for the quarter
-                if "total" not in k.lower() and "average" not in k.lower():
-                    return str(obj[k])
-                
-        # Target common array wrapper keys (added 'timeline' and 'transactions')
-        for key in ["data", "results", "result", "priceHistory", "points", "timeline", "transactions"]:
-            if key in obj:
-                res = find_latest_sales(obj[key])
-                if res != "N/A": return res
-                
-        # Deep search fallback
-        for k, v in obj.items():
-            # Skip drilling into summary stats
-            if "total" in k.lower() or "average" in k.lower():
-                continue
-            res = find_latest_sales(v)
-            if res != "N/A": return res
-            
-    elif isinstance(obj, list) and len(obj) > 0:
-        # Search the list backwards (newest dates are typically at the end of the array)
-        for item in reversed(obj):
-            res = find_latest_sales(item)
-            if res != "N/A": return res
-            
-    return "N/A"
+def select_chart_sku(result_list):
+    """Prefer the Unopened / English / Normal SKU that drives the Market Price History chart."""
+    if not result_list:
+        return None
+    skus = result_list if isinstance(result_list, list) else [result_list]
+
+    def score(sku):
+        condition = str(sku.get("condition") or "").lower()
+        language = str(sku.get("language") or "").lower()
+        variant = str(sku.get("variant") or "").lower()
+        return (
+            1 if condition == "unopened" else 0,
+            1 if language == "english" else 0,
+            1 if variant == "normal" else 0,
+        )
+
+    return max(skus, key=score)
+
+
+def parse_daily_buckets(history_data):
+    """Parse TCGPlayer daily chart buckets into dated quantitySold rows.
+
+    `range=month` returns one bucket per calendar day (the 1M chart).
+    `range=quarter` returns 3-day aggregates and must not be used for daily volume.
+    Buckets arrive newest-first; we sort by bucketStartDate ascending.
+    """
+    if not isinstance(history_data, dict):
+        return []
+    result = history_data.get("result") or history_data.get("results") or []
+    sku = select_chart_sku(result)
+    if not sku:
+        return []
+
+    rows = []
+    for bucket in sku.get("buckets") or []:
+        if not isinstance(bucket, dict):
+            continue
+        raw_date = bucket.get("bucketStartDate") or bucket.get("date")
+        if not raw_date:
+            continue
+        rows.append({
+            "date": str(raw_date)[:10],
+            "quantitySold": parse_numeric(bucket.get("quantitySold")),
+            "marketPrice": parse_numeric(bucket.get("marketPrice"), as_float=True),
+        })
+    rows.sort(key=lambda row: row["date"])
+    return rows
+
+
+def latest_completed_sales(buckets, today_date):
+    """Most recent completed day's item volume (skip today's incomplete bucket)."""
+    completed = [
+        row for row in buckets
+        if row.get("date") and row["date"] < today_date and row.get("quantitySold") is not None
+    ]
+    if not completed:
+        return "N/A"
+    return str(completed[-1]["quantitySold"])
+
+
+def history_records_for_product(product_id, product_name, url, buckets, today_date):
+    """Dated snapshots for every completed chart day so the dashboard can plot true daily volume."""
+    records = []
+    for bucket in buckets:
+        if not bucket.get("date") or bucket["date"] >= today_date:
+            continue
+        records.append({
+            "date": bucket["date"],
+            "productId": product_id,
+            "productName": product_name,
+            "marketPrice": bucket.get("marketPrice"),
+            "recentSale": None,
+            "listedMedian": None,
+            "currentSellers": None,
+            "currentQuantity": None,
+            "lastDaySales": bucket.get("quantitySold"),
+            "url": url,
+        })
+    return records
 
 
 def parse_numeric(value, as_float=False):
@@ -117,12 +163,16 @@ def save_records(records):
 
 
 def upsert_records(existing, new_records):
-    """Replace a snapshot when the same product is scraped again on the same date."""
+    """Merge snapshots by (date, productId). Nulls do not wipe richer live-scrape fields."""
     index = {(row.get("date"), str(row.get("productId"))): i for i, row in enumerate(existing)}
     for record in new_records:
         key = (record.get("date"), str(record.get("productId")))
         if key in index:
-            existing[index[key]] = record
+            merged = dict(existing[index[key]])
+            for field, value in record.items():
+                if value is not None:
+                    merged[field] = value
+            existing[index[key]] = merged
         else:
             existing.append(record)
             index[key] = len(existing) - 1
@@ -148,6 +198,9 @@ def main():
     discord_blocks = []
     today_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
+    from bs4 import BeautifulSoup
+    from scrapling.fetchers import StealthySession
+
     print(f"Initializing Scrapling StealthySession to scrape {len(urls)} URLs...")
     with StealthySession(headless=True, solve_cloudflare=True) as session:
         for url in urls:
@@ -167,13 +220,15 @@ def main():
 
                 # --- DIRECT API QUERY FOR CHART DATA ---
                 last_day_sales = "N/A"
+                daily_buckets = []
                 product_id_match = re.search(r'product/(\d+)', url)
                 
                 if product_id_match:
                     product_id = product_id_match.group(1)
                     
-                    # Target the infinite-api that drives the Market Price History chart
-                    api_url = f"https://infinite-api.tcgplayer.com/price/history/{product_id}/detailed?range=quarter"
+                    # range=month matches the 1M Market Price History chart (one bar per day).
+                    # range=quarter is 3-day aggregates and must not be used for daily volume.
+                    api_url = f"https://infinite-api.tcgplayer.com/price/history/{product_id}/detailed?range=month"
                     
                     headers = {
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -188,12 +243,13 @@ def main():
                         
                         if api_response.status_code == 200:
                             history_data = api_response.json()
-                            last_day_sales = find_latest_sales(history_data)
+                            daily_buckets = parse_daily_buckets(history_data)
+                            last_day_sales = latest_completed_sales(daily_buckets, today_date)
                             
                             if last_day_sales != "N/A":
-                                print(f">>> SUCCESS: Found Sales Data: {last_day_sales}")
+                                print(f">>> SUCCESS: Found Sales Data: {last_day_sales} across {len(daily_buckets)} daily buckets")
                             else:
-                                print(f"DEBUG: Parsed JSON, but no sales data keys were found. Raw: {str(history_data)[:250]}...")
+                                print(f"DEBUG: Parsed JSON, but no completed daily buckets were found. Raw: {str(history_data)[:250]}...")
                         else:
                             print(f"DEBUG: Direct API request failed with status {api_response.status_code}")
                             
@@ -210,10 +266,13 @@ def main():
                     "listedMedian": parse_numeric(listed_median, as_float=True),
                     "currentSellers": parse_numeric(current_sellers),
                     "currentQuantity": parse_numeric(current_quantity),
-                    "lastDaySales": parse_numeric(last_day_sales),
+                    "lastDaySales": None,
                     "url": url,
                 }
                 all_data_rows.append(record)
+                all_data_rows.extend(
+                    history_records_for_product(product_id, product_name, url, daily_buckets, today_date)
+                )
 
                 # Build text block for Discord
                 block = (
