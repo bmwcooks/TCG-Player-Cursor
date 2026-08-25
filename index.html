@@ -150,7 +150,7 @@
         <div class="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h2 class="font-display text-xl font-semibold">Daily Number of Sales</h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400">Units sold on the most recent recorded day for each snapshot</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Items sold each day from TCGPlayer’s 1M Market Price History chart</p>
           </div>
           <div id="product-pills" class="flex flex-wrap gap-2"></div>
         </div>
@@ -251,18 +251,36 @@
 
     function latestSnapshots(data) {
       const latest = new Map();
+      const latestSales = new Map();
       data.forEach((row) => {
         const key = String(row.productId);
         const current = latest.get(key);
         if (!current || (row.date || "") >= (current.date || "")) {
           latest.set(key, row);
         }
+        if (row.lastDaySales != null) {
+          const salesRow = latestSales.get(key);
+          if (!salesRow || (row.date || "") >= (salesRow.date || "")) {
+            latestSales.set(key, row);
+          }
+        }
       });
-      return [...latest.values()];
+      return [...latest.values()].map((row) => {
+        const salesRow = latestSales.get(String(row.productId));
+        if (!salesRow || row.lastDaySales != null) return row;
+        return { ...row, lastDaySales: salesRow.lastDaySales };
+      });
     }
 
     function latestDate(data) {
       return data.reduce((max, row) => ((row.date || "") > max ? row.date : max), "");
+    }
+
+    function latestSalesDate(data) {
+      return data.reduce((max, row) => {
+        if (row.lastDaySales == null) return max;
+        return (row.date || "") > max ? row.date : max;
+      }, "");
     }
 
     function escapeHtml(value) {
@@ -289,7 +307,7 @@
     }
 
     function renderMetrics(latest, all) {
-      const asOf = latestDate(all);
+      const asOf = latestSalesDate(all) || latestDate(all);
       const todayRows = all.filter((row) => row.date === asOf);
       document.getElementById("metric-tracked").textContent = integer.format(latest.length);
 
@@ -337,8 +355,8 @@
         : records.filter((row) => String(row.productId) === selectedProductId);
       const byDate = new Map();
       filtered.forEach((row) => {
-        if (!row.date) return;
-        byDate.set(row.date, (byDate.get(row.date) || 0) + (row.lastDaySales || 0));
+        if (!row.date || row.lastDaySales == null) return;
+        byDate.set(row.date, (byDate.get(row.date) || 0) + row.lastDaySales);
       });
       const labels = [...byDate.keys()].sort();
       return { labels, values: labels.map((date) => byDate.get(date)) };
