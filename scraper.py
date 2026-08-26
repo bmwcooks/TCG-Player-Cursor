@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import requests
 import datetime
 import re
@@ -13,6 +14,11 @@ LATEST_SALES_FILE = os.path.join(DATA_DIR, "latest_sales.json")
 PRODUCTS_FILE = os.path.join(DATA_DIR, "pokemon_products.json")
 IMAGE_OVERRIDES_FILE = os.path.join(DATA_DIR, "product_image_overrides.json")
 LATEST_SALES_LIMIT = 100
+DISCORD_MESSAGE_LIMIT = 2000
+# Discord counts some emoji as two units; keep a small buffer under the hard cap.
+DISCORD_SAFETY_MARGIN = 40
+DISCORD_PACK_LIMIT = DISCORD_MESSAGE_LIMIT - DISCORD_SAFETY_MARGIN
+DISCORD_HEADER = "**TCGPlayer Daily Update** 📊"
 
 CHART_RANGES = {
     "month": {"key": "1M", "interval": "day", "label": "1M · daily"},
@@ -413,6 +419,62 @@ def capture_latest_sales_action(product_id, sink):
     return page_action
 
 
+def discord_header(part, total):
+    return f"{DISCORD_HEADER} ({part}/{total})\n\n"
+
+
+def pack_discord_messages(blocks, limit=DISCORD_PACK_LIMIT):
+    """Pack product recaps into Discord messages without exceeding the character cap."""
+    items = [str(block).strip() for block in blocks if str(block).strip()]
+    if not items:
+        return [f"{DISCORD_HEADER}\nNo products scraped."]
+
+    # Reserve room for the longest " (999/999)" part tag we might add after packing.
+    header_budget = len(discord_header(999, 999))
+    body_limit = max(1, limit - header_budget)
+
+    bodies = []
+    current = ""
+    for block in items:
+        if len(block) > body_limit:
+            if current:
+                bodies.append(current)
+                current = ""
+            bodies.append(block[: body_limit - 1] + "…")
+            continue
+        candidate = f"{current}\n\n{block}" if current else block
+        if len(candidate) > body_limit:
+            bodies.append(current)
+            current = block
+        else:
+            current = candidate
+    if current:
+        bodies.append(current)
+
+    total = len(bodies)
+    messages = []
+    for index, body in enumerate(bodies, start=1):
+        header = discord_header(index, total)
+        message = header + body
+        if len(message) > limit:
+            message = header + body[: max(0, limit - len(header) - 1)] + "…"
+        messages.append(message)
+    return messages
+
+
+def send_discord_messages(webhook_url, messages):
+    """Post packed recaps one webhook at a time, pausing so Discord rate limits stay happy."""
+    total = len(messages)
+    for index, content in enumerate(messages, start=1):
+        response = requests.post(webhook_url, json={"content": content}, timeout=20)
+        if response.status_code in (200, 204):
+            print(f"Discord notification {index}/{total} sent ({len(content)}/{DISCORD_MESSAGE_LIMIT} chars).")
+        else:
+            print(f"Failed to send Discord {index}/{total}: {response.status_code}, {response.text}")
+        if index < total:
+            time.sleep(0.7)
+
+
 def upsert_records(existing, new_records):
     """Merge snapshots by (date, productId). Nulls do not wipe richer live-scrape fields."""
     index = {(row.get("date"), str(row.get("productId"))): i for i, row in enumerate(existing)}
@@ -591,27 +653,13 @@ def main():
     if not discord_url:
         print("DISCORD_WEBHOOK_URL environment variable is missing; skipping Discord notification.")
         return
-        
-    header = "**TCGPlayer Daily Update** 📊\n\n"
-    current_message = header
-    messages_to_send = []
 
-    for block in discord_blocks:
-        if len(current_message) + len(block) + 4 > 1900:
-            messages_to_send.append(current_message)
-            current_message = block + "\n\n"
-        else:
-            current_message += block + "\n\n"
-            
-    if current_message.strip():
-        messages_to_send.append(current_message)
-
-    for i, msg_text in enumerate(messages_to_send):
-        response = requests.post(discord_url, json={"content": msg_text})
-        if response.status_code in [200, 204]:
-            print(f"Discord notification part {i+1}/{len(messages_to_send)} sent successfully!")
-        else:
-            print(f"Failed to send Discord part {i+1}: {response.status_code}, {response.text}")
+    messages_to_send = pack_discord_messages(discord_blocks)
+    print(
+        f"Packed {len(discord_blocks)} product recap(s) into {len(messages_to_send)} "
+        f"Discord message(s) (max {DISCORD_PACK_LIMIT} chars each, hard cap {DISCORD_MESSAGE_LIMIT})."
+    )
+    send_discord_messages(discord_url, messages_to_send)
 
 if __name__ == "__main__":
     main()
