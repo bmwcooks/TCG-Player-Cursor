@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "asOf": "2026-08-26",
+  "notes": "English TCG expansions only. Special/subset products are marked as special. Upcoming dates are announced street dates.",
+  "games": [
+    {
+      "id": "one-piece",
+      "name": "One Piece",
+      "tagline": "Bandai One Piece Card Game",
+      "description": "Pick a product line, then a set. Main boosters (OP), Extra Boosters (EB), and Premium Boosters (PRB).",
+      "accent": "crimson",
+      "icon": "anchor",
+      "families": [
+        {
+          "id": "op",
+          "name": "OP",
+          "fullName": "Main Boosters",
+          "description": "Numbered English booster expansions from Romance Dawn through The World's Strongest Warriors.",
+          "sets": [
+            { "slug": "op-01-romance-dawn", "code": "OP-01", "name": "Romance Dawn", "setName": "Romance Dawn", "released": "2022-12-02" },
+            { "slug": "op-02-paramount-war", "code": "OP-02", "name": "Paramount War", "setName": "Paramount War", "released": "2023-03-10" },
+            { "slug": "op-03-pillars-of-strength", "code": "OP-03", "name": "Pillars of Strength", "setName": "Pillars of Strength", "released": "2023-06-30" },
+            { "slug": "op-04-kingdoms-of-intrigue", "code": "OP-04", "name": "Kingdoms of Intrigue", "setName": "Kingdoms of Intrigue", "released": "2023-09-22" },
+            { "slug": "op-05-awakening-of-the-new-era", "code": "OP-05", "name": "Awakening of the New Era", "setName": "Awakening of the New Era", "released": "2023-12-08" },
+            { "slug": "op-06-wings-of-the-captain", "code": "OP-06", "name": "Wings of the Captain", "setName": "Wings of the Captain", "released": "2024-03-15" },
+            { "slug": "op-07-500-years-in-the-future", "code": "OP-07", "name": "500 Years in the Future", "setName": "500 Years in the Future", "released": "2024-06-28" },
+            { "slug": "op-08-two-legends", "code": "OP-08", "name": "Two Legends", "setName": "Two Legends", "released": "2024-09-13" },
+            { "slug": "op-09-emperors-in-the-new-world", "code": "OP-09", "name": "Emperors in the New World", "setName": "Emperors in the New World", "released": "2024-12-13" },
+            { "slug": "op-10-royal-blood", "code": "OP-10", "name": "Royal Blood", "setName": "Royal Blood", "released": "2025-03-21" },
+            { "slug": "op-11-a-fist-of-divine-speed", "code": "OP-11", "name": "A Fist of Divine Speed", "setName": "A Fist of Divine Speed", "released": "2025-06-06" },
+            { "slug": "op-12-legacy-of-the-master", "code": "OP-12", "name": "Legacy of the Master", "setName": "Legacy of the Master", "released": "2025-08-22" },
+            { "slug": "op-13-carrying-on-his-will", "code": "OP-13", "name": "Carrying On His Will", "setName": "Carrying On His Will", "released": "2025-11-07" },
+            { "slug": "op-14-the-azure-seas-seven", "code": "OP-14", "name": "The Azure Sea's Seven", "setName": "The Azure Sea's Seven", "released": "2026-01-16", "note": "English OP14-EB04; includes EB-04 cards." },
+            { "slug": "op-15-adventure-on-kamis-island", "code": "OP-15", "name": "Adventure on Kami's Island", "setName": "Adventure on Kami's Island", "released": "2026-04-03", "note": "English OP15-EB04; includes EB-04 cards." },
+            { "slug": "op-16-the-time-of-battle", "code": "OP-16", "name": "The Time of Battle", "setName": "The Time of Battle", "released": "2026-06-12" },
+            { "slug": "op-17-the-worlds-strongest-warriors", "code": "OP-17", "name": "The World's Strongest Warriors", "setName": "The World's Strongest Warriors", "released": "2026-08-28", "status": "upcoming" }
+          ]
+        },
+        {
+          "id": "eb",
+          "name": "EB",
+          "fullName": "Extra Boosters",
+          "description": "Themed extra boosters. EB-04 was Japan-only as a standalone box; those cards shipped in English inside OP-14 and OP-15.",
+          "sets": [
+            { "slug": "eb-01-memorial-collection", "code": "EB-01", "name": "Memorial Collection", "setName": "Memorial Collection", "released": "2024-05-03" },
+            { "slug": "eb-02-anime-25th-collection", "code": "EB-02", "name": "Anime 25th Collection", "setName": "Anime 25th Collection", "released": "2025-05-09" },
+            { "slug": "eb-03-heroines-edition", "code": "EB-03", "name": "Heroines Edition", "setName": "Heroines Edition", "released": "2026-02-20" },
+            { "slug": "eb-04-egghead-crisis", "code": "EB-04", "name": "Egghead Crisis", "setName": "Egghead Crisis", "released": "2026-01-01", "status": "japan-only", "note": "No standalone English box. Cards were folded into OP-14 and OP-15." },
+            { "slug": "eb-05-heroines-edition-vol-2", "code": "EB-05", "name": "Heroines Edition vol.2", "setName": "Heroines Edition vol.2", "released": "2026-10-30", "status": "upcoming" }
+          ]
+        },
+        {
+          "id": "prb",
+          "name": "PRB",
+          "fullName": "Premium Boosters",
+          "description": "All-hits premium reprint boosters with upgraded treatments.",
+          "sets": [
+            { "slug": "prb-01-the-best-vol-1", "code": "PRB-01", "name": "The Best Vol. 1", "setName": "The Best Vol. 1", "released": "2024-11-08" },
+            { "slug": "prb-02-the-best-vol-2", "code": "PRB-02", "name": "The Best Vol. 2", "setName": "The Best Vol. 2", "released": "2025-10-03" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pokemon",
+      "name": "Pokémon",
+      "tagline": "Pokémon Trading Card Game",
+      "description": "Pick an era, then a set. Only sets with product URLs in urls.txt currently have live market data.",
+      "accent": "gold",
+      "icon": "sparkles",
+      "families": [
+        {
+          "id": "xy",
+          "name": "X and Y",
+          "fullName": "XY Era",
+          "description": "English XY expansions from the Kalos Starter Set through Evolutions.",
+          "sets": [
+            { "slug": "xy-kalos-starter-set", "code": "XYK", "name": "XY Kalos Starter Set", "setName": "XY Kalos Starter Set", "released": "2013-11-08", "kind": "special" },
+            { "slug": "xy", "code": "XY", "name": "XY", "setName": "XY", "released": "2014-02-05" },
+            { "slug": "flashfire", "code": "FLF", "name": "Flashfire", "setName": "Flashfire", "released": "2014-05-07" },
+            { "slug": "furious-fists", "code": "FFI", "name": "Furious Fists", "setName": "Furious Fists", "released": "2014-08-13" },
+            { "slug": "phantom-forces", "code": "PHF", "name": "Phantom Forces", "setName": "Phantom Forces", "released": "2014-11-05" },
+            { "slug": "primal-clash", "code": "PRC", "name": "Primal Clash", "setName": "Primal Clash", "released": "2015-02-04" },
+            { "slug": "double-crisis", "code": "DCR", "name": "Double Crisis", "setName": "Double Crisis", "released": "2015-03-25", "kind": "special" },
+            { "slug": "roaring-skies", "code": "ROS", "name": "Roaring Skies", "setName": "Roaring Skies", "released": "2015-05-06" },
+            { "slug": "ancient-origins", "code": "AOR", "name": "Ancient Origins", "setName": "Ancient Origins", "released": "2015-08-12" },
+            { "slug": "breakthrough", "code": "BKT", "name": "BREAKthrough", "setName": "BREAKthrough", "released": "2015-11-04" },
+            { "slug": "breakpoint", "code": "BKP", "name": "BREAKpoint", "setName": "BREAKpoint", "released": "2016-02-03" },
+            { "slug": "generations", "code": "GEN", "name": "Generations", "setName": "Generations", "released": "2016-02-22", "kind": "special" },
+            { "slug": "fates-collide", "code": "FCO", "name": "Fates Collide", "setName": "Fates Collide", "released": "2016-05-02" },
+            { "slug": "steam-siege", "code": "STS", "name": "Steam Siege", "setName": "Steam Siege", "released": "2016-08-03" },
+            { "slug": "evolutions", "code": "EVO", "name": "Evolutions", "setName": "Evolutions", "released": "2016-11-02" }
+          ]
+        },
+        {
+          "id": "sun-and-moon",
+          "name": "Sun and Moon",
+          "fullName": "Sun & Moon Era",
+          "description": "English Sun & Moon expansions from the base set through Cosmic Eclipse.",
+          "sets": [
+            { "slug": "sun-and-moon", "code": "SUM", "name": "Sun & Moon", "setName": "Sun & Moon", "released": "2017-02-03" },
+            { "slug": "guardians-rising", "code": "GRI", "name": "Guardians Rising", "setName": "Guardians Rising", "released": "2017-05-05" },
+            { "slug": "burning-shadows", "code": "BUS", "name": "Burning Shadows", "setName": "Burning Shadows", "released": "2017-08-04" },
+            { "slug": "shining-legends", "code": "SLG", "name": "Shining Legends", "setName": "Shining Legends", "released": "2017-10-06", "kind": "special" },
+            { "slug": "crimson-invasion", "code": "CIN", "name": "Crimson Invasion", "setName": "Crimson Invasion", "released": "2017-11-03" },
+            { "slug": "ultra-prism", "code": "UPR", "name": "Ultra Prism", "setName": "Ultra Prism", "released": "2018-02-02" },
+            { "slug": "forbidden-light", "code": "FLI", "name": "Forbidden Light", "setName": "Forbidden Light", "released": "2018-05-04" },
+            { "slug": "celestial-storm", "code": "CES", "name": "Celestial Storm", "setName": "Celestial Storm", "released": "2018-08-03" },
+            { "slug": "dragon-majesty", "code": "DRM", "name": "Dragon Majesty", "setName": "Dragon Majesty", "released": "2018-09-07", "kind": "special" },
+            { "slug": "lost-thunder", "code": "LOT", "name": "Lost Thunder", "setName": "Lost Thunder", "released": "2018-11-02" },
+            { "slug": "team-up", "code": "TEU", "name": "Team Up", "setName": "Team Up", "released": "2019-02-01" },
+            { "slug": "detective-pikachu", "code": "DET", "name": "Detective Pikachu", "setName": "Detective Pikachu", "released": "2019-04-05", "kind": "special" },
+            { "slug": "unbroken-bonds", "code": "UNB", "name": "Unbroken Bonds", "setName": "Unbroken Bonds", "released": "2019-05-03" },
+            { "slug": "unified-minds", "code": "UNM", "name": "Unified Minds", "setName": "Unified Minds", "released": "2019-08-02" },
+            { "slug": "hidden-fates", "code": "HIF", "name": "Hidden Fates", "setName": "Hidden Fates", "released": "2019-08-23", "kind": "special" },
+            { "slug": "cosmic-eclipse", "code": "CEC", "name": "Cosmic Eclipse", "setName": "Cosmic Eclipse", "released": "2019-11-01" }
+          ]
+        },
+        {
+          "id": "sword-and-shield",
+          "name": "Sword and Shield",
+          "fullName": "Sword & Shield Era",
+          "description": "English Sword & Shield expansions from the base set through Crown Zenith.",
+          "sets": [
+            { "slug": "sword-and-shield", "code": "SSH", "name": "Sword & Shield", "setName": "Sword & Shield", "released": "2020-02-07" },
+            { "slug": "rebel-clash", "code": "RCL", "name": "Rebel Clash", "setName": "Rebel Clash", "released": "2020-05-01" },
+            { "slug": "darkness-ablaze", "code": "DAA", "name": "Darkness Ablaze", "setName": "Darkness Ablaze", "released": "2020-08-14" },
+            { "slug": "champions-path", "code": "CPA", "name": "Champion's Path", "setName": "Champion's Path", "released": "2020-09-25", "kind": "special" },
+            { "slug": "vivid-voltage", "code": "VIV", "name": "Vivid Voltage", "setName": "Vivid Voltage", "released": "2020-11-13" },
+            { "slug": "shining-fates", "code": "SHF", "name": "Shining Fates", "setName": "Shining Fates", "released": "2021-02-19", "kind": "special" },
+            { "slug": "battle-styles", "code": "BST", "name": "Battle Styles", "setName": "Battle Styles", "released": "2021-03-19" },
+            { "slug": "chilling-reign", "code": "CRE", "name": "Chilling Reign", "setName": "Chilling Reign", "released": "2021-06-18" },
+            { "slug": "evolving-skies", "code": "EVS", "name": "Evolving Skies", "setName": "Evolving Skies", "released": "2021-08-27" },
+            { "slug": "celebrations", "code": "CEL", "name": "Celebrations", "setName": "Celebrations", "released": "2021-10-08", "kind": "special" },
+            { "slug": "fusion-strike", "code": "FST", "name": "Fusion Strike", "setName": "Fusion Strike", "released": "2021-11-12" },
+            { "slug": "brilliant-stars", "code": "BRS", "name": "Brilliant Stars", "setName": "Brilliant Stars", "released": "2022-02-25" },
+            { "slug": "astral-radiance", "code": "ASR", "name": "Astral Radiance", "setName": "Astral Radiance", "released": "2022-05-27" },
+            { "slug": "pokemon-go", "code": "PGO", "name": "Pokémon GO", "setName": "Pokémon GO", "released": "2022-07-01", "kind": "special" },
+            { "slug": "lost-origin", "code": "LOR", "name": "Lost Origin", "setName": "Lost Origin", "released": "2022-09-09" },
+            { "slug": "silver-tempest", "code": "SIT", "name": "Silver Tempest", "setName": "Silver Tempest", "released": "2022-11-11" },
+            { "slug": "crown-zenith", "code": "CRZ", "name": "Crown Zenith", "setName": "Crown Zenith", "released": "2023-01-20", "kind": "special" }
+          ]
+        },
+        {
+          "id": "scarlet-and-violet",
+          "name": "Scarlet and Violet",
+          "fullName": "Scarlet & Violet Era",
+          "description": "English Scarlet & Violet expansions from the base set through Black Bolt and White Flare.",
+          "sets": [
+            { "slug": "scarlet-and-violet", "code": "SVI", "name": "Scarlet & Violet", "setName": "Scarlet & Violet", "released": "2023-03-31" },
+            { "slug": "paldea-evolved", "code": "PAL", "name": "Paldea Evolved", "setName": "Paldea Evolved", "released": "2023-06-09" },
+            { "slug": "obsidian-flames", "code": "OBF", "name": "Obsidian Flames", "setName": "Obsidian Flames", "released": "2023-08-11" },
+            { "slug": "151", "code": "MEW", "name": "151", "setName": "151", "released": "2023-09-22", "kind": "special" },
+            { "slug": "paradox-rift", "code": "PAR", "name": "Paradox Rift", "setName": "Paradox Rift", "released": "2023-11-03" },
+            { "slug": "paldean-fates", "code": "PAF", "name": "Paldean Fates", "setName": "Paldean Fates", "released": "2024-01-26", "kind": "special" },
+            { "slug": "temporal-forces", "code": "TEF", "name": "Temporal Forces", "setName": "Temporal Forces", "released": "2024-03-22" },
+            { "slug": "twilight-masquerade", "code": "TWM", "name": "Twilight Masquerade", "setName": "Twilight Masquerade", "released": "2024-05-24" },
+            { "slug": "shrouded-fable", "code": "SFA", "name": "Shrouded Fable", "setName": "Shrouded Fable", "released": "2024-08-02", "kind": "special" },
+            { "slug": "stellar-crown", "code": "SCR", "name": "Stellar Crown", "setName": "Stellar Crown", "released": "2024-09-13" },
+            { "slug": "surging-sparks", "code": "SSP", "name": "Surging Sparks", "setName": "Surging Sparks", "released": "2024-11-08" },
+            { "slug": "prismatic-evolutions", "code": "PRE", "name": "Prismatic Evolutions", "setName": "Prismatic Evolutions", "released": "2025-01-17", "kind": "special" },
+            { "slug": "journey-together", "code": "JTG", "name": "Journey Together", "setName": "Journey Together", "released": "2025-03-28" },
+            { "slug": "destined-rivals", "code": "DRI", "name": "Destined Rivals", "setName": "Destined Rivals", "released": "2025-05-30" },
+            { "slug": "black-bolt", "code": "BLK", "name": "Black Bolt", "setName": "Black Bolt", "released": "2025-07-18", "kind": "special" },
+            { "slug": "white-flare", "code": "WHT", "name": "White Flare", "setName": "White Flare", "released": "2025-07-18", "kind": "special" }
+          ]
+        },
+        {
+          "id": "mega-evolution",
+          "name": "Mega Evolution",
+          "fullName": "Mega Evolution Era",
+          "description": "English Mega Evolution expansions from the block opener through announced 2026 sets.",
+          "sets": [
+            { "slug": "mega-evolution", "code": "ME01", "name": "Mega Evolution", "setName": "Mega Evolution", "released": "2025-09-26" },
+            { "slug": "phantasmal-flames", "code": "ME02", "name": "Phantasmal Flames", "setName": "Phantasmal Flames", "released": "2025-11-14" },
+            { "slug": "ascended-heroes", "code": "MEH", "name": "Ascended Heroes", "setName": "Ascended Heroes", "released": "2026-01-30", "kind": "special" },
+            { "slug": "perfect-order", "code": "ME03", "name": "Perfect Order", "setName": "Perfect Order", "released": "2026-03-27" },
+            { "slug": "chaos-rising", "code": "ME04", "name": "Chaos Rising", "setName": "Chaos Rising", "released": "2026-05-22" },
+            { "slug": "pitch-black", "code": "ME05", "name": "Pitch Black", "setName": "Pitch Black", "released": "2026-07-17" },
+            { "slug": "30th-celebration", "code": "30TH", "name": "30th Celebration", "setName": "30th Celebration", "released": "2026-09-16", "kind": "special", "status": "upcoming" },
+            { "slug": "delta-reign", "code": "ME06", "name": "Delta Reign", "setName": "Delta Reign", "released": "2026-11-06", "status": "upcoming" }
+          ]
+        }
+      ]
+    }
+  ]
+}
