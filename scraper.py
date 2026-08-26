@@ -11,7 +11,10 @@ DATA_DIR = "data"
 DATA_FILE = os.path.join(DATA_DIR, "tracker_data.json")
 CHART_HISTORY_FILE = os.path.join(DATA_DIR, "chart_history.json")
 LATEST_SALES_FILE = os.path.join(DATA_DIR, "latest_sales.json")
-PRODUCTS_FILE = os.path.join(DATA_DIR, "pokemon_products.json")
+PRODUCTS_FILES = [
+    os.path.join(DATA_DIR, "pokemon_products.json"),
+    os.path.join(DATA_DIR, "one_piece_products.json"),
+]
 IMAGE_OVERRIDES_FILE = os.path.join(DATA_DIR, "product_image_overrides.json")
 LATEST_SALES_LIMIT = 100
 DISCORD_MESSAGE_LIMIT = 2000
@@ -180,18 +183,27 @@ def extract_product_id(url):
     return match.group(1) if match else None
 
 
+def load_catalog_products():
+    """Sealed product metadata from Pokémon and One Piece catalog JSON files."""
+    products = []
+    for path in PRODUCTS_FILES:
+        if not os.path.exists(path):
+            continue
+        try:
+            payload = json.load(open(path, encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        products.extend(payload.get("products") or [])
+    return products
+
+
 def load_image_lookup():
     """TCGPlayer catalog images plus optional local overrides in data/product_image_overrides.json."""
     lookup = {}
-    if os.path.exists(PRODUCTS_FILE):
-        try:
-            payload = json.load(open(PRODUCTS_FILE, encoding="utf-8"))
-            for row in payload.get("products") or []:
-                product_id = str(row.get("productId") or "")
-                if product_id and row.get("imageUrl"):
-                    lookup[product_id] = row["imageUrl"]
-        except (json.JSONDecodeError, OSError):
-            pass
+    for row in load_catalog_products():
+        product_id = str(row.get("productId") or "")
+        if product_id and row.get("imageUrl"):
+            lookup[product_id] = row["imageUrl"]
     if os.path.exists(IMAGE_OVERRIDES_FILE):
         try:
             overrides = json.load(open(IMAGE_OVERRIDES_FILE, encoding="utf-8"))
@@ -206,16 +218,10 @@ def load_image_lookup():
 
 def catalog_kind_lookup():
     kinds = {}
-    if not os.path.exists(PRODUCTS_FILE):
-        return kinds
-    try:
-        payload = json.load(open(PRODUCTS_FILE, encoding="utf-8"))
-        for row in payload.get("products") or []:
-            product_id = str(row.get("productId") or "")
-            if product_id and row.get("kind"):
-                kinds[product_id] = row["kind"]
-    except (json.JSONDecodeError, OSError):
-        pass
+    for row in load_catalog_products():
+        product_id = str(row.get("productId") or "")
+        if product_id and row.get("kind"):
+            kinds[product_id] = row["kind"]
     return kinds
 
 

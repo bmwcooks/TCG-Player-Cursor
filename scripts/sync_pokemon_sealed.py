@@ -5,15 +5,19 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 import time
 from pathlib import Path
 
 import requests
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from tracked_urls import write_tracked_urls  # noqa: E402
+
 CATALOG_PATH = ROOT / "data" / "catalog.json"
 PRODUCTS_PATH = ROOT / "data" / "pokemon_products.json"
-URLS_PATH = ROOT / "urls.txt"
 GROUPS_URL = "https://tcgcsv.com/tcgplayer/3/groups"
 PRODUCTS_URL = "https://tcgcsv.com/tcgplayer/3/{group_id}/products"
 HEADERS = {"User-Agent": "TCG-Player-Cursor/1.0 (catalog sync)"}
@@ -198,28 +202,12 @@ def main() -> None:
         raise SystemExit(f"Missing group map for: {missing_groups}")
 
     PRODUCTS_PATH.write_text(json.dumps({"updatedAt": "2026-08-26", "products": products}, indent=2) + "\n", encoding="utf-8")
-
-    lines = [
-        "# Group products under a set with `# Set: Name`.",
-        "# Pokémon sealed listings: booster boxes, Elite Trainer Boxes, and",
-        "# booster bundles (Lost Origin and later). One Piece sets can be added the same way.",
-        "",
-    ]
-    current = None
-    for row in products:
-        if row["setName"] != current:
-            current = row["setName"]
-            lines.append(f"# Set: {current}")
-            lines.append("")
-        lines.append(f"# {row['name']}")
-        lines.append(row["url"])
-        lines.append("")
-    URLS_PATH.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+    write_tracked_urls(ROOT)
 
     counts = {}
     for row in products:
         counts[row["kind"]] = counts.get(row["kind"], 0) + 1
-    print(f"Wrote {len(products)} products -> {PRODUCTS_PATH} and {URLS_PATH}")
+    print(f"Wrote {len(products)} products -> {PRODUCTS_PATH}")
     print(counts)
 
 

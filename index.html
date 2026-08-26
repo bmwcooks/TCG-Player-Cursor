@@ -332,11 +332,13 @@
 
     let catalog = { games: [] };
     let currentCatalogSet = null;
-    let pokemonProducts = { products: [] };
+    let catalogProducts = { products: [] };
     let imageOverrides = {};
 
     const KIND_LABEL = {
       "booster-box": "Booster Box",
+      "extra-booster-box": "Extra Booster Box",
+      "premium-booster-box": "Premium Booster Box",
       "etb": "Elite Trainer Box",
       "booster-bundle": "Booster Bundle",
     };
@@ -402,21 +404,35 @@
       return (family?.sets || []).find((set) => set.slug === setSlug) || null;
     }
 
+    function mergeCatalogProducts(...payloads) {
+      const products = [];
+      const seen = new Set();
+      payloads.forEach((payload) => {
+        (payload && payload.products ? payload.products : []).forEach((row) => {
+          const id = String(row.productId || "");
+          if (!id || seen.has(id)) return;
+          seen.add(id);
+          products.push(row);
+        });
+      });
+      return { products };
+    }
+
     function trackedSetNames() {
       const names = new Set();
       records.forEach((row) => names.add(setNameOf(row)));
       (chartHistory.products || []).forEach((row) => names.add(setNameOf(row)));
       latestSales.forEach((row) => names.add(setNameOf(row)));
-      (pokemonProducts.products || []).forEach((row) => names.add(row.setName));
+      (catalogProducts.products || []).forEach((row) => names.add(row.setName));
       return names;
     }
 
     function catalogProductsInSet() {
-      return (pokemonProducts.products || []).filter((row) => row.setName === selectedSet);
+      return (catalogProducts.products || []).filter((row) => row.setName === selectedSet);
     }
 
     function productById(productId) {
-      return (pokemonProducts.products || []).find((row) => String(row.productId) === String(productId)) || null;
+      return (catalogProducts.products || []).find((row) => String(row.productId) === String(productId)) || null;
     }
 
     function productImageUrl(row) {
@@ -436,8 +452,9 @@
     }
 
     function setThumb(set) {
-      const listed = (pokemonProducts.products || []).filter((row) => row.setName === set.setName);
-      return (listed.find((row) => row.kind === "booster-box") || listed[0] || {}).imageUrl || "";
+      const listed = (catalogProducts.products || []).filter((row) => row.setName === set.setName);
+      const box = listed.find((row) => (row.kind || "").includes("booster-box")) || listed[0] || {};
+      return box.imageUrl || "";
     }
 
     function imageMarkup(row, sizeClass) {
@@ -611,7 +628,11 @@
       ].join("");
       document.getElementById("change-set").href = routeHref([game.id, family.id]);
       const emptyCopy = document.getElementById("empty-set-copy");
-      emptyCopy.innerHTML = `Nothing from <strong>${escapeHtml(set.name)}</strong> is being scraped yet. Add TCGPlayer URLs under <code class="rounded bg-ink-50 px-1.5 py-0.5 text-ink-900 dark:bg-ink-950 dark:text-ink-50"># Set: ${escapeHtml(set.setName)}</code> in <code class="rounded bg-ink-50 px-1.5 py-0.5 text-ink-900 dark:bg-ink-950 dark:text-ink-50">urls.txt</code> to start collecting snapshots.`;
+      if (set.status === "japan-only") {
+        emptyCopy.innerHTML = `<strong>${escapeHtml(set.name)}</strong> had no standalone English booster box. ${escapeHtml(set.note || "Those cards shipped inside later English sets.")}`;
+      } else {
+        emptyCopy.innerHTML = `Nothing from <strong>${escapeHtml(set.name)}</strong> is being scraped yet. Add TCGPlayer URLs under <code class="rounded bg-ink-50 px-1.5 py-0.5 text-ink-900 dark:bg-ink-950 dark:text-ink-50"># Set: ${escapeHtml(set.setName)}</code> in <code class="rounded bg-ink-50 px-1.5 py-0.5 text-ink-900 dark:bg-ink-950 dark:text-ink-50">urls.txt</code> to start collecting snapshots.`;
+      }
     }
 
     function applyRoute() {
@@ -1146,12 +1167,19 @@
         catalog = { games: [] };
       }
 
+      let pokemonPayload = { products: [] };
+      let onePiecePayload = { products: [] };
       try {
-        pokemonProducts = await loadJson("data/pokemon_products.json");
-        if (!pokemonProducts || !Array.isArray(pokemonProducts.products)) pokemonProducts = { products: [] };
+        pokemonPayload = await loadJson("data/pokemon_products.json");
       } catch (error) {
-        pokemonProducts = { products: [] };
+        pokemonPayload = { products: [] };
       }
+      try {
+        onePiecePayload = await loadJson("data/one_piece_products.json");
+      } catch (error) {
+        onePiecePayload = { products: [] };
+      }
+      catalogProducts = mergeCatalogProducts(pokemonPayload, onePiecePayload);
 
       try {
         imageOverrides = await loadJson("data/product_image_overrides.json");
