@@ -1,0 +1,2045 @@
+{
+  "updatedAt": "2026-08-26",
+  "products": [
+    {
+      "productId": "91601",
+      "name": "XY Booster Box",
+      "setName": "XY",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/91601/pokemon-xy-base-set-xy-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/91601_200w.jpg",
+      "groupId": 1387
+    },
+    {
+      "productId": "97747",
+      "name": "XY Elite Trainer Box [Xerneas]",
+      "setName": "XY",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/97747/pokemon-xy-base-set-xy-elite-trainer-box-xerneas?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/97747_200w.jpg",
+      "groupId": 1387
+    },
+    {
+      "productId": "97748",
+      "name": "XY Elite Trainer Box [Yveltal]",
+      "setName": "XY",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/97748/pokemon-xy-base-set-xy-elite-trainer-box-yveltal?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/97748_200w.jpg",
+      "groupId": 1387
+    },
+    {
+      "productId": "91594",
+      "name": "Flashfire Booster Box",
+      "setName": "Flashfire",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/91594/pokemon-xy-flashfire-flashfire-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/91594_200w.jpg",
+      "groupId": 1464
+    },
+    {
+      "productId": "92168",
+      "name": "Furious Fists Booster Box",
+      "setName": "Furious Fists",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/92168/pokemon-xy-furious-fists-furious-fists-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/92168_200w.jpg",
+      "groupId": 1481
+    },
+    {
+      "productId": "95284",
+      "name": "Furious Fists Elite Trainer Box",
+      "setName": "Furious Fists",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/95284/pokemon-xy-furious-fists-furious-fists-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/95284_200w.jpg",
+      "groupId": 1481
+    },
+    {
+      "productId": "94623",
+      "name": "XY Phantom Forces Booster Box",
+      "setName": "Phantom Forces",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/94623/pokemon-xy-phantom-forces-xy-phantom-forces-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/94623_200w.jpg",
+      "groupId": 1494
+    },
+    {
+      "productId": "97786",
+      "name": "Phantom Forces Elite Trainer Box",
+      "setName": "Phantom Forces",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/97786/pokemon-xy-phantom-forces-phantom-forces-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/97786_200w.jpg",
+      "groupId": 1494
+    },
+    {
+      "productId": "97750",
+      "name": "XY Primal Clash Booster Box",
+      "setName": "Primal Clash",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/97750/pokemon-xy-primal-clash-xy-primal-clash-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/97750_200w.jpg",
+      "groupId": 1509
+    },
+    {
+      "productId": "97762",
+      "name": "Elite Trainer Box [Groudon]",
+      "setName": "Primal Clash",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/97762/pokemon-xy-primal-clash-elite-trainer-box-groudon?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/97762_200w.jpg",
+      "groupId": 1509
+    },
+    {
+      "productId": "97763",
+      "name": "Elite Trainer Box [Kyogre]",
+      "setName": "Primal Clash",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/97763/pokemon-xy-primal-clash-elite-trainer-box-kyogre?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/97763_200w.jpg",
+      "groupId": 1509
+    },
+    {
+      "productId": "98026",
+      "name": "XY Roaring Skies Booster Box",
+      "setName": "Roaring Skies",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/98026/pokemon-xy-roaring-skies-xy-roaring-skies-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/98026_200w.jpg",
+      "groupId": 1534
+    },
+    {
+      "productId": "98028",
+      "name": "XY Roaring Skies Elite Trainer Box",
+      "setName": "Roaring Skies",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/98028/pokemon-xy-roaring-skies-xy-roaring-skies-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/98028_200w.jpg",
+      "groupId": 1534
+    },
+    {
+      "productId": "100489",
+      "name": "XY Ancient Origins Booster Box",
+      "setName": "Ancient Origins",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/100489/pokemon-xy-ancient-origins-xy-ancient-origins-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/100489_200w.jpg",
+      "groupId": 1576
+    },
+    {
+      "productId": "100495",
+      "name": "Ancient Origins Elite Trainer Box",
+      "setName": "Ancient Origins",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/100495/pokemon-xy-ancient-origins-ancient-origins-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/100495_200w.jpg",
+      "groupId": 1576
+    },
+    {
+      "productId": "107101",
+      "name": "XY BREAKthrough Booster Box",
+      "setName": "BREAKthrough",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/107101/pokemon-xy-breakthrough-xy-breakthrough-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/107101_200w.jpg",
+      "groupId": 1661
+    },
+    {
+      "productId": "107106",
+      "name": "Elite Trainer Box [Mewtwo X]",
+      "setName": "BREAKthrough",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/107106/pokemon-xy-breakthrough-elite-trainer-box-mewtwo-x?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/107106_200w.jpg",
+      "groupId": 1661
+    },
+    {
+      "productId": "107107",
+      "name": "Elite Trainer Box [Mewtwo Y]",
+      "setName": "BREAKthrough",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/107107/pokemon-xy-breakthrough-elite-trainer-box-mewtwo-y?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/107107_200w.jpg",
+      "groupId": 1661
+    },
+    {
+      "productId": "111278",
+      "name": "XY BREAKpoint Booster Box",
+      "setName": "BREAKpoint",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/111278/pokemon-xy-breakpoint-xy-breakpoint-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/111278_200w.jpg",
+      "groupId": 1701
+    },
+    {
+      "productId": "111280",
+      "name": "XY BREAKpoint Elite Trainer Box",
+      "setName": "BREAKpoint",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/111280/pokemon-xy-breakpoint-xy-breakpoint-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/111280_200w.jpg",
+      "groupId": 1701
+    },
+    {
+      "productId": "123741",
+      "name": "Generations Elite Trainer Box",
+      "setName": "Generations",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/123741/pokemon-generations-generations-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/123741_200w.jpg",
+      "groupId": 1728
+    },
+    {
+      "productId": "117478",
+      "name": "XY Fates Collide Booster Box",
+      "setName": "Fates Collide",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/117478/pokemon-xy-fates-collide-xy-fates-collide-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/117478_200w.jpg",
+      "groupId": 1780
+    },
+    {
+      "productId": "118331",
+      "name": "Fates Collide Elite Trainer Box",
+      "setName": "Fates Collide",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/118331/pokemon-xy-fates-collide-fates-collide-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/118331_200w.jpg",
+      "groupId": 1780
+    },
+    {
+      "productId": "120076",
+      "name": "Steam Siege Booster Box",
+      "setName": "Steam Siege",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/120076/pokemon-xy-steam-siege-steam-siege-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/120076_200w.jpg",
+      "groupId": 1815
+    },
+    {
+      "productId": "120697",
+      "name": "Steam Siege Elite Trainer Box",
+      "setName": "Steam Siege",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/120697/pokemon-xy-steam-siege-steam-siege-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/120697_200w.jpg",
+      "groupId": 1815
+    },
+    {
+      "productId": "123446",
+      "name": "XY Evolutions Booster Box",
+      "setName": "Evolutions",
+      "familyId": "xy",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/123446/pokemon-xy-evolutions-xy-evolutions-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/123446_200w.jpg",
+      "groupId": 1842
+    },
+    {
+      "productId": "123448",
+      "name": "XY Evolutions Elite Trainer Box [Mega Blastoise]",
+      "setName": "Evolutions",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/123448/pokemon-xy-evolutions-xy-evolutions-elite-trainer-box-mega-blastoise?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/123448_200w.jpg",
+      "groupId": 1842
+    },
+    {
+      "productId": "123447",
+      "name": "XY Evolutions Elite Trainer Box [Mega Charizard Y]",
+      "setName": "Evolutions",
+      "familyId": "xy",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/123447/pokemon-xy-evolutions-xy-evolutions-elite-trainer-box-mega-charizard-y?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/123447_200w.jpg",
+      "groupId": 1842
+    },
+    {
+      "productId": "126048",
+      "name": "Sun & Moon Booster Box",
+      "setName": "Sun & Moon",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/126048/pokemon-sm-base-set-sun-and-moon-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/126048_200w.jpg",
+      "groupId": 1863
+    },
+    {
+      "productId": "126091",
+      "name": "Sun & Moon Elite Trainer Box [Lunala]",
+      "setName": "Sun & Moon",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/126091/pokemon-sm-base-set-sun-and-moon-elite-trainer-box-lunala?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/126091_200w.jpg",
+      "groupId": 1863
+    },
+    {
+      "productId": "126089",
+      "name": "Sun & Moon Elite Trainer Box [Solgaleo]",
+      "setName": "Sun & Moon",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/126089/pokemon-sm-base-set-sun-and-moon-elite-trainer-box-solgaleo?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/126089_200w.jpg",
+      "groupId": 1863
+    },
+    {
+      "productId": "129888",
+      "name": "Guardians Rising Booster Box",
+      "setName": "Guardians Rising",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/129888/pokemon-sm-guardians-rising-guardians-rising-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/129888_200w.jpg",
+      "groupId": 1919
+    },
+    {
+      "productId": "129890",
+      "name": "Guardians Rising Elite Trainer Box",
+      "setName": "Guardians Rising",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/129890/pokemon-sm-guardians-rising-guardians-rising-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/129890_200w.jpg",
+      "groupId": 1919
+    },
+    {
+      "productId": "133773",
+      "name": "Burning Shadows Booster Box",
+      "setName": "Burning Shadows",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/133773/pokemon-sm-burning-shadows-burning-shadows-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/133773_200w.jpg",
+      "groupId": 1957
+    },
+    {
+      "productId": "133776",
+      "name": "Burning Shadows Elite Trainer Box",
+      "setName": "Burning Shadows",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/133776/pokemon-sm-burning-shadows-burning-shadows-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/133776_200w.jpg",
+      "groupId": 1957
+    },
+    {
+      "productId": "145847",
+      "name": "Shining Legends Elite Trainer Box",
+      "setName": "Shining Legends",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/145847/pokemon-shining-legends-shining-legends-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/145847_200w.jpg",
+      "groupId": 2054
+    },
+    {
+      "productId": "146995",
+      "name": "Crimson Invasion Booster Box",
+      "setName": "Crimson Invasion",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/146995/pokemon-sm-crimson-invasion-crimson-invasion-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/146995_200w.jpg",
+      "groupId": 2071
+    },
+    {
+      "productId": "149377",
+      "name": "Crimson Invasion Elite Trainer Box",
+      "setName": "Crimson Invasion",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/149377/pokemon-sm-crimson-invasion-crimson-invasion-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/149377_200w.jpg",
+      "groupId": 2071
+    },
+    {
+      "productId": "155661",
+      "name": "Ultra Prism Booster Box",
+      "setName": "Ultra Prism",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/155661/pokemon-sm-ultra-prism-ultra-prism-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/155661_200w.jpg",
+      "groupId": 2178
+    },
+    {
+      "productId": "155663",
+      "name": "Ultra Prism Elite Trainer Box [Dawn Wings Necrozma]",
+      "setName": "Ultra Prism",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/155663/pokemon-sm-ultra-prism-ultra-prism-elite-trainer-box-dawn-wings-necrozma?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/155663_200w.jpg",
+      "groupId": 2178
+    },
+    {
+      "productId": "155664",
+      "name": "Ultra Prism Elite Trainer Box [Dusk Mane Necrozma]",
+      "setName": "Ultra Prism",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/155664/pokemon-sm-ultra-prism-ultra-prism-elite-trainer-box-dusk-mane-necrozma?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/155664_200w.jpg",
+      "groupId": 2178
+    },
+    {
+      "productId": "164296",
+      "name": "Forbidden Light Booster Box",
+      "setName": "Forbidden Light",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/164296/pokemon-sm-forbidden-light-forbidden-light-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/164296_200w.jpg",
+      "groupId": 2209
+    },
+    {
+      "productId": "164303",
+      "name": "Forbidden Light Elite Trainer Box",
+      "setName": "Forbidden Light",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/164303/pokemon-sm-forbidden-light-forbidden-light-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/164303_200w.jpg",
+      "groupId": 2209
+    },
+    {
+      "productId": "170273",
+      "name": "Celestial Storm Booster Box",
+      "setName": "Celestial Storm",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/170273/pokemon-sm-celestial-storm-celestial-storm-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/170273_200w.jpg",
+      "groupId": 2278
+    },
+    {
+      "productId": "170277",
+      "name": "Celestial Storm Elite Trainer Box",
+      "setName": "Celestial Storm",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/170277/pokemon-sm-celestial-storm-celestial-storm-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/170277_200w.jpg",
+      "groupId": 2278
+    },
+    {
+      "productId": "173393",
+      "name": "Dragon Majesty Elite Trainer Box",
+      "setName": "Dragon Majesty",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/173393/pokemon-dragon-majesty-dragon-majesty-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/173393_200w.jpg",
+      "groupId": 2295
+    },
+    {
+      "productId": "175509",
+      "name": "Lost Thunder Booster Box",
+      "setName": "Lost Thunder",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/175509/pokemon-sm-lost-thunder-lost-thunder-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/175509_200w.jpg",
+      "groupId": 2328
+    },
+    {
+      "productId": "175511",
+      "name": "Lost Thunder Elite Trainer Box",
+      "setName": "Lost Thunder",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/175511/pokemon-sm-lost-thunder-lost-thunder-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/175511_200w.jpg",
+      "groupId": 2328
+    },
+    {
+      "productId": "181698",
+      "name": "Team Up Booster Box",
+      "setName": "Team Up",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/181698/pokemon-sm-team-up-team-up-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/181698_200w.jpg",
+      "groupId": 2377
+    },
+    {
+      "productId": "181704",
+      "name": "Team Up Elite Trainer Box",
+      "setName": "Team Up",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/181704/pokemon-sm-team-up-team-up-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/181704_200w.jpg",
+      "groupId": 2377
+    },
+    {
+      "productId": "185717",
+      "name": "Unbroken Bonds Booster Box",
+      "setName": "Unbroken Bonds",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/185717/pokemon-sm-unbroken-bonds-unbroken-bonds-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/185717_200w.jpg",
+      "groupId": 2420
+    },
+    {
+      "productId": "185719",
+      "name": "Unbroken Bonds Elite Trainer Box",
+      "setName": "Unbroken Bonds",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/185719/pokemon-sm-unbroken-bonds-unbroken-bonds-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/185719_200w.jpg",
+      "groupId": 2420
+    },
+    {
+      "productId": "191882",
+      "name": "Unified Minds Booster Box",
+      "setName": "Unified Minds",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/191882/pokemon-sm-unified-minds-unified-minds-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/191882_200w.jpg",
+      "groupId": 2464
+    },
+    {
+      "productId": "193052",
+      "name": "Unified Minds Elite Trainer Box",
+      "setName": "Unified Minds",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/193052/pokemon-sm-unified-minds-unified-minds-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/193052_200w.jpg",
+      "groupId": 2464
+    },
+    {
+      "productId": "194729",
+      "name": "Hidden Fates Elite Trainer Box",
+      "setName": "Hidden Fates",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/194729/pokemon-hidden-fates-hidden-fates-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/194729_200w.jpg",
+      "groupId": 2480
+    },
+    {
+      "productId": "199261",
+      "name": "Cosmic Eclipse Booster Box",
+      "setName": "Cosmic Eclipse",
+      "familyId": "sun-and-moon",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/199261/pokemon-sm-cosmic-eclipse-cosmic-eclipse-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/199261_200w.jpg",
+      "groupId": 2534
+    },
+    {
+      "productId": "199308",
+      "name": "Cosmic Eclipse Elite Trainer Box",
+      "setName": "Cosmic Eclipse",
+      "familyId": "sun-and-moon",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/199308/pokemon-sm-cosmic-eclipse-cosmic-eclipse-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/199308_200w.jpg",
+      "groupId": 2534
+    },
+    {
+      "productId": "206027",
+      "name": "Sword & Shield Booster Box",
+      "setName": "Sword & Shield",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/206027/pokemon-swsh01-sword-and-shield-base-set-sword-and-shield-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/206027_200w.jpg",
+      "groupId": 2585
+    },
+    {
+      "productId": "206038",
+      "name": "Sword & Shield Elite Trainer Box [Zacian]",
+      "setName": "Sword & Shield",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/206038/pokemon-swsh01-sword-and-shield-base-set-sword-and-shield-elite-trainer-box-zacian?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/206038_200w.jpg",
+      "groupId": 2585
+    },
+    {
+      "productId": "206039",
+      "name": "Sword & Shield Elite Trainer Box [Zamazenta]",
+      "setName": "Sword & Shield",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/206039/pokemon-swsh01-sword-and-shield-base-set-sword-and-shield-elite-trainer-box-zamazenta?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/206039_200w.jpg",
+      "groupId": 2585
+    },
+    {
+      "productId": "210561",
+      "name": "Rebel Clash Booster Box",
+      "setName": "Rebel Clash",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/210561/pokemon-swsh02-rebel-clash-rebel-clash-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/210561_200w.jpg",
+      "groupId": 2626
+    },
+    {
+      "productId": "210572",
+      "name": "Rebel Clash Elite Trainer Box",
+      "setName": "Rebel Clash",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/210572/pokemon-swsh02-rebel-clash-rebel-clash-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/210572_200w.jpg",
+      "groupId": 2626
+    },
+    {
+      "productId": "216853",
+      "name": "Darkness Ablaze Booster Box",
+      "setName": "Darkness Ablaze",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/216853/pokemon-swsh03-darkness-ablaze-darkness-ablaze-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/216853_200w.jpg",
+      "groupId": 2675
+    },
+    {
+      "productId": "216856",
+      "name": "Darkness Ablaze Elite Trainer Box",
+      "setName": "Darkness Ablaze",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/216856/pokemon-swsh03-darkness-ablaze-darkness-ablaze-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/216856_200w.jpg",
+      "groupId": 2675
+    },
+    {
+      "productId": "218791",
+      "name": "Champion's Path Elite Trainer Box",
+      "setName": "Champion's Path",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/218791/pokemon-champions-path-champions-path-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/218791_200w.jpg",
+      "groupId": 2685
+    },
+    {
+      "productId": "221313",
+      "name": "Vivid Voltage Booster Box",
+      "setName": "Vivid Voltage",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/221313/pokemon-swsh04-vivid-voltage-vivid-voltage-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/221313_200w.jpg",
+      "groupId": 2701
+    },
+    {
+      "productId": "221752",
+      "name": "Vivid Voltage Elite Trainer Box",
+      "setName": "Vivid Voltage",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/221752/pokemon-swsh04-vivid-voltage-vivid-voltage-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/221752_200w.jpg",
+      "groupId": 2701
+    },
+    {
+      "productId": "228821",
+      "name": "Shining Fates Elite Trainer Box",
+      "setName": "Shining Fates",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/228821/pokemon-shining-fates-shining-fates-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/228821_200w.jpg",
+      "groupId": 2754
+    },
+    {
+      "productId": "229277",
+      "name": "Battle Styles Booster Box",
+      "setName": "Battle Styles",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/229277/pokemon-swsh05-battle-styles-battle-styles-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/229277_200w.jpg",
+      "groupId": 2765
+    },
+    {
+      "productId": "229285",
+      "name": "Battle Styles Elite Trainer Box [Rapid Strike Urshifu] (Blue)",
+      "setName": "Battle Styles",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/229285/pokemon-swsh05-battle-styles-battle-styles-elite-trainer-box-rapid-strike-urshifu-blue?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/229285_200w.jpg",
+      "groupId": 2765
+    },
+    {
+      "productId": "229284",
+      "name": "Battle Styles Elite Trainer Box [Single Strike Urshifu] (Red)",
+      "setName": "Battle Styles",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/229284/pokemon-swsh05-battle-styles-battle-styles-elite-trainer-box-single-strike-urshifu-red?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/229284_200w.jpg",
+      "groupId": 2765
+    },
+    {
+      "productId": "236258",
+      "name": "Chilling Reign Booster Box",
+      "setName": "Chilling Reign",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/236258/pokemon-swsh06-chilling-reign-chilling-reign-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/236258_200w.jpg",
+      "groupId": 2807
+    },
+    {
+      "productId": "236260",
+      "name": "Chilling Reign Elite Trainer Box [Ice Rider Calyrex]",
+      "setName": "Chilling Reign",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/236260/pokemon-swsh06-chilling-reign-chilling-reign-elite-trainer-box-ice-rider-calyrex?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/236260_200w.jpg",
+      "groupId": 2807
+    },
+    {
+      "productId": "236261",
+      "name": "Chilling Reign Elite Trainer Box [Shadow Rider Calyrex]",
+      "setName": "Chilling Reign",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/236261/pokemon-swsh06-chilling-reign-chilling-reign-elite-trainer-box-shadow-rider-calyrex?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/236261_200w.jpg",
+      "groupId": 2807
+    },
+    {
+      "productId": "247281",
+      "name": "Chilling Reign Pokemon Center Elite Trainer Box [Ice Rider Calyrex] (Exclusive)",
+      "setName": "Chilling Reign",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/247281/pokemon-swsh06-chilling-reign-chilling-reign-pokemon-center-elite-trainer-box-ice-rider-calyrex-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/247281_200w.jpg",
+      "groupId": 2807
+    },
+    {
+      "productId": "247282",
+      "name": "Chilling Reign Pokemon Center Elite Trainer Box [Shadow Rider Calyrex] (Exclusive)",
+      "setName": "Chilling Reign",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/247282/pokemon-swsh06-chilling-reign-chilling-reign-pokemon-center-elite-trainer-box-shadow-rider-calyrex-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/247282_200w.jpg",
+      "groupId": 2807
+    },
+    {
+      "productId": "242436",
+      "name": "Evolving Skies Booster Box",
+      "setName": "Evolving Skies",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/242436/pokemon-swsh07-evolving-skies-evolving-skies-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/242436_200w.jpg",
+      "groupId": 2848
+    },
+    {
+      "productId": "242434",
+      "name": "Evolving Skies Elite Trainer Box [Flareon/Jolteon/Umbreon/Leafeon]",
+      "setName": "Evolving Skies",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/242434/pokemon-swsh07-evolving-skies-evolving-skies-elite-trainer-box-flareon-jolteon-umbreon-leafeon?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/242434_200w.jpg",
+      "groupId": 2848
+    },
+    {
+      "productId": "242443",
+      "name": "Evolving Skies Elite Trainer Box [Glaceon/Vaporeon/Sylveon/Espeon]",
+      "setName": "Evolving Skies",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/242443/pokemon-swsh07-evolving-skies-evolving-skies-elite-trainer-box-glaceon-vaporeon-sylveon-espeon?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/242443_200w.jpg",
+      "groupId": 2848
+    },
+    {
+      "productId": "245352",
+      "name": "Evolving Skies Pokemon Center Elite Trainer Box [Glaceon/Vaporeon/Sylveon/Espeon] (Exclusive)",
+      "setName": "Evolving Skies",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/245352/pokemon-swsh07-evolving-skies-evolving-skies-pokemon-center-elite-trainer-box-glaceon-vaporeon-sylveon-espeon-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/245352_200w.jpg",
+      "groupId": 2848
+    },
+    {
+      "productId": "245376",
+      "name": "Evolving Skies Pokemon Center Elite Trainer Box [Jolteon/Flareon/Umbreon/Leafeon] (Exclusive)",
+      "setName": "Evolving Skies",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/245376/pokemon-swsh07-evolving-skies-evolving-skies-pokemon-center-elite-trainer-box-jolteon-flareon-umbreon-leafeon-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/245376_200w.jpg",
+      "groupId": 2848
+    },
+    {
+      "productId": "242811",
+      "name": "Celebrations Elite Trainer Box",
+      "setName": "Celebrations",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/242811/pokemon-celebrations-celebrations-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/242811_200w.jpg",
+      "groupId": 2867
+    },
+    {
+      "productId": "251199",
+      "name": "Celebrations Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Celebrations",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/251199/pokemon-celebrations-celebrations-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/251199_200w.jpg",
+      "groupId": 2867
+    },
+    {
+      "productId": "247654",
+      "name": "Fusion Strike Booster Box",
+      "setName": "Fusion Strike",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/247654/pokemon-swsh08-fusion-strike-fusion-strike-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/247654_200w.jpg",
+      "groupId": 2906
+    },
+    {
+      "productId": "247671",
+      "name": "Fusion Strike Elite Trainer Box",
+      "setName": "Fusion Strike",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/247671/pokemon-swsh08-fusion-strike-fusion-strike-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/247671_200w.jpg",
+      "groupId": 2906
+    },
+    {
+      "productId": "247673",
+      "name": "Fusion Strike Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Fusion Strike",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/247673/pokemon-swsh08-fusion-strike-fusion-strike-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/247673_200w.jpg",
+      "groupId": 2906
+    },
+    {
+      "productId": "256141",
+      "name": "Brilliant Stars Booster Box",
+      "setName": "Brilliant Stars",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/256141/pokemon-swsh09-brilliant-stars-brilliant-stars-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/256141_200w.jpg",
+      "groupId": 2948
+    },
+    {
+      "productId": "256138",
+      "name": "Brilliant Stars Elite Trainer Box",
+      "setName": "Brilliant Stars",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/256138/pokemon-swsh09-brilliant-stars-brilliant-stars-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/256138_200w.jpg",
+      "groupId": 2948
+    },
+    {
+      "productId": "256140",
+      "name": "Brilliant Stars Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Brilliant Stars",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/256140/pokemon-swsh09-brilliant-stars-brilliant-stars-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/256140_200w.jpg",
+      "groupId": 2948
+    },
+    {
+      "productId": "265519",
+      "name": "Astral Radiance Booster Box",
+      "setName": "Astral Radiance",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/265519/pokemon-swsh10-astral-radiance-astral-radiance-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/265519_200w.jpg",
+      "groupId": 3040
+    },
+    {
+      "productId": "265527",
+      "name": "Astral Radiance Elite Trainer Box",
+      "setName": "Astral Radiance",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/265527/pokemon-swsh10-astral-radiance-astral-radiance-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/265527_200w.jpg",
+      "groupId": 3040
+    },
+    {
+      "productId": "265528",
+      "name": "Astral Radiance Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Astral Radiance",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/265528/pokemon-swsh10-astral-radiance-astral-radiance-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/265528_200w.jpg",
+      "groupId": 3040
+    },
+    {
+      "productId": "270708",
+      "name": "Pokemon GO Elite Trainer Box",
+      "setName": "Pok\u00e9mon GO",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/270708/pokemon-pokemon-go-pokemon-go-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/270708_200w.jpg",
+      "groupId": 3064
+    },
+    {
+      "productId": "270709",
+      "name": "Pokemon GO Pokemon Center Elite Trainer Box Plus (Exclusive)",
+      "setName": "Pok\u00e9mon GO",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/270709/pokemon-pokemon-go-pokemon-go-pokemon-center-elite-trainer-box-plus-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/270709_200w.jpg",
+      "groupId": 3064
+    },
+    {
+      "productId": "277324",
+      "name": "Lost Origin Booster Box",
+      "setName": "Lost Origin",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/277324/pokemon-swsh11-lost-origin-lost-origin-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/277324_200w.jpg",
+      "groupId": 3118
+    },
+    {
+      "productId": "277335",
+      "name": "Lost Origin Elite Trainer Box",
+      "setName": "Lost Origin",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/277335/pokemon-swsh11-lost-origin-lost-origin-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/277335_200w.jpg",
+      "groupId": 3118
+    },
+    {
+      "productId": "277336",
+      "name": "Lost Origin Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Lost Origin",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/277336/pokemon-swsh11-lost-origin-lost-origin-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/277336_200w.jpg",
+      "groupId": 3118
+    },
+    {
+      "productId": "278819",
+      "name": "Lost Origin Booster Bundle",
+      "setName": "Lost Origin",
+      "familyId": "sword-and-shield",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/278819/pokemon-swsh11-lost-origin-lost-origin-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/278819_200w.jpg",
+      "groupId": 3118
+    },
+    {
+      "productId": "283389",
+      "name": "Silver Tempest Booster Box",
+      "setName": "Silver Tempest",
+      "familyId": "sword-and-shield",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/283389/pokemon-swsh12-silver-tempest-silver-tempest-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/283389_200w.jpg",
+      "groupId": 3170
+    },
+    {
+      "productId": "283401",
+      "name": "Silver Tempest Elite Trainer Box",
+      "setName": "Silver Tempest",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/283401/pokemon-swsh12-silver-tempest-silver-tempest-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/283401_200w.jpg",
+      "groupId": 3170
+    },
+    {
+      "productId": "285860",
+      "name": "Silver Tempest Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Silver Tempest",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/285860/pokemon-swsh12-silver-tempest-silver-tempest-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/285860_200w.jpg",
+      "groupId": 3170
+    },
+    {
+      "productId": "283396",
+      "name": "Silver Tempest Booster Bundle",
+      "setName": "Silver Tempest",
+      "familyId": "sword-and-shield",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/283396/pokemon-swsh12-silver-tempest-silver-tempest-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/283396_200w.jpg",
+      "groupId": 3170
+    },
+    {
+      "productId": "453470",
+      "name": "Crown Zenith Elite Trainer Box",
+      "setName": "Crown Zenith",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/453470/pokemon-swsh-crown-zenith-crown-zenith-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/453470_200w.jpg",
+      "groupId": 17688
+    },
+    {
+      "productId": "454246",
+      "name": "Crown Zenith Pokemon Center Elite Trainer Box Plus",
+      "setName": "Crown Zenith",
+      "familyId": "sword-and-shield",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/454246/pokemon-swsh-crown-zenith-crown-zenith-pokemon-center-elite-trainer-box-plus?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/454246_200w.jpg",
+      "groupId": 17688
+    },
+    {
+      "productId": "527562",
+      "name": "Crown Zenith Booster Bundle",
+      "setName": "Crown Zenith",
+      "familyId": "sword-and-shield",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/527562/pokemon-swsh-crown-zenith-crown-zenith-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/527562_200w.jpg",
+      "groupId": 17688
+    },
+    {
+      "productId": "476452",
+      "name": "Scarlet & Violet Booster Box",
+      "setName": "Scarlet & Violet",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/476452/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/476452_200w.jpg",
+      "groupId": 22873
+    },
+    {
+      "productId": "478335",
+      "name": "Scarlet & Violet Elite Trainer Box [Koraidon]",
+      "setName": "Scarlet & Violet",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/478335/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-elite-trainer-box-koraidon?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/478335_200w.jpg",
+      "groupId": 22873
+    },
+    {
+      "productId": "478336",
+      "name": "Scarlet & Violet Elite Trainer Box [Miraidon]",
+      "setName": "Scarlet & Violet",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/478336/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-elite-trainer-box-miraidon?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/478336_200w.jpg",
+      "groupId": 22873
+    },
+    {
+      "productId": "478758",
+      "name": "Scarlet & Violet Pokemon Center Elite Trainer Box (Exclusive) [Koraidon]",
+      "setName": "Scarlet & Violet",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/478758/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-pokemon-center-elite-trainer-box-exclusive-koraidon?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/478758_200w.jpg",
+      "groupId": 22873
+    },
+    {
+      "productId": "478756",
+      "name": "Scarlet & Violet Pokemon Center Elite Trainer Box (Exclusive) [Miraidon]",
+      "setName": "Scarlet & Violet",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/478756/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-pokemon-center-elite-trainer-box-exclusive-miraidon?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/478756_200w.jpg",
+      "groupId": 22873
+    },
+    {
+      "productId": "478258",
+      "name": "Scarlet & Violet Booster Bundle",
+      "setName": "Scarlet & Violet",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/478258/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/478258_200w.jpg",
+      "groupId": 22873
+    },
+    {
+      "productId": "493975",
+      "name": "Paldea Evolved Booster Box",
+      "setName": "Paldea Evolved",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/493975/pokemon-sv02-paldea-evolved-paldea-evolved-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/493975_200w.jpg",
+      "groupId": 23120
+    },
+    {
+      "productId": "493974",
+      "name": "Paldea Evolved Elite Trainer Box",
+      "setName": "Paldea Evolved",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/493974/pokemon-sv02-paldea-evolved-paldea-evolved-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/493974_200w.jpg",
+      "groupId": 23120
+    },
+    {
+      "productId": "493973",
+      "name": "Paldea Evolved Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Paldea Evolved",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/493973/pokemon-sv02-paldea-evolved-paldea-evolved-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/493973_200w.jpg",
+      "groupId": 23120
+    },
+    {
+      "productId": "496914",
+      "name": "Paldea Evolved Booster Bundle",
+      "setName": "Paldea Evolved",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/496914/pokemon-sv02-paldea-evolved-paldea-evolved-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/496914_200w.jpg",
+      "groupId": 23120
+    },
+    {
+      "productId": "501257",
+      "name": "Obsidian Flames Booster Box",
+      "setName": "Obsidian Flames",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/501257/pokemon-sv03-obsidian-flames-obsidian-flames-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/501257_200w.jpg",
+      "groupId": 23228
+    },
+    {
+      "productId": "501264",
+      "name": "Obsidian Flames Elite Trainer Box",
+      "setName": "Obsidian Flames",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/501264/pokemon-sv03-obsidian-flames-obsidian-flames-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/501264_200w.jpg",
+      "groupId": 23228
+    },
+    {
+      "productId": "501266",
+      "name": "Obsidian Flames Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Obsidian Flames",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/501266/pokemon-sv03-obsidian-flames-obsidian-flames-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/501266_200w.jpg",
+      "groupId": 23228
+    },
+    {
+      "productId": "501263",
+      "name": "Obsidian Flames Booster Bundle",
+      "setName": "Obsidian Flames",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/501263/pokemon-sv03-obsidian-flames-obsidian-flames-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/501263_200w.jpg",
+      "groupId": 23228
+    },
+    {
+      "productId": "503313",
+      "name": "151 Elite Trainer Box",
+      "setName": "151",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/503313/pokemon-sv-scarlet-and-violet-151-151-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/503313_200w.jpg",
+      "groupId": 23237
+    },
+    {
+      "productId": "501999",
+      "name": "151 Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "151",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/501999/pokemon-sv-scarlet-and-violet-151-151-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/501999_200w.jpg",
+      "groupId": 23237
+    },
+    {
+      "productId": "502000",
+      "name": "151 Booster Bundle",
+      "setName": "151",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/502000/pokemon-sv-scarlet-and-violet-151-151-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/502000_200w.jpg",
+      "groupId": 23237
+    },
+    {
+      "productId": "512821",
+      "name": "Paradox Rift Booster Box",
+      "setName": "Paradox Rift",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/512821/pokemon-sv04-paradox-rift-paradox-rift-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/512821_200w.jpg",
+      "groupId": 23286
+    },
+    {
+      "productId": "512813",
+      "name": "Paradox Rift Elite Trainer Box [Iron Valiant]",
+      "setName": "Paradox Rift",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/512813/pokemon-sv04-paradox-rift-paradox-rift-elite-trainer-box-iron-valiant?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/512813_200w.jpg",
+      "groupId": 23286
+    },
+    {
+      "productId": "512815",
+      "name": "Paradox Rift Elite Trainer Box [Roaring Moon]",
+      "setName": "Paradox Rift",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/512815/pokemon-sv04-paradox-rift-paradox-rift-elite-trainer-box-roaring-moon?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/512815_200w.jpg",
+      "groupId": 23286
+    },
+    {
+      "productId": "512801",
+      "name": "Paradox Rift Pokemon Center Elite Trainer Box (Exclusive) [Iron Valiant]",
+      "setName": "Paradox Rift",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/512801/pokemon-sv04-paradox-rift-paradox-rift-pokemon-center-elite-trainer-box-exclusive-iron-valiant?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/512801_200w.jpg",
+      "groupId": 23286
+    },
+    {
+      "productId": "512809",
+      "name": "Paradox Rift Pokemon Center Elite Trainer Box (Exclusive) [Roaring Moon]",
+      "setName": "Paradox Rift",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/512809/pokemon-sv04-paradox-rift-paradox-rift-pokemon-center-elite-trainer-box-exclusive-roaring-moon?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/512809_200w.jpg",
+      "groupId": 23286
+    },
+    {
+      "productId": "512820",
+      "name": "Paradox Rift Booster Bundle",
+      "setName": "Paradox Rift",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/512820/pokemon-sv04-paradox-rift-paradox-rift-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/512820_200w.jpg",
+      "groupId": 23286
+    },
+    {
+      "productId": "528040",
+      "name": "Paldean Fates Elite Trainer Box",
+      "setName": "Paldean Fates",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/528040/pokemon-sv-paldean-fates-paldean-fates-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/528040_200w.jpg",
+      "groupId": 23353
+    },
+    {
+      "productId": "528039",
+      "name": "Paldean Fates Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Paldean Fates",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/528039/pokemon-sv-paldean-fates-paldean-fates-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/528039_200w.jpg",
+      "groupId": 23353
+    },
+    {
+      "productId": "528771",
+      "name": "Paldean Fates Booster Bundle",
+      "setName": "Paldean Fates",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/528771/pokemon-sv-paldean-fates-paldean-fates-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/528771_200w.jpg",
+      "groupId": 23353
+    },
+    {
+      "productId": "536225",
+      "name": "Temporal Forces Booster Box",
+      "setName": "Temporal Forces",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/536225/pokemon-sv05-temporal-forces-temporal-forces-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/536225_200w.jpg",
+      "groupId": 23381
+    },
+    {
+      "productId": "532848",
+      "name": "Temporal Forces Elite Trainer Box [Iron Leaves ex]",
+      "setName": "Temporal Forces",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/532848/pokemon-sv05-temporal-forces-temporal-forces-elite-trainer-box-iron-leaves-ex?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/532848_200w.jpg",
+      "groupId": 23381
+    },
+    {
+      "productId": "532845",
+      "name": "Temporal Forces Elite Trainer Box [Walking Wake]",
+      "setName": "Temporal Forces",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/532845/pokemon-sv05-temporal-forces-temporal-forces-elite-trainer-box-walking-wake?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/532845_200w.jpg",
+      "groupId": 23381
+    },
+    {
+      "productId": "532853",
+      "name": "Temporal Forces Pokemon Center Elite Trainer Box (Exclusive) [Iron Leaves]",
+      "setName": "Temporal Forces",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/532853/pokemon-sv05-temporal-forces-temporal-forces-pokemon-center-elite-trainer-box-exclusive-iron-leaves?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/532853_200w.jpg",
+      "groupId": 23381
+    },
+    {
+      "productId": "538775",
+      "name": "Temporal Forces Pokemon Center Elite Trainer Box (Exclusive) [Walking Wake]",
+      "setName": "Temporal Forces",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/538775/pokemon-sv05-temporal-forces-temporal-forces-pokemon-center-elite-trainer-box-exclusive-walking-wake?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/538775_200w.jpg",
+      "groupId": 23381
+    },
+    {
+      "productId": "541017",
+      "name": "Temporal Forces Booster Bundle",
+      "setName": "Temporal Forces",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/541017/pokemon-sv05-temporal-forces-temporal-forces-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/541017_200w.jpg",
+      "groupId": 23381
+    },
+    {
+      "productId": "543846",
+      "name": "Twilight Masquerade Booster Box",
+      "setName": "Twilight Masquerade",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/543846/pokemon-sv06-twilight-masquerade-twilight-masquerade-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/543846_200w.jpg",
+      "groupId": 23473
+    },
+    {
+      "productId": "543845",
+      "name": "Twilight Masquerade Elite Trainer Box",
+      "setName": "Twilight Masquerade",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/543845/pokemon-sv06-twilight-masquerade-twilight-masquerade-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/543845_200w.jpg",
+      "groupId": 23473
+    },
+    {
+      "productId": "543844",
+      "name": "Twilight Masquerade Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Twilight Masquerade",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/543844/pokemon-sv06-twilight-masquerade-twilight-masquerade-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/543844_200w.jpg",
+      "groupId": 23473
+    },
+    {
+      "productId": "543852",
+      "name": "Twilight Masquerade Booster Bundle",
+      "setName": "Twilight Masquerade",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/543852/pokemon-sv06-twilight-masquerade-twilight-masquerade-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/543852_200w.jpg",
+      "groupId": 23473
+    },
+    {
+      "productId": "552999",
+      "name": "Shrouded Fable Elite Trainer Box",
+      "setName": "Shrouded Fable",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/552999/pokemon-sv-shrouded-fable-shrouded-fable-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/552999_200w.jpg",
+      "groupId": 23529
+    },
+    {
+      "productId": "552998",
+      "name": "Shrouded Fable Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Shrouded Fable",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/552998/pokemon-sv-shrouded-fable-shrouded-fable-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/552998_200w.jpg",
+      "groupId": 23529
+    },
+    {
+      "productId": "553031",
+      "name": "Shrouded Fable Booster Bundle",
+      "setName": "Shrouded Fable",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/553031/pokemon-sv-shrouded-fable-shrouded-fable-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/553031_200w.jpg",
+      "groupId": 23529
+    },
+    {
+      "productId": "557354",
+      "name": "Stellar Crown Booster Box",
+      "setName": "Stellar Crown",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/557354/pokemon-sv07-stellar-crown-stellar-crown-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/557354_200w.jpg",
+      "groupId": 23537
+    },
+    {
+      "productId": "557350",
+      "name": "Stellar Crown Elite Trainer Box",
+      "setName": "Stellar Crown",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/557350/pokemon-sv07-stellar-crown-stellar-crown-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/557350_200w.jpg",
+      "groupId": 23537
+    },
+    {
+      "productId": "557340",
+      "name": "Stellar Crown Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Stellar Crown",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/557340/pokemon-sv07-stellar-crown-stellar-crown-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/557340_200w.jpg",
+      "groupId": 23537
+    },
+    {
+      "productId": "557345",
+      "name": "Stellar Crown Booster Bundle",
+      "setName": "Stellar Crown",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/557345/pokemon-sv07-stellar-crown-stellar-crown-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/557345_200w.jpg",
+      "groupId": 23537
+    },
+    {
+      "productId": "565606",
+      "name": "Surging Sparks Booster Box",
+      "setName": "Surging Sparks",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/565606/pokemon-sv08-surging-sparks-surging-sparks-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/565606_200w.jpg",
+      "groupId": 23651
+    },
+    {
+      "productId": "565630",
+      "name": "Surging Sparks Elite Trainer Box",
+      "setName": "Surging Sparks",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/565630/pokemon-sv08-surging-sparks-surging-sparks-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/565630_200w.jpg",
+      "groupId": 23651
+    },
+    {
+      "productId": "565632",
+      "name": "Surging Sparks Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Surging Sparks",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/565632/pokemon-sv08-surging-sparks-surging-sparks-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/565632_200w.jpg",
+      "groupId": 23651
+    },
+    {
+      "productId": "565629",
+      "name": "Surging Sparks Booster Bundle (LGS)",
+      "setName": "Surging Sparks",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/565629/pokemon-sv08-surging-sparks-surging-sparks-booster-bundle-lgs?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/565629_200w.jpg",
+      "groupId": 23651
+    },
+    {
+      "productId": "679564",
+      "name": "Surging Sparks Booster Bundle (Retail)",
+      "setName": "Surging Sparks",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/679564/pokemon-sv08-surging-sparks-surging-sparks-booster-bundle-retail?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/679564_200w.jpg",
+      "groupId": 23651
+    },
+    {
+      "productId": "593355",
+      "name": "Prismatic Evolutions Elite Trainer Box",
+      "setName": "Prismatic Evolutions",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/593355/pokemon-sv-prismatic-evolutions-prismatic-evolutions-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/593355_200w.jpg",
+      "groupId": 23821
+    },
+    {
+      "productId": "593324",
+      "name": "Prismatic Evolutions Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Prismatic Evolutions",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/593324/pokemon-sv-prismatic-evolutions-prismatic-evolutions-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/593324_200w.jpg",
+      "groupId": 23821
+    },
+    {
+      "productId": "600518",
+      "name": "Prismatic Evolutions Booster Bundle",
+      "setName": "Prismatic Evolutions",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/600518/pokemon-sv-prismatic-evolutions-prismatic-evolutions-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/600518_200w.jpg",
+      "groupId": 23821
+    },
+    {
+      "productId": "610931",
+      "name": "Journey Together Booster Box",
+      "setName": "Journey Together",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/610931/pokemon-sv09-journey-together-journey-together-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/610931_200w.jpg",
+      "groupId": 24073
+    },
+    {
+      "productId": "623628",
+      "name": "Journey Together Enhanced Booster Box",
+      "setName": "Journey Together",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/623628/pokemon-sv09-journey-together-journey-together-enhanced-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/623628_200w.jpg",
+      "groupId": 24073
+    },
+    {
+      "productId": "610930",
+      "name": "Journey Together Elite Trainer Box",
+      "setName": "Journey Together",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/610930/pokemon-sv09-journey-together-journey-together-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/610930_200w.jpg",
+      "groupId": 24073
+    },
+    {
+      "productId": "610929",
+      "name": "Journey Together Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Journey Together",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/610929/pokemon-sv09-journey-together-journey-together-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/610929_200w.jpg",
+      "groupId": 24073
+    },
+    {
+      "productId": "610953",
+      "name": "Journey Together Booster Bundle",
+      "setName": "Journey Together",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/610953/pokemon-sv09-journey-together-journey-together-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/610953_200w.jpg",
+      "groupId": 24073
+    },
+    {
+      "productId": "624679",
+      "name": "Destined Rivals Booster Box",
+      "setName": "Destined Rivals",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/624679/pokemon-sv10-destined-rivals-destined-rivals-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/624679_200w.jpg",
+      "groupId": 24269
+    },
+    {
+      "productId": "624676",
+      "name": "Destined Rivals Elite Trainer Box",
+      "setName": "Destined Rivals",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/624676/pokemon-sv10-destined-rivals-destined-rivals-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/624676_200w.jpg",
+      "groupId": 24269
+    },
+    {
+      "productId": "624675",
+      "name": "Destined Rivals Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Destined Rivals",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/624675/pokemon-sv10-destined-rivals-destined-rivals-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/624675_200w.jpg",
+      "groupId": 24269
+    },
+    {
+      "productId": "625670",
+      "name": "Destined Rivals Booster Bundle",
+      "setName": "Destined Rivals",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/625670/pokemon-sv10-destined-rivals-destined-rivals-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/625670_200w.jpg",
+      "groupId": 24269
+    },
+    {
+      "productId": "630686",
+      "name": "Black Bolt Elite Trainer Box",
+      "setName": "Black Bolt",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/630686/pokemon-sv-black-bolt-black-bolt-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/630686_200w.jpg",
+      "groupId": 24325
+    },
+    {
+      "productId": "630687",
+      "name": "Black Bolt Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Black Bolt",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/630687/pokemon-sv-black-bolt-black-bolt-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/630687_200w.jpg",
+      "groupId": 24325
+    },
+    {
+      "productId": "630431",
+      "name": "Black Bolt Booster Bundle",
+      "setName": "Black Bolt",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/630431/pokemon-sv-black-bolt-black-bolt-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/630431_200w.jpg",
+      "groupId": 24325
+    },
+    {
+      "productId": "630689",
+      "name": "White Flare Elite Trainer Box",
+      "setName": "White Flare",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/630689/pokemon-sv-white-flare-white-flare-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/630689_200w.jpg",
+      "groupId": 24326
+    },
+    {
+      "productId": "630688",
+      "name": "White Flare Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "White Flare",
+      "familyId": "scarlet-and-violet",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/630688/pokemon-sv-white-flare-white-flare-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/630688_200w.jpg",
+      "groupId": 24326
+    },
+    {
+      "productId": "630696",
+      "name": "White Flare Booster Bundle",
+      "setName": "White Flare",
+      "familyId": "scarlet-and-violet",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/630696/pokemon-sv-white-flare-white-flare-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/630696_200w.jpg",
+      "groupId": 24326
+    },
+    {
+      "productId": "644298",
+      "name": "Mega Evolution Booster Box",
+      "setName": "Mega Evolution",
+      "familyId": "mega-evolution",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/644298/pokemon-me01-mega-evolution-mega-evolution-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/644298_200w.jpg",
+      "groupId": 24380
+    },
+    {
+      "productId": "644300",
+      "name": "Mega Evolution Enhanced Booster Box",
+      "setName": "Mega Evolution",
+      "familyId": "mega-evolution",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/644300/pokemon-me01-mega-evolution-mega-evolution-enhanced-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/644300_200w.jpg",
+      "groupId": 24380
+    },
+    {
+      "productId": "644279",
+      "name": "Mega Evolution Elite Trainer Box [Mega Gardevoir]",
+      "setName": "Mega Evolution",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/644279/pokemon-me01-mega-evolution-mega-evolution-elite-trainer-box-mega-gardevoir?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/644279_200w.jpg",
+      "groupId": 24380
+    },
+    {
+      "productId": "648394",
+      "name": "Mega Evolution Elite Trainer Box [Mega Lucario]",
+      "setName": "Mega Evolution",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/648394/pokemon-me01-mega-evolution-mega-evolution-elite-trainer-box-mega-lucario?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/648394_200w.jpg",
+      "groupId": 24380
+    },
+    {
+      "productId": "648415",
+      "name": "Mega Evolution Pokemon Center Elite Trainer Box (Exclusive) [Mega Gardevoir]",
+      "setName": "Mega Evolution",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/648415/pokemon-me01-mega-evolution-mega-evolution-pokemon-center-elite-trainer-box-exclusive-mega-gardevoir?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/648415_200w.jpg",
+      "groupId": 24380
+    },
+    {
+      "productId": "644282",
+      "name": "Mega Evolution Pokemon Center Elite Trainer Box (Exclusive) [Mega Lucario]",
+      "setName": "Mega Evolution",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/644282/pokemon-me01-mega-evolution-mega-evolution-pokemon-center-elite-trainer-box-exclusive-mega-lucario?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/644282_200w.jpg",
+      "groupId": 24380
+    },
+    {
+      "productId": "644362",
+      "name": "Mega Evolution Booster Bundle",
+      "setName": "Mega Evolution",
+      "familyId": "mega-evolution",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/644362/pokemon-me01-mega-evolution-mega-evolution-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/644362_200w.jpg",
+      "groupId": 24380
+    },
+    {
+      "productId": "654137",
+      "name": "Phantasmal Flames Booster Box",
+      "setName": "Phantasmal Flames",
+      "familyId": "mega-evolution",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/654137/pokemon-me02-phantasmal-flames-phantasmal-flames-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/654137_200w.jpg",
+      "groupId": 24448
+    },
+    {
+      "productId": "654136",
+      "name": "Phantasmal Flames Elite Trainer Box",
+      "setName": "Phantasmal Flames",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/654136/pokemon-me02-phantasmal-flames-phantasmal-flames-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/654136_200w.jpg",
+      "groupId": 24448
+    },
+    {
+      "productId": "654135",
+      "name": "Phantasmal Flames Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Phantasmal Flames",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/654135/pokemon-me02-phantasmal-flames-phantasmal-flames-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/654135_200w.jpg",
+      "groupId": 24448
+    },
+    {
+      "productId": "654160",
+      "name": "Phantasmal Flames Booster Bundle",
+      "setName": "Phantasmal Flames",
+      "familyId": "mega-evolution",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/654160/pokemon-me02-phantasmal-flames-phantasmal-flames-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/654160_200w.jpg",
+      "groupId": 24448
+    },
+    {
+      "productId": "668496",
+      "name": "Ascended Heroes Elite Trainer Box",
+      "setName": "Ascended Heroes",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/668496/pokemon-me-ascended-heroes-ascended-heroes-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/668496_200w.jpg",
+      "groupId": 24541
+    },
+    {
+      "productId": "668497",
+      "name": "Ascended Heroes Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Ascended Heroes",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/668497/pokemon-me-ascended-heroes-ascended-heroes-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/668497_200w.jpg",
+      "groupId": 24541
+    },
+    {
+      "productId": "668541",
+      "name": "Ascended Heroes Booster Bundle",
+      "setName": "Ascended Heroes",
+      "familyId": "mega-evolution",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/668541/pokemon-me-ascended-heroes-ascended-heroes-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/668541_200w.jpg",
+      "groupId": 24541
+    },
+    {
+      "productId": "672394",
+      "name": "Perfect Order Booster Box",
+      "setName": "Perfect Order",
+      "familyId": "mega-evolution",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/672394/pokemon-me03-perfect-order-perfect-order-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/672394_200w.jpg",
+      "groupId": 24587
+    },
+    {
+      "productId": "672401",
+      "name": "Perfect Order Elite Trainer Box",
+      "setName": "Perfect Order",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/672401/pokemon-me03-perfect-order-perfect-order-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/672401_200w.jpg",
+      "groupId": 24587
+    },
+    {
+      "productId": "672404",
+      "name": "Perfect Order Pokemon Center Elite Trainer Box",
+      "setName": "Perfect Order",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/672404/pokemon-me03-perfect-order-perfect-order-pokemon-center-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/672404_200w.jpg",
+      "groupId": 24587
+    },
+    {
+      "productId": "672396",
+      "name": "Perfect Order Booster Bundle",
+      "setName": "Perfect Order",
+      "familyId": "mega-evolution",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/672396/pokemon-me03-perfect-order-perfect-order-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/672396_200w.jpg",
+      "groupId": 24587
+    },
+    {
+      "productId": "684444",
+      "name": "Chaos Rising Booster Box",
+      "setName": "Chaos Rising",
+      "familyId": "mega-evolution",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/684444/pokemon-me04-chaos-rising-chaos-rising-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/684444_200w.jpg",
+      "groupId": 24655
+    },
+    {
+      "productId": "684450",
+      "name": "Chaos Rising Elite Trainer Box",
+      "setName": "Chaos Rising",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/684450/pokemon-me04-chaos-rising-chaos-rising-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/684450_200w.jpg",
+      "groupId": 24655
+    },
+    {
+      "productId": "684452",
+      "name": "Chaos Rising Pokemon Center Elite Trainer Box",
+      "setName": "Chaos Rising",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/684452/pokemon-me04-chaos-rising-chaos-rising-pokemon-center-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/684452_200w.jpg",
+      "groupId": 24655
+    },
+    {
+      "productId": "684456",
+      "name": "Chaos Rising Booster Bundle",
+      "setName": "Chaos Rising",
+      "familyId": "mega-evolution",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/684456/pokemon-me04-chaos-rising-chaos-rising-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/684456_200w.jpg",
+      "groupId": 24655
+    },
+    {
+      "productId": "692939",
+      "name": "Pitch Black Booster Box",
+      "setName": "Pitch Black",
+      "familyId": "mega-evolution",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/692939/pokemon-me05-pitch-black-pitch-black-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/692939_200w.jpg",
+      "groupId": 24688
+    },
+    {
+      "productId": "692947",
+      "name": "Pitch Black Elite Trainer Box",
+      "setName": "Pitch Black",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/692947/pokemon-me05-pitch-black-pitch-black-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/692947_200w.jpg",
+      "groupId": 24688
+    },
+    {
+      "productId": "692949",
+      "name": "Pitch Black Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Pitch Black",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/692949/pokemon-me05-pitch-black-pitch-black-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/692949_200w.jpg",
+      "groupId": 24688
+    },
+    {
+      "productId": "692942",
+      "name": "Pitch Black Booster Bundle",
+      "setName": "Pitch Black",
+      "familyId": "mega-evolution",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/692942/pokemon-me05-pitch-black-pitch-black-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/692942_200w.jpg",
+      "groupId": 24688
+    },
+    {
+      "productId": "704143",
+      "name": "30th Celebration Elite Trainer Box",
+      "setName": "30th Celebration",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/704143/pokemon-me-30th-celebration-30th-celebration-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/704143_200w.jpg",
+      "groupId": 24722
+    },
+    {
+      "productId": "704144",
+      "name": "30th Celebration Pokemon Center Elite Trainer Box",
+      "setName": "30th Celebration",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/704144/pokemon-me-30th-celebration-30th-celebration-pokemon-center-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/704144_200w.jpg",
+      "groupId": 24722
+    },
+    {
+      "productId": "704171",
+      "name": "30th Celebration Booster Bundle",
+      "setName": "30th Celebration",
+      "familyId": "mega-evolution",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/704171/pokemon-me-30th-celebration-30th-celebration-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/704171_200w.jpg",
+      "groupId": 24722
+    },
+    {
+      "productId": "712094",
+      "name": "Delta Reign Booster Box",
+      "setName": "Delta Reign",
+      "familyId": "mega-evolution",
+      "kind": "booster-box",
+      "url": "https://www.tcgplayer.com/product/712094/pokemon-me06-delta-reign-delta-reign-booster-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/712094_200w.jpg",
+      "groupId": 24831
+    },
+    {
+      "productId": "712102",
+      "name": "Delta Reign Elite Trainer Box",
+      "setName": "Delta Reign",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/712102/pokemon-me06-delta-reign-delta-reign-elite-trainer-box?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/712102_200w.jpg",
+      "groupId": 24831
+    },
+    {
+      "productId": "712104",
+      "name": "Delta Reign Pokemon Center Elite Trainer Box (Exclusive)",
+      "setName": "Delta Reign",
+      "familyId": "mega-evolution",
+      "kind": "etb",
+      "url": "https://www.tcgplayer.com/product/712104/pokemon-me06-delta-reign-delta-reign-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/712104_200w.jpg",
+      "groupId": 24831
+    },
+    {
+      "productId": "712097",
+      "name": "Delta Reign Booster Bundle",
+      "setName": "Delta Reign",
+      "familyId": "mega-evolution",
+      "kind": "booster-bundle",
+      "url": "https://www.tcgplayer.com/product/712097/pokemon-me06-delta-reign-delta-reign-booster-bundle?page=1&Language=English",
+      "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/712097_200w.jpg",
+      "groupId": 24831
+    }
+  ]
+}
