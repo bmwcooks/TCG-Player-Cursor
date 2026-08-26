@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TCG Marketplace Tracker</title>
-  <meta name="description" content="Daily TCGPlayer market tracker for Pokémon booster boxes and high-end listings." />
+  <meta name="description" content="Choose One Piece or Pokémon, pick a set, and track TCGPlayer market snapshots." />
   <meta name="theme-color" content="#0c0f14" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -79,22 +79,67 @@
       background: #e8b86d;
       color: #0c0f14;
     }
+    .choice-card {
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .choice-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(212, 160, 84, 0.7);
+      box-shadow: 0 18px 40px -24px rgba(15, 23, 42, 0.45);
+    }
+    .dark .choice-card:hover {
+      box-shadow: 0 18px 40px -24px rgba(232, 184, 109, 0.25);
+    }
   </style>
 </head>
 <body class="min-h-screen bg-ink-50 text-ink-900 font-sans antialiased dark:bg-ink-950 dark:text-ink-50">
   <div class="grid-overlay min-h-screen">
+    <div id="view-landing">
+      <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-ink-50/85 backdrop-blur-md dark:border-white/10 dark:bg-ink-950/80">
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <a href="#/" class="flex items-center gap-3" data-route="/">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-500 text-ink-950 shadow-lg shadow-amber-700/20">
+              <i data-lucide="bar-chart-3" class="h-5 w-5"></i>
+            </div>
+            <div>
+              <h1 class="font-display text-lg font-semibold tracking-tight sm:text-xl">TCG Marketplace Tracker</h1>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Pick a game, then a set</p>
+            </div>
+          </a>
+          <div class="flex items-center gap-2 sm:gap-3">
+            <a href="https://github.com/bmwcooks/TCG-Player-Cursor" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 hover:text-ink-900 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200 dark:hover:text-white" aria-label="Open GitHub repository">
+              <i data-lucide="github" class="h-4 w-4"></i>
+              <span class="hidden sm:inline">GitHub</span>
+            </a>
+            <button type="button" class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200" aria-label="Toggle color theme">
+              <i data-lucide="sun" class="hidden h-4 w-4 dark:block"></i>
+              <i data-lucide="moon" class="h-4 w-4 dark:hidden"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+      <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+        <div id="landing-stage"></div>
+      </main>
+    </div>
+
+    <div id="view-dashboard" class="hidden">
     <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-ink-50/85 backdrop-blur-md dark:border-white/10 dark:bg-ink-950/80">
       <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <div class="flex items-center gap-3">
-          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-500 text-ink-950 shadow-lg shadow-amber-700/20">
+        <div class="flex min-w-0 items-center gap-3">
+          <a href="#/" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gold-500 text-ink-950 shadow-lg shadow-amber-700/20" data-route="/" aria-label="Back to games">
             <i data-lucide="bar-chart-3" class="h-5 w-5"></i>
-          </div>
-          <div>
-            <h1 class="font-display text-lg font-semibold tracking-tight sm:text-xl">TCG Marketplace Tracker</h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Pokémon TCGPlayer market snapshots</p>
+          </a>
+          <div class="min-w-0">
+            <h1 id="dashboard-title" class="truncate font-display text-lg font-semibold tracking-tight sm:text-xl">TCG Marketplace Tracker</h1>
+            <nav id="dashboard-crumb" class="flex flex-wrap items-center gap-1 text-xs text-slate-500 dark:text-slate-400"></nav>
           </div>
         </div>
         <div class="flex items-center gap-2 sm:gap-3">
+          <a id="change-set" href="#/" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200">
+            <i data-lucide="layout-grid" class="h-4 w-4"></i>
+            <span class="hidden sm:inline">Change set</span>
+          </a>
           <span id="updated-badge" class="hidden items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 dark:border-white/10 dark:bg-ink-900 dark:text-slate-300 sm:inline-flex">
             <i data-lucide="clock-3" class="h-3.5 w-3.5"></i>
             <span>Waiting for data</span>
@@ -103,7 +148,7 @@
             <i data-lucide="github" class="h-4 w-4"></i>
             <span class="hidden sm:inline">GitHub</span>
           </a>
-          <button id="theme-toggle" type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200" aria-label="Toggle color theme">
+          <button type="button" class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200" aria-label="Toggle color theme">
             <i data-lucide="sun" class="hidden h-4 w-4 dark:block"></i>
             <i data-lucide="moon" class="h-4 w-4 dark:hidden"></i>
           </button>
@@ -112,10 +157,6 @@
     </header>
 
     <div class="mx-auto max-w-7xl px-4 pt-4 sm:px-6">
-      <div class="mb-3">
-        <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Sets</p>
-        <div id="set-tabs" class="flex flex-wrap gap-2"></div>
-      </div>
       <div class="inline-flex rounded-xl border border-slate-200 bg-white/90 p-1 dark:border-white/10 dark:bg-ink-900/80" role="tablist" aria-label="View">
         <button type="button" data-tab="overview" class="tab-btn pill-active rounded-lg px-4 py-2 text-sm font-medium">Overview</button>
         <button type="button" data-tab="sales" class="tab-btn rounded-lg px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300">Latest Sales</button>
@@ -125,7 +166,16 @@
     <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
       <section id="status-banner" class="mb-6 hidden rounded-2xl border border-amber-300/60 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100"></section>
 
+      <section id="empty-set" class="mb-8 hidden rounded-2xl border border-slate-200 bg-white/90 p-8 text-center dark:border-white/10 dark:bg-ink-900/80 sm:p-12">
+        <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gold-500/15 text-gold-500">
+          <i data-lucide="package-plus" class="h-7 w-7"></i>
+        </div>
+        <h2 class="font-display text-2xl font-semibold">No products tracked yet</h2>
+        <p id="empty-set-copy" class="mx-auto mt-2 max-w-xl text-sm text-slate-500 dark:text-slate-400">This set is in the catalog, but nothing from it is being scraped yet. Add TCGPlayer URLs under a matching <code class="rounded bg-ink-50 px-1.5 py-0.5 text-ink-900 dark:bg-ink-950 dark:text-ink-50"># Set: Name</code> group in <code class="rounded bg-ink-50 px-1.5 py-0.5 text-ink-900 dark:bg-ink-950 dark:text-ink-50">urls.txt</code> to start collecting snapshots.</p>
+      </section>
+
       <div id="panel-overview">
+      <div id="overview-data">
 
       <section class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" id="metric-cards">
         <article class="rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
@@ -217,6 +267,7 @@
         <p id="table-empty" class="hidden px-3 py-8 text-center text-sm text-slate-500 dark:text-slate-400">No products match that search.</p>
       </section>
       </div>
+      </div>
 
       <div id="panel-sales" class="hidden">
         <section class="rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80 sm:p-6">
@@ -261,6 +312,7 @@
         </section>
       </div>
     </main>
+    </div>
   </div>
 
   <script>
@@ -277,6 +329,9 @@
     let activeTab = "overview";
     let salesChart = null;
     let latestByProduct = [];
+
+    let catalog = { games: [] };
+    let currentCatalogSet = null;
 
     const RANGE_COPY = {
       "1M": { title: "Market Price History · 1M", subtitle: "Daily items sold and market price (TCGPlayer 1M chart)" },
@@ -309,6 +364,226 @@
 
     function toggleTheme() {
       setTheme(currentTheme() === "dark" ? "light" : "dark");
+    }
+
+    function parseRoute() {
+      const hash = (location.hash || "#/").replace(/^#/, "");
+      const parts = hash.split("/").filter(Boolean);
+      return {
+        gameId: parts[0] || null,
+        familyId: parts[1] || null,
+        setSlug: parts[2] || null,
+        tab: parts[3] === "sales" ? "sales" : "overview",
+      };
+    }
+
+    function routeHref(parts) {
+      const clean = parts.filter(Boolean);
+      return clean.length ? `#/${clean.join("/")}` : "#/";
+    }
+
+    function findGame(gameId) {
+      return (catalog.games || []).find((game) => game.id === gameId) || null;
+    }
+
+    function findFamily(game, familyId) {
+      return (game?.families || []).find((family) => family.id === familyId) || null;
+    }
+
+    function findSet(family, setSlug) {
+      return (family?.sets || []).find((set) => set.slug === setSlug) || null;
+    }
+
+    function trackedSetNames() {
+      const names = new Set();
+      records.forEach((row) => names.add(setNameOf(row)));
+      (chartHistory.products || []).forEach((row) => names.add(setNameOf(row)));
+      latestSales.forEach((row) => names.add(setNameOf(row)));
+      return names;
+    }
+
+    function setIsTracked(set) {
+      return trackedSetNames().has(set.setName);
+    }
+
+    function formatReleased(value) {
+      if (!value) return "";
+      const date = new Date(`${value}T00:00:00`);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString(undefined, { month: "short", year: "numeric" });
+    }
+
+    function setStatus(set) {
+      if (set.status) return set.status;
+      if (set.released && set.released > "2026-08-26") return "upcoming";
+      return "released";
+    }
+
+    function statusLabel(status) {
+      if (status === "upcoming") return "Upcoming";
+      if (status === "japan-only") return "Japan only";
+      return "";
+    }
+
+    function crumbLink(href, label) {
+      return `<a href="${escapeHtml(href)}" class="hover:text-gold-500">${escapeHtml(label)}</a>`;
+    }
+
+    function renderLanding(game, family) {
+      const stage = document.getElementById("landing-stage");
+      if (family && game) {
+        const tracked = trackedSetNames();
+        const sets = [...family.sets].sort((a, b) => (b.released || "").localeCompare(a.released || ""));
+        stage.innerHTML = `
+          <div class="mb-8">
+            <nav class="mb-4 flex flex-wrap items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
+              ${crumbLink("#/", "Games")}
+              <span>/</span>
+              ${crumbLink(routeHref([game.id]), game.name)}
+              <span>/</span>
+              <span class="text-ink-900 dark:text-ink-50">${escapeHtml(family.name)}</span>
+            </nav>
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-gold-500">${escapeHtml(game.name)}</p>
+            <h2 class="mt-2 font-display text-3xl font-semibold sm:text-4xl">${escapeHtml(family.fullName || family.name)}</h2>
+            <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">${escapeHtml(family.description || "")}</p>
+            <p class="mt-2 text-sm text-slate-500">${integer.format(family.sets.length)} sets · newest first</p>
+          </div>
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            ${sets.map((set) => {
+              const status = setStatus(set);
+              const tracking = tracked.has(set.setName);
+              return `
+                <a href="${escapeHtml(routeHref([game.id, family.id, set.slug]))}" class="choice-card rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
+                  <div class="flex items-start justify-between gap-3">
+                    <span class="rounded-full bg-ink-50 px-2.5 py-1 text-xs font-semibold tabular text-slate-600 dark:bg-ink-950 dark:text-slate-300">${escapeHtml(set.code || "")}</span>
+                    <div class="flex flex-wrap justify-end gap-1">
+                      ${set.kind === "special" ? `<span class="rounded-full bg-sky-500/10 px-2 py-1 text-[11px] font-semibold text-sky-700 dark:text-sky-300">Special</span>` : ""}
+                      ${statusLabel(status) ? `<span class="rounded-full bg-amber-500/10 px-2 py-1 text-[11px] font-semibold text-amber-800 dark:text-amber-200">${escapeHtml(statusLabel(status))}</span>` : ""}
+                      ${tracking ? `<span class="rounded-full bg-emerald-500/15 px-2 py-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">Tracking</span>` : ""}
+                    </div>
+                  </div>
+                  <h3 class="mt-4 font-display text-xl font-semibold">${escapeHtml(set.name)}</h3>
+                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">${escapeHtml(formatReleased(set.released) || "Release date TBA")}</p>
+                  ${set.note ? `<p class="mt-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">${escapeHtml(set.note)}</p>` : ""}
+                </a>
+              `;
+            }).join("")}
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      if (game) {
+        stage.innerHTML = `
+          <div class="mb-8">
+            <nav class="mb-4 flex flex-wrap items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
+              ${crumbLink("#/", "Games")}
+              <span>/</span>
+              <span class="text-ink-900 dark:text-ink-50">${escapeHtml(game.name)}</span>
+            </nav>
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-gold-500">${escapeHtml(game.tagline || "Choose a product line")}</p>
+            <h2 class="mt-2 font-display text-3xl font-semibold sm:text-4xl">${escapeHtml(game.name)}</h2>
+            <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">${escapeHtml(game.description || "")}</p>
+          </div>
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 ${game.families.length > 3 ? "xl:grid-cols-3" : game.families.length === 3 ? "lg:grid-cols-3" : ""}">
+            ${game.families.map((family) => `
+              <a href="${escapeHtml(routeHref([game.id, family.id]))}" class="choice-card rounded-3xl border border-slate-200 bg-white/90 p-6 dark:border-white/10 dark:bg-ink-900/80">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gold-500/15 text-gold-500">
+                  <i data-lucide="layers" class="h-6 w-6"></i>
+                </div>
+                <h3 class="mt-5 font-display text-2xl font-semibold">${escapeHtml(family.name)}</h3>
+                <p class="mt-1 text-sm font-medium text-slate-500 dark:text-slate-400">${escapeHtml(family.fullName || "")}</p>
+                <p class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">${escapeHtml(family.description || "")}</p>
+                <p class="mt-5 text-sm font-semibold text-gold-500">${integer.format(family.sets.length)} sets</p>
+              </a>
+            `).join("")}
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      if (!(catalog.games || []).length) {
+        stage.innerHTML = `
+          <div class="mx-auto max-w-xl rounded-2xl border border-amber-300/60 bg-amber-50 p-8 text-center dark:border-amber-400/20 dark:bg-amber-400/10">
+            <h2 class="font-display text-2xl font-semibold">Catalog could not load</h2>
+            <p class="mt-2 text-sm text-amber-900 dark:text-amber-100">Open this page over HTTP so data/catalog.json can load, then choose One Piece or Pokémon.</p>
+          </div>
+        `;
+        return;
+      }
+
+      stage.innerHTML = `
+        <div class="mx-auto mb-10 max-w-2xl text-center">
+          <p class="text-sm font-semibold uppercase tracking-[0.25em] text-gold-500">TCG Marketplace Tracker</p>
+          <h2 class="mt-3 font-display text-4xl font-semibold sm:text-5xl">Choose a game</h2>
+          <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">Start with One Piece or Pokémon, then drill into a product line and set. Live market data appears once a set is added to the scraper.</p>
+        </div>
+        <div class="mx-auto grid max-w-4xl grid-cols-1 gap-5 md:grid-cols-2">
+          ${(catalog.games || []).map((item) => `
+            <a href="${escapeHtml(routeHref([item.id]))}" class="choice-card group relative overflow-hidden rounded-3xl border border-slate-200 bg-white/90 p-8 dark:border-white/10 dark:bg-ink-900/80">
+              <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full ${item.id === "one-piece" ? "bg-rose-500/10" : "bg-gold-500/10"}"></div>
+              <div class="relative">
+                <div class="flex h-14 w-14 items-center justify-center rounded-2xl ${item.id === "one-piece" ? "bg-rose-500/15 text-rose-500" : "bg-gold-500/15 text-gold-500"}">
+                  <i data-lucide="${escapeHtml(item.icon || "sparkles")}" class="h-7 w-7"></i>
+                </div>
+                <h3 class="mt-6 font-display text-3xl font-semibold">${escapeHtml(item.name)}</h3>
+                <p class="mt-2 text-slate-600 dark:text-slate-300">${escapeHtml(item.tagline || "")}</p>
+                <p class="mt-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">${escapeHtml(item.description || "")}</p>
+                <p class="mt-6 inline-flex items-center gap-2 text-sm font-semibold ${item.id === "one-piece" ? "text-rose-500" : "text-gold-500"}">
+                  Browse sets <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                </p>
+              </div>
+            </a>
+          `).join("")}
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function showView(name) {
+      document.getElementById("view-landing").classList.toggle("hidden", name !== "landing");
+      document.getElementById("view-dashboard").classList.toggle("hidden", name !== "dashboard");
+    }
+
+    function updateDashboardChrome(game, family, set) {
+      currentCatalogSet = set;
+      document.getElementById("dashboard-title").textContent = set.name;
+      document.getElementById("dashboard-crumb").innerHTML = [
+        crumbLink("#/", "Games"),
+        `<span>/</span>`,
+        crumbLink(routeHref([game.id]), game.name),
+        `<span>/</span>`,
+        crumbLink(routeHref([game.id, family.id]), family.name),
+        `<span>/</span>`,
+        `<span class="text-ink-900 dark:text-ink-50">${escapeHtml(set.code ? `${set.code} · ${set.name}` : set.name)}</span>`,
+      ].join("");
+      document.getElementById("change-set").href = routeHref([game.id, family.id]);
+      const emptyCopy = document.getElementById("empty-set-copy");
+      emptyCopy.innerHTML = `Nothing from <strong>${escapeHtml(set.name)}</strong> is being scraped yet. Add TCGPlayer URLs under <code class="rounded bg-ink-50 px-1.5 py-0.5 text-ink-900 dark:bg-ink-950 dark:text-ink-50"># Set: ${escapeHtml(set.setName)}</code> in <code class="rounded bg-ink-50 px-1.5 py-0.5 text-ink-900 dark:bg-ink-950 dark:text-ink-50">urls.txt</code> to start collecting snapshots.`;
+    }
+
+    function applyRoute() {
+      const route = parseRoute();
+      const game = findGame(route.gameId);
+      const family = findFamily(game, route.familyId);
+      const set = findSet(family, route.setSlug);
+
+      if (set && game && family) {
+        selectedSet = set.setName;
+        selectedProductId = "all";
+        showView("dashboard");
+        updateDashboardChrome(game, family, set);
+        setActiveTab(route.tab, { skipHash: true });
+        refreshSetView();
+        lucide.createIcons();
+        return;
+      }
+
+      currentCatalogSet = null;
+      showView("landing");
+      renderLanding(game, family);
     }
 
     function uniqueProducts(data) {
@@ -435,53 +710,43 @@
       badge.querySelector("span").textContent = asOf ? `Updated ${asOf}` : "No snapshots yet";
     }
 
-    function renderSetTabs() {
-      const host = document.getElementById("set-tabs");
-      const sets = availableSets();
-      if (!sets.length) {
-        host.innerHTML = `<span class="text-sm text-slate-500">No sets yet. Add a # Set: Name group in urls.txt.</span>`;
-        return;
-      }
-      if (!sets.includes(selectedSet)) {
-        selectedSet = sets[0];
-      }
-      host.innerHTML = sets.map((name) => `
-        <button type="button" data-set="${escapeHtml(name)}" class="pill rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-gold-500 dark:border-white/10 dark:text-slate-200 ${selectedSet === name ? "pill-active" : "bg-white dark:bg-ink-900"}">
-          ${escapeHtml(name)}
-        </button>
-      `).join("");
-      host.querySelectorAll("button").forEach((button) => {
-        button.addEventListener("click", () => {
-          selectedSet = button.dataset.set;
-          selectedProductId = "all";
-          localStorage.setItem("selectedSet", selectedSet);
-          renderSetTabs();
-          refreshSetView();
-        });
-      });
-    }
-
     function refreshSetView() {
       const scoped = recordsInSet();
       latestByProduct = latestSnapshots(scoped);
-      renderMetrics(latestByProduct, scoped);
-      renderPills(uniqueProducts(scoped));
-      renderChart();
-      renderTable();
+      const hasData = scoped.length > 0 || chartProductsInSet().length > 0 || salesInSet().length > 0;
+      document.getElementById("empty-set").classList.toggle("hidden", hasData || activeTab !== "overview");
+      document.getElementById("overview-data").classList.toggle("hidden", !hasData);
+      if (hasData) {
+        renderMetrics(latestByProduct, scoped);
+        renderPills(uniqueProducts(scoped));
+        renderChart();
+        renderTable();
+      } else {
+        const badge = document.getElementById("updated-badge");
+        badge.classList.add("hidden");
+        badge.classList.remove("inline-flex");
+      }
       populateSalesProductFilter();
       renderSalesTable();
     }
 
-    function setActiveTab(tab) {
+    function setActiveTab(tab, options = {}) {
       activeTab = tab;
       document.getElementById("panel-overview").classList.toggle("hidden", tab !== "overview");
       document.getElementById("panel-sales").classList.toggle("hidden", tab !== "sales");
+      const hasData = recordsInSet().length > 0 || chartProductsInSet().length > 0 || salesInSet().length > 0;
+      document.getElementById("empty-set").classList.toggle("hidden", hasData || tab !== "overview");
       document.querySelectorAll(".tab-btn").forEach((button) => {
         const selected = button.dataset.tab === tab;
         button.classList.toggle("pill-active", selected);
         button.classList.toggle("text-slate-600", !selected);
         button.classList.toggle("dark:text-slate-300", !selected);
       });
+      if (!options.skipHash && currentCatalogSet) {
+        const route = parseRoute();
+        const next = routeHref([route.gameId, route.familyId, route.setSlug, tab === "sales" ? "sales" : null]);
+        if (location.hash !== next) history.replaceState(null, "", next);
+      }
     }
 
     function renderRangePills() {
@@ -767,7 +1032,9 @@
 
     async function init() {
       lucide.createIcons();
-      document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
+      document.querySelectorAll(".theme-toggle").forEach((button) => {
+        button.addEventListener("click", toggleTheme);
+      });
       document.getElementById("table-search").addEventListener("input", renderTable);
       document.getElementById("table-sort").addEventListener("change", renderTable);
       document.getElementById("sales-search").addEventListener("input", renderSalesTable);
@@ -775,6 +1042,7 @@
       document.querySelectorAll(".tab-btn").forEach((button) => {
         button.addEventListener("click", () => setActiveTab(button.dataset.tab));
       });
+      window.addEventListener("hashchange", applyRoute);
       window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
         if (!localStorage.getItem("theme")) {
           document.documentElement.classList.toggle("dark", event.matches);
@@ -783,10 +1051,16 @@
       });
 
       try {
+        catalog = await loadJson("data/catalog.json");
+        if (!catalog || !Array.isArray(catalog.games)) catalog = { games: [] };
+      } catch (error) {
+        catalog = { games: [] };
+      }
+
+      try {
         records = await loadJson("data/tracker_data.json");
         if (!Array.isArray(records)) records = [];
       } catch (error) {
-        showBanner("Could not load tracker data yet. Run the daily scraper (or open this page over HTTP) to populate snapshots.");
         records = [];
       }
 
@@ -804,11 +1078,9 @@
         latestSales = [];
       }
 
-      selectedSet = localStorage.getItem("selectedSet") || "";
       renderRangePills();
-      renderSetTabs();
-      refreshSetView();
-      if (location.hash === "#sales") setActiveTab("sales");
+      if (location.hash === "#sales") history.replaceState(null, "", "#/");
+      applyRoute();
     }
 
     init();
