@@ -1,0 +1,7 @@
+name = "tcg-player-cursor"
+compatibility_date = "2026-08-26"
+
+# Serve the static dashboard (index.html + data/*.json) from the repo root.
+# GitHub Pages still deploys the same files via the daily scraper workflow.
+[assets]
+directory = "./"
