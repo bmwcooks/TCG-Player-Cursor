@@ -77,8 +77,8 @@ def select_chart_sku(result_list):
         language = str(sku.get("language") or "").lower()
         variant = str(sku.get("variant") or "").lower()
         return (
-            1 if condition == "unopened" else 0,
             1 if language == "english" else 0,
+            1 if condition == "unopened" else 0,
             1 if variant == "normal" else 0,
         )
 
