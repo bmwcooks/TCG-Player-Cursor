@@ -107,10 +107,6 @@
             </div>
           </a>
           <div class="flex items-center gap-2 sm:gap-3">
-            <a href="https://github.com/bmwcooks/TCG-Player-Cursor" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 hover:text-ink-900 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200 dark:hover:text-white" aria-label="Open GitHub repository">
-              <i data-lucide="github" class="h-4 w-4"></i>
-              <span class="hidden sm:inline">GitHub</span>
-            </a>
             <button type="button" class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200" aria-label="Toggle color theme">
               <i data-lucide="sun" class="hidden h-4 w-4 dark:block"></i>
               <i data-lucide="moon" class="h-4 w-4 dark:hidden"></i>
@@ -144,10 +140,11 @@
             <i data-lucide="clock-3" class="h-3.5 w-3.5"></i>
             <span>Waiting for data</span>
           </span>
-          <a href="https://github.com/bmwcooks/TCG-Player-Cursor" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 hover:text-ink-900 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200 dark:hover:text-white" aria-label="Open GitHub repository">
-            <i data-lucide="github" class="h-4 w-4"></i>
-            <span class="hidden sm:inline">GitHub</span>
-          </a>
+          <button type="button" data-outlier-toggle class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200" aria-pressed="true" title="When on, hide Japanese, Korean, and Chinese sales, and drop prices that swing more than 50% when a product has enough sales that day or week to judge. Thin markets (about one sale a week) stay raw unless the language is not English.">
+            <span data-outlier-icon-on class="inline-flex"><i data-lucide="shield-check" class="h-4 w-4"></i></span>
+            <span data-outlier-icon-off class="hidden inline-flex"><i data-lucide="shield-off" class="h-4 w-4"></i></span>
+            <span class="hidden sm:inline" data-outlier-label>Outliers on</span>
+          </button>
           <button type="button" class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200" aria-label="Toggle color theme">
             <i data-lucide="sun" class="hidden h-4 w-4 dark:block"></i>
             <i data-lucide="moon" class="h-4 w-4 dark:hidden"></i>
@@ -275,6 +272,7 @@
             <div>
               <h2 class="font-display text-xl font-semibold">Latest Sold Transactions</h2>
               <p class="text-sm text-slate-500 dark:text-slate-400">Up to 100 most recent TCGPlayer sales per product, with price and quantity</p>
+              <p id="sales-filter-note" class="mt-1 hidden text-xs text-slate-500 dark:text-slate-400"></p>
             </div>
             <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
               <label class="relative block">
@@ -316,9 +314,13 @@
   </div>
 
   <script>
-    const REPO_URL = "https://github.com/bmwcooks/TCG-Player-Cursor";
     const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
     const integer = new Intl.NumberFormat("en-US");
+    const OUTLIER_RATIO = 0.5;
+    const MIN_DAILY_SALES = 4;
+    const MIN_WEEKLY_SALES = 4;
+    const MIN_CAPTURED_SALES = 6;
+    const DAY_MS = 24 * 60 * 60 * 1000;
 
     let records = [];
     let chartHistory = { products: [] };
@@ -344,10 +346,126 @@
     };
 
     const RANGE_COPY = {
-      "1M": { title: "Market Price History · 1M", subtitle: "Daily items sold and market price (TCGPlayer 1M chart)" },
-      "3M": { title: "Market Price History · 3M", subtitle: "3-day sales totals and market price (TCGPlayer 3M chart)" },
-      "1Y": { title: "Market Price History · 1Y", subtitle: "Weekly sales totals and market price (TCGPlayer 1Y chart)" },
+      "1M": { title: "Market Price History · 1M", subtitle: "Daily items sold and market price (TCGPlayer 1M chart)", window: 7, busyVolume: 5 },
+      "3M": { title: "Market Price History · 3M", subtitle: "3-day sales totals and market price (TCGPlayer 3M chart)", window: 6, busyVolume: 8 },
+      "1Y": { title: "Market Price History · 1Y", subtitle: "Weekly sales totals and market price (TCGPlayer 1Y chart)", window: 8, busyVolume: 12 },
     };
+
+    function outlierProtectionOn() {
+      return localStorage.getItem("outlierProtection") !== "off";
+    }
+
+    function setOutlierProtection(on) {
+      localStorage.setItem("outlierProtection", on ? "on" : "off");
+      renderOutlierToggle();
+      if (salesChart) renderChart();
+      renderSalesTable();
+    }
+
+    function renderOutlierToggle() {
+      const on = outlierProtectionOn();
+      document.querySelectorAll("[data-outlier-toggle]").forEach((button) => {
+        button.setAttribute("aria-pressed", on ? "true" : "false");
+        button.classList.toggle("pill-active", on);
+        button.classList.toggle("border-transparent", on);
+        const onIcon = button.querySelector("[data-outlier-icon-on]");
+        const offIcon = button.querySelector("[data-outlier-icon-off]");
+        const label = button.querySelector("[data-outlier-label]");
+        if (onIcon) onIcon.classList.toggle("hidden", !on);
+        if (offIcon) offIcon.classList.toggle("hidden", on);
+        if (label) label.textContent = on ? "Outliers on" : "Outliers off";
+      });
+      lucide.createIcons();
+    }
+
+    function median(values) {
+      const nums = values.filter((value) => value != null && !Number.isNaN(value)).slice().sort((a, b) => a - b);
+      if (!nums.length) return null;
+      const mid = Math.floor(nums.length / 2);
+      return nums.length % 2 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+    }
+
+    function languageStatus(value) {
+      const text = String(value || "").trim().toLowerCase();
+      if (!text) return "unknown";
+      if (text === "english" || text === "en") return "english";
+      return "other";
+    }
+
+    function saleTime(row) {
+      if (!row || !row.orderDate) return null;
+      const date = new Date(row.orderDate);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function saleDayKey(row) {
+      const date = saleTime(row);
+      return date ? date.toISOString().slice(0, 10) : String(row.orderDate || "").slice(0, 10);
+    }
+
+    function isVolatilePrice(price, baseline) {
+      if (price == null || baseline == null || baseline <= 0) return false;
+      return Math.abs(price - baseline) / baseline > OUTLIER_RATIO;
+    }
+
+    function salesForProduct(productId) {
+      return latestSales.filter((row) => String(row.productId) === String(productId) && row.purchasePrice != null);
+    }
+
+    function saleIsOutlier(row, productSales) {
+      if (languageStatus(row.language) === "other") return true;
+      const price = row.purchasePrice;
+      const soldAt = saleTime(row);
+      if (price == null || !soldAt) return false;
+
+      const sameDay = productSales.filter((item) => saleDayKey(item) === saleDayKey(row));
+      const sameWeek = productSales.filter((item) => {
+        const other = saleTime(item);
+        return other && Math.abs(other.getTime() - soldAt.getTime()) <= 7 * DAY_MS;
+      });
+      let windowRows = null;
+      if (sameDay.length >= MIN_DAILY_SALES) windowRows = sameDay;
+      else if (sameWeek.length >= MIN_WEEKLY_SALES) windowRows = sameWeek;
+      else if (productSales.length >= MIN_CAPTURED_SALES) windowRows = productSales;
+      if (!windowRows) return false;
+
+      const others = windowRows.filter((item) => item !== row).map((item) => item.purchasePrice);
+      return isVolatilePrice(price, median(others));
+    }
+
+    function protectPriceSeries(points, rangeKey) {
+      if (!outlierProtectionOn() || !points.length) return points;
+      const meta = RANGE_COPY[rangeKey] || RANGE_COPY["1M"];
+      const windowSize = meta.window;
+      const busyVolume = meta.busyVolume;
+      return points.map((point, index) => {
+        if (point.marketPrice == null) return point;
+        const neighbors = [];
+        for (let j = 0; j < points.length; j += 1) {
+          if (j === index || points[j].marketPrice == null) continue;
+          if (Math.abs(j - index) <= windowSize) neighbors.push(points[j]);
+        }
+        if (neighbors.length < 4) return point;
+        const baseline = median(neighbors.map((row) => row.marketPrice));
+        if (!isVolatilePrice(point.marketPrice, baseline)) return point;
+
+        let similarNearby = 0;
+        for (let j = Math.max(0, index - 2); j <= Math.min(points.length - 1, index + 2); j += 1) {
+          if (j === index) continue;
+          const other = points[j];
+          if (!other || other.marketPrice == null || point.marketPrice <= 0) continue;
+          if (Math.abs(other.marketPrice - point.marketPrice) / point.marketPrice < 0.25) similarNearby += 1;
+        }
+        if (similarNearby >= 2) return point;
+        const volume = point.quantitySold || 0;
+        if (volume >= busyVolume) return point;
+        return {
+          ...point,
+          marketPrice: baseline,
+          quantitySold: volume <= 2 ? 0 : volume,
+        };
+      });
+    }
 
     function currentTheme() {
       return document.documentElement.classList.contains("dark") ? "dark" : "light";
@@ -894,7 +1012,7 @@
         : products.filter((product) => String(product.productId) === selectedProductId);
       const byDate = new Map();
       selected.forEach((product) => {
-        const points = product.ranges?.[selectedRange]?.points || [];
+        const points = protectPriceSeries(product.ranges?.[selectedRange]?.points || [], selectedRange);
         points.forEach((point) => {
           if (!point.date) return;
           const current = byDate.get(point.date) || { quantitySold: 0, marketPriceSum: 0, priceCount: 0 };
@@ -920,7 +1038,9 @@
     function renderChart() {
       const copy = RANGE_COPY[selectedRange] || RANGE_COPY["1M"];
       document.getElementById("chart-title").textContent = copy.title;
-      document.getElementById("chart-subtitle").textContent = copy.subtitle;
+      document.getElementById("chart-subtitle").textContent = outlierProtectionOn()
+        ? `${copy.subtitle} · outlier protection on`
+        : copy.subtitle;
 
       const ctx = document.getElementById("sales-chart");
       const colors = chartColors();
@@ -1090,15 +1210,35 @@
       ).join("");
     }
 
+    function salesAfterOutliers() {
+      const protect = outlierProtectionOn();
+      return salesInSet().filter((row) => !protect || !saleIsOutlier(row, salesForProduct(row.productId)));
+    }
+
     function filteredSales() {
       const query = document.getElementById("sales-search").value.trim().toLowerCase();
       const productId = document.getElementById("sales-product").value;
-      return salesInSet().filter((row) => {
+      return salesAfterOutliers().filter((row) => {
         if (productId !== "all" && String(row.productId) !== productId) return false;
         if (!query) return true;
         const haystack = [row.productName, row.condition, row.variant, row.language].join(" ").toLowerCase();
         return haystack.includes(query);
       });
+    }
+
+    function updateSalesFilterNote() {
+      const note = document.getElementById("sales-filter-note");
+      if (!note) return;
+      if (!outlierProtectionOn()) {
+        note.classList.add("hidden");
+        note.textContent = "";
+        return;
+      }
+      const hidden = Math.max(0, salesInSet().length - salesAfterOutliers().length);
+      note.classList.remove("hidden");
+      note.textContent = hidden
+        ? `Outlier protection hid ${integer.format(hidden)} non-English or 50%+ price-spike sales. Thin markets (fewer than ${MIN_WEEKLY_SALES} sales in a week) stay visible unless the language is not English.`
+        : "Outlier protection is on. Non-English sales are hidden; 50%+ price spikes are dropped when a product has at least 4 sales that day or week.";
     }
 
     function renderSalesTable() {
@@ -1109,7 +1249,11 @@
       if (!rows.length) {
         body.innerHTML = "";
         empty.classList.remove("hidden");
-        count.textContent = "";
+        const totalInSet = salesInSet().length;
+        count.textContent = totalInSet
+          ? `Showing 0 of ${integer.format(totalInSet)} captured transactions in ${selectedSet || "this set"}`
+          : "";
+        updateSalesFilterNote();
         return;
       }
       empty.classList.add("hidden");
@@ -1132,6 +1276,7 @@
         `;
       }).join("");
       count.textContent = `Showing ${integer.format(rows.length)} of ${integer.format(salesInSet().length)} captured transactions in ${selectedSet || "this set"}`;
+      updateSalesFilterNote();
     }
 
     async function loadJson(path, fallback) {
@@ -1142,8 +1287,12 @@
 
     async function init() {
       lucide.createIcons();
+      renderOutlierToggle();
       document.querySelectorAll(".theme-toggle").forEach((button) => {
         button.addEventListener("click", toggleTheme);
+      });
+      document.querySelectorAll("[data-outlier-toggle]").forEach((button) => {
+        button.addEventListener("click", () => setOutlierProtection(!outlierProtectionOn()));
       });
       document.getElementById("table-search").addEventListener("input", renderTable);
       document.getElementById("table-sort").addEventListener("change", renderTable);
