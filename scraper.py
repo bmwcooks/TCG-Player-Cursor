@@ -10,6 +10,8 @@ DATA_DIR = "data"
 DATA_FILE = os.path.join(DATA_DIR, "tracker_data.json")
 CHART_HISTORY_FILE = os.path.join(DATA_DIR, "chart_history.json")
 LATEST_SALES_FILE = os.path.join(DATA_DIR, "latest_sales.json")
+PRODUCTS_FILE = os.path.join(DATA_DIR, "pokemon_products.json")
+IMAGE_OVERRIDES_FILE = os.path.join(DATA_DIR, "product_image_overrides.json")
 LATEST_SALES_LIMIT = 100
 
 CHART_RANGES = {
@@ -125,7 +127,7 @@ def latest_completed_sales(buckets, today_date):
     return str(completed[-1]["quantitySold"])
 
 
-def history_records_for_product(product_id, product_name, url, buckets, today_date, set_name=None):
+def history_records_for_product(product_id, product_name, url, buckets, today_date, set_name=None, image_url=None, product_kind=None):
     """Dated snapshots for every completed chart day so the dashboard can plot true daily volume."""
     records = []
     for bucket in buckets:
@@ -136,6 +138,8 @@ def history_records_for_product(product_id, product_name, url, buckets, today_da
             "productId": product_id,
             "productName": product_name,
             "setName": set_name,
+            "productKind": product_kind,
+            "imageUrl": image_url,
             "marketPrice": bucket.get("marketPrice"),
             "recentSale": None,
             "listedMedian": None,
@@ -168,6 +172,59 @@ def parse_numeric(value, as_float=False):
 def extract_product_id(url):
     match = re.search(r"product/(\d+)", url)
     return match.group(1) if match else None
+
+
+def load_image_lookup():
+    """TCGPlayer catalog images plus optional local overrides in data/product_image_overrides.json."""
+    lookup = {}
+    if os.path.exists(PRODUCTS_FILE):
+        try:
+            payload = json.load(open(PRODUCTS_FILE, encoding="utf-8"))
+            for row in payload.get("products") or []:
+                product_id = str(row.get("productId") or "")
+                if product_id and row.get("imageUrl"):
+                    lookup[product_id] = row["imageUrl"]
+        except (json.JSONDecodeError, OSError):
+            pass
+    if os.path.exists(IMAGE_OVERRIDES_FILE):
+        try:
+            overrides = json.load(open(IMAGE_OVERRIDES_FILE, encoding="utf-8"))
+            if isinstance(overrides, dict):
+                for product_id, image_url in overrides.items():
+                    if image_url:
+                        lookup[str(product_id)] = image_url
+        except (json.JSONDecodeError, OSError):
+            pass
+    return lookup
+
+
+def catalog_kind_lookup():
+    kinds = {}
+    if not os.path.exists(PRODUCTS_FILE):
+        return kinds
+    try:
+        payload = json.load(open(PRODUCTS_FILE, encoding="utf-8"))
+        for row in payload.get("products") or []:
+            product_id = str(row.get("productId") or "")
+            if product_id and row.get("kind"):
+                kinds[product_id] = row["kind"]
+    except (json.JSONDecodeError, OSError):
+        pass
+    return kinds
+
+
+def extract_image_url(soup, product_id, known=None):
+    if known:
+        return known
+    og = soup.find("meta", property="og:image") if soup else None
+    if og and og.get("content"):
+        return og["content"].strip()
+    img = soup.find("img") if soup else None
+    if img and img.get("src") and "tcgplayer" in img.get("src", "").lower():
+        return img["src"]
+    if product_id:
+        return f"https://tcgplayer-cdn.tcgplayer.com/product/{product_id}_in_1000x1000.jpg"
+    return None
 
 
 def infer_set_name(url, product_name="", explicit=None):
@@ -396,6 +453,8 @@ def main():
     from scrapling.fetchers import StealthySession
 
     print(f"Initializing Scrapling StealthySession to scrape {len(entries)} URLs...")
+    image_lookup = load_image_lookup()
+    kind_lookup = catalog_kind_lookup()
     with StealthySession(headless=True, solve_cloudflare=True) as session:
         for entry in entries:
             url = entry["url"]
@@ -413,6 +472,8 @@ def main():
 
                 product_name = get_product_name(soup)
                 set_name = infer_set_name(url, product_name, entry.get("setName"))
+                product_kind = kind_lookup.get(str(product_id or ""))
+                image_url = extract_image_url(soup, product_id, image_lookup.get(str(product_id or "")))
                 market_price = extract_metric(soup, "Market Price")
                 recent_sale = extract_metric(soup, "Most Recent Sale")
                 listed_median = extract_metric(soup, "Listed Median")
@@ -466,6 +527,8 @@ def main():
                         "productId": product_id,
                         "productName": product_name,
                         "setName": set_name,
+                        "productKind": product_kind,
+                        "imageUrl": image_url,
                         "url": url,
                         "ranges": range_payload,
                     })
@@ -475,6 +538,8 @@ def main():
                     "productId": product_id,
                     "productName": product_name,
                     "setName": set_name,
+                    "productKind": product_kind,
+                    "imageUrl": image_url,
                     "marketPrice": parse_numeric(market_price, as_float=True),
                     "recentSale": parse_numeric(recent_sale, as_float=True),
                     "listedMedian": parse_numeric(listed_median, as_float=True),
@@ -485,7 +550,9 @@ def main():
                 }
                 all_data_rows.append(record)
                 all_data_rows.extend(
-                    history_records_for_product(product_id, product_name, url, daily_buckets, today_date, set_name)
+                    history_records_for_product(
+                        product_id, product_name, url, daily_buckets, today_date, set_name, image_url, product_kind
+                    )
                 )
 
                 # Build text block for Discord

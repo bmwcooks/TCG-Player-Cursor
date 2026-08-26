@@ -1,17 +1,753 @@
 # Group products under a set with `# Set: Name`.
-# New sets get their own tab on the dashboard.
+# Pokémon sealed listings: booster boxes, Elite Trainer Boxes, and
+# booster bundles (Lost Origin and later). One Piece sets can be added the same way.
+
+# Set: XY
+
+# XY Booster Box
+https://www.tcgplayer.com/product/91601/pokemon-xy-base-set-xy-booster-box?page=1&Language=English
+
+# XY Elite Trainer Box [Xerneas]
+https://www.tcgplayer.com/product/97747/pokemon-xy-base-set-xy-elite-trainer-box-xerneas?page=1&Language=English
+
+# XY Elite Trainer Box [Yveltal]
+https://www.tcgplayer.com/product/97748/pokemon-xy-base-set-xy-elite-trainer-box-yveltal?page=1&Language=English
+
+# Set: Flashfire
+
+# Flashfire Booster Box
+https://www.tcgplayer.com/product/91594/pokemon-xy-flashfire-flashfire-booster-box?page=1&Language=English
+
+# Set: Furious Fists
+
+# Furious Fists Booster Box
+https://www.tcgplayer.com/product/92168/pokemon-xy-furious-fists-furious-fists-booster-box?page=1&Language=English
+
+# Furious Fists Elite Trainer Box
+https://www.tcgplayer.com/product/95284/pokemon-xy-furious-fists-furious-fists-elite-trainer-box?page=1&Language=English
+
+# Set: Phantom Forces
+
+# XY Phantom Forces Booster Box
+https://www.tcgplayer.com/product/94623/pokemon-xy-phantom-forces-xy-phantom-forces-booster-box?page=1&Language=English
+
+# Phantom Forces Elite Trainer Box
+https://www.tcgplayer.com/product/97786/pokemon-xy-phantom-forces-phantom-forces-elite-trainer-box?page=1&Language=English
+
+# Set: Primal Clash
+
+# XY Primal Clash Booster Box
+https://www.tcgplayer.com/product/97750/pokemon-xy-primal-clash-xy-primal-clash-booster-box?page=1&Language=English
+
+# Elite Trainer Box [Groudon]
+https://www.tcgplayer.com/product/97762/pokemon-xy-primal-clash-elite-trainer-box-groudon?page=1&Language=English
+
+# Elite Trainer Box [Kyogre]
+https://www.tcgplayer.com/product/97763/pokemon-xy-primal-clash-elite-trainer-box-kyogre?page=1&Language=English
+
+# Set: Roaring Skies
+
+# XY Roaring Skies Booster Box
+https://www.tcgplayer.com/product/98026/pokemon-xy-roaring-skies-xy-roaring-skies-booster-box?page=1&Language=English
+
+# XY Roaring Skies Elite Trainer Box
+https://www.tcgplayer.com/product/98028/pokemon-xy-roaring-skies-xy-roaring-skies-elite-trainer-box?page=1&Language=English
+
+# Set: Ancient Origins
+
+# XY Ancient Origins Booster Box
+https://www.tcgplayer.com/product/100489/pokemon-xy-ancient-origins-xy-ancient-origins-booster-box?page=1&Language=English
+
+# Ancient Origins Elite Trainer Box
+https://www.tcgplayer.com/product/100495/pokemon-xy-ancient-origins-ancient-origins-elite-trainer-box?page=1&Language=English
+
+# Set: BREAKthrough
+
+# XY BREAKthrough Booster Box
+https://www.tcgplayer.com/product/107101/pokemon-xy-breakthrough-xy-breakthrough-booster-box?page=1&Language=English
+
+# Elite Trainer Box [Mewtwo X]
+https://www.tcgplayer.com/product/107106/pokemon-xy-breakthrough-elite-trainer-box-mewtwo-x?page=1&Language=English
+
+# Elite Trainer Box [Mewtwo Y]
+https://www.tcgplayer.com/product/107107/pokemon-xy-breakthrough-elite-trainer-box-mewtwo-y?page=1&Language=English
+
+# Set: BREAKpoint
+
+# XY BREAKpoint Booster Box
+https://www.tcgplayer.com/product/111278/pokemon-xy-breakpoint-xy-breakpoint-booster-box?page=1&Language=English
+
+# XY BREAKpoint Elite Trainer Box
+https://www.tcgplayer.com/product/111280/pokemon-xy-breakpoint-xy-breakpoint-elite-trainer-box?page=1&Language=English
+
+# Set: Generations
+
+# Generations Elite Trainer Box
+https://www.tcgplayer.com/product/123741/pokemon-generations-generations-elite-trainer-box?page=1&Language=English
+
+# Set: Fates Collide
+
+# XY Fates Collide Booster Box
+https://www.tcgplayer.com/product/117478/pokemon-xy-fates-collide-xy-fates-collide-booster-box?page=1&Language=English
+
+# Fates Collide Elite Trainer Box
+https://www.tcgplayer.com/product/118331/pokemon-xy-fates-collide-fates-collide-elite-trainer-box?page=1&Language=English
+
+# Set: Steam Siege
+
+# Steam Siege Booster Box
+https://www.tcgplayer.com/product/120076/pokemon-xy-steam-siege-steam-siege-booster-box?page=1&Language=English
+
+# Steam Siege Elite Trainer Box
+https://www.tcgplayer.com/product/120697/pokemon-xy-steam-siege-steam-siege-elite-trainer-box?page=1&Language=English
+
+# Set: Evolutions
+
+# XY Evolutions Booster Box
+https://www.tcgplayer.com/product/123446/pokemon-xy-evolutions-xy-evolutions-booster-box?page=1&Language=English
+
+# XY Evolutions Elite Trainer Box [Mega Blastoise]
+https://www.tcgplayer.com/product/123448/pokemon-xy-evolutions-xy-evolutions-elite-trainer-box-mega-blastoise?page=1&Language=English
+
+# XY Evolutions Elite Trainer Box [Mega Charizard Y]
+https://www.tcgplayer.com/product/123447/pokemon-xy-evolutions-xy-evolutions-elite-trainer-box-mega-charizard-y?page=1&Language=English
+
+# Set: Sun & Moon
+
+# Sun & Moon Booster Box
+https://www.tcgplayer.com/product/126048/pokemon-sm-base-set-sun-and-moon-booster-box?page=1&Language=English
+
+# Sun & Moon Elite Trainer Box [Lunala]
+https://www.tcgplayer.com/product/126091/pokemon-sm-base-set-sun-and-moon-elite-trainer-box-lunala?page=1&Language=English
+
+# Sun & Moon Elite Trainer Box [Solgaleo]
+https://www.tcgplayer.com/product/126089/pokemon-sm-base-set-sun-and-moon-elite-trainer-box-solgaleo?page=1&Language=English
+
+# Set: Guardians Rising
+
+# Guardians Rising Booster Box
+https://www.tcgplayer.com/product/129888/pokemon-sm-guardians-rising-guardians-rising-booster-box?page=1&Language=English
+
+# Guardians Rising Elite Trainer Box
+https://www.tcgplayer.com/product/129890/pokemon-sm-guardians-rising-guardians-rising-elite-trainer-box?page=1&Language=English
+
+# Set: Burning Shadows
+
+# Burning Shadows Booster Box
+https://www.tcgplayer.com/product/133773/pokemon-sm-burning-shadows-burning-shadows-booster-box?page=1&Language=English
+
+# Burning Shadows Elite Trainer Box
+https://www.tcgplayer.com/product/133776/pokemon-sm-burning-shadows-burning-shadows-elite-trainer-box?page=1&Language=English
+
+# Set: Shining Legends
+
+# Shining Legends Elite Trainer Box
+https://www.tcgplayer.com/product/145847/pokemon-shining-legends-shining-legends-elite-trainer-box?page=1&Language=English
+
+# Set: Crimson Invasion
+
+# Crimson Invasion Booster Box
+https://www.tcgplayer.com/product/146995/pokemon-sm-crimson-invasion-crimson-invasion-booster-box?page=1&Language=English
+
+# Crimson Invasion Elite Trainer Box
+https://www.tcgplayer.com/product/149377/pokemon-sm-crimson-invasion-crimson-invasion-elite-trainer-box?page=1&Language=English
+
+# Set: Ultra Prism
+
+# Ultra Prism Booster Box
+https://www.tcgplayer.com/product/155661/pokemon-sm-ultra-prism-ultra-prism-booster-box?page=1&Language=English
+
+# Ultra Prism Elite Trainer Box [Dawn Wings Necrozma]
+https://www.tcgplayer.com/product/155663/pokemon-sm-ultra-prism-ultra-prism-elite-trainer-box-dawn-wings-necrozma?page=1&Language=English
+
+# Ultra Prism Elite Trainer Box [Dusk Mane Necrozma]
+https://www.tcgplayer.com/product/155664/pokemon-sm-ultra-prism-ultra-prism-elite-trainer-box-dusk-mane-necrozma?page=1&Language=English
+
+# Set: Forbidden Light
+
+# Forbidden Light Booster Box
+https://www.tcgplayer.com/product/164296/pokemon-sm-forbidden-light-forbidden-light-booster-box?page=1&Language=English
+
+# Forbidden Light Elite Trainer Box
+https://www.tcgplayer.com/product/164303/pokemon-sm-forbidden-light-forbidden-light-elite-trainer-box?page=1&Language=English
+
+# Set: Celestial Storm
+
+# Celestial Storm Booster Box
+https://www.tcgplayer.com/product/170273/pokemon-sm-celestial-storm-celestial-storm-booster-box?page=1&Language=English
+
+# Celestial Storm Elite Trainer Box
+https://www.tcgplayer.com/product/170277/pokemon-sm-celestial-storm-celestial-storm-elite-trainer-box?page=1&Language=English
+
+# Set: Dragon Majesty
+
+# Dragon Majesty Elite Trainer Box
+https://www.tcgplayer.com/product/173393/pokemon-dragon-majesty-dragon-majesty-elite-trainer-box?page=1&Language=English
+
+# Set: Lost Thunder
+
+# Lost Thunder Booster Box
+https://www.tcgplayer.com/product/175509/pokemon-sm-lost-thunder-lost-thunder-booster-box?page=1&Language=English
+
+# Lost Thunder Elite Trainer Box
+https://www.tcgplayer.com/product/175511/pokemon-sm-lost-thunder-lost-thunder-elite-trainer-box?page=1&Language=English
+
+# Set: Team Up
+
+# Team Up Booster Box
+https://www.tcgplayer.com/product/181698/pokemon-sm-team-up-team-up-booster-box?page=1&Language=English
+
+# Team Up Elite Trainer Box
+https://www.tcgplayer.com/product/181704/pokemon-sm-team-up-team-up-elite-trainer-box?page=1&Language=English
+
+# Set: Unbroken Bonds
+
+# Unbroken Bonds Booster Box
+https://www.tcgplayer.com/product/185717/pokemon-sm-unbroken-bonds-unbroken-bonds-booster-box?page=1&Language=English
+
+# Unbroken Bonds Elite Trainer Box
+https://www.tcgplayer.com/product/185719/pokemon-sm-unbroken-bonds-unbroken-bonds-elite-trainer-box?page=1&Language=English
+
+# Set: Unified Minds
+
+# Unified Minds Booster Box
+https://www.tcgplayer.com/product/191882/pokemon-sm-unified-minds-unified-minds-booster-box?page=1&Language=English
+
+# Unified Minds Elite Trainer Box
+https://www.tcgplayer.com/product/193052/pokemon-sm-unified-minds-unified-minds-elite-trainer-box?page=1&Language=English
+
+# Set: Hidden Fates
+
+# Hidden Fates Elite Trainer Box
+https://www.tcgplayer.com/product/194729/pokemon-hidden-fates-hidden-fates-elite-trainer-box?page=1&Language=English
+
+# Set: Cosmic Eclipse
+
+# Cosmic Eclipse Booster Box
+https://www.tcgplayer.com/product/199261/pokemon-sm-cosmic-eclipse-cosmic-eclipse-booster-box?page=1&Language=English
+
+# Cosmic Eclipse Elite Trainer Box
+https://www.tcgplayer.com/product/199308/pokemon-sm-cosmic-eclipse-cosmic-eclipse-elite-trainer-box?page=1&Language=English
+
+# Set: Sword & Shield
+
+# Sword & Shield Booster Box
+https://www.tcgplayer.com/product/206027/pokemon-swsh01-sword-and-shield-base-set-sword-and-shield-booster-box?page=1&Language=English
+
+# Sword & Shield Elite Trainer Box [Zacian]
+https://www.tcgplayer.com/product/206038/pokemon-swsh01-sword-and-shield-base-set-sword-and-shield-elite-trainer-box-zacian?page=1&Language=English
+
+# Sword & Shield Elite Trainer Box [Zamazenta]
+https://www.tcgplayer.com/product/206039/pokemon-swsh01-sword-and-shield-base-set-sword-and-shield-elite-trainer-box-zamazenta?page=1&Language=English
+
+# Set: Rebel Clash
+
+# Rebel Clash Booster Box
+https://www.tcgplayer.com/product/210561/pokemon-swsh02-rebel-clash-rebel-clash-booster-box?page=1&Language=English
+
+# Rebel Clash Elite Trainer Box
+https://www.tcgplayer.com/product/210572/pokemon-swsh02-rebel-clash-rebel-clash-elite-trainer-box?page=1&Language=English
+
+# Set: Darkness Ablaze
+
+# Darkness Ablaze Booster Box
+https://www.tcgplayer.com/product/216853/pokemon-swsh03-darkness-ablaze-darkness-ablaze-booster-box?page=1&Language=English
+
+# Darkness Ablaze Elite Trainer Box
+https://www.tcgplayer.com/product/216856/pokemon-swsh03-darkness-ablaze-darkness-ablaze-elite-trainer-box?page=1&Language=English
+
+# Set: Champion's Path
+
+# Champion's Path Elite Trainer Box
+https://www.tcgplayer.com/product/218791/pokemon-champions-path-champions-path-elite-trainer-box?page=1&Language=English
+
+# Set: Vivid Voltage
+
+# Vivid Voltage Booster Box
+https://www.tcgplayer.com/product/221313/pokemon-swsh04-vivid-voltage-vivid-voltage-booster-box?page=1&Language=English
+
+# Vivid Voltage Elite Trainer Box
+https://www.tcgplayer.com/product/221752/pokemon-swsh04-vivid-voltage-vivid-voltage-elite-trainer-box?page=1&Language=English
+
+# Set: Shining Fates
+
+# Shining Fates Elite Trainer Box
+https://www.tcgplayer.com/product/228821/pokemon-shining-fates-shining-fates-elite-trainer-box?page=1&Language=English
+
+# Set: Battle Styles
+
+# Battle Styles Booster Box
+https://www.tcgplayer.com/product/229277/pokemon-swsh05-battle-styles-battle-styles-booster-box?page=1&Language=English
+
+# Battle Styles Elite Trainer Box [Rapid Strike Urshifu] (Blue)
+https://www.tcgplayer.com/product/229285/pokemon-swsh05-battle-styles-battle-styles-elite-trainer-box-rapid-strike-urshifu-blue?page=1&Language=English
+
+# Battle Styles Elite Trainer Box [Single Strike Urshifu] (Red)
+https://www.tcgplayer.com/product/229284/pokemon-swsh05-battle-styles-battle-styles-elite-trainer-box-single-strike-urshifu-red?page=1&Language=English
+
+# Set: Chilling Reign
+
+# Chilling Reign Booster Box
+https://www.tcgplayer.com/product/236258/pokemon-swsh06-chilling-reign-chilling-reign-booster-box?page=1&Language=English
+
+# Chilling Reign Elite Trainer Box [Ice Rider Calyrex]
+https://www.tcgplayer.com/product/236260/pokemon-swsh06-chilling-reign-chilling-reign-elite-trainer-box-ice-rider-calyrex?page=1&Language=English
+
+# Chilling Reign Elite Trainer Box [Shadow Rider Calyrex]
+https://www.tcgplayer.com/product/236261/pokemon-swsh06-chilling-reign-chilling-reign-elite-trainer-box-shadow-rider-calyrex?page=1&Language=English
+
+# Chilling Reign Pokemon Center Elite Trainer Box [Ice Rider Calyrex] (Exclusive)
+https://www.tcgplayer.com/product/247281/pokemon-swsh06-chilling-reign-chilling-reign-pokemon-center-elite-trainer-box-ice-rider-calyrex-exclusive?page=1&Language=English
+
+# Chilling Reign Pokemon Center Elite Trainer Box [Shadow Rider Calyrex] (Exclusive)
+https://www.tcgplayer.com/product/247282/pokemon-swsh06-chilling-reign-chilling-reign-pokemon-center-elite-trainer-box-shadow-rider-calyrex-exclusive?page=1&Language=English
+
+# Set: Evolving Skies
+
+# Evolving Skies Booster Box
+https://www.tcgplayer.com/product/242436/pokemon-swsh07-evolving-skies-evolving-skies-booster-box?page=1&Language=English
+
+# Evolving Skies Elite Trainer Box [Flareon/Jolteon/Umbreon/Leafeon]
+https://www.tcgplayer.com/product/242434/pokemon-swsh07-evolving-skies-evolving-skies-elite-trainer-box-flareon-jolteon-umbreon-leafeon?page=1&Language=English
+
+# Evolving Skies Elite Trainer Box [Glaceon/Vaporeon/Sylveon/Espeon]
+https://www.tcgplayer.com/product/242443/pokemon-swsh07-evolving-skies-evolving-skies-elite-trainer-box-glaceon-vaporeon-sylveon-espeon?page=1&Language=English
+
+# Evolving Skies Pokemon Center Elite Trainer Box [Glaceon/Vaporeon/Sylveon/Espeon] (Exclusive)
+https://www.tcgplayer.com/product/245352/pokemon-swsh07-evolving-skies-evolving-skies-pokemon-center-elite-trainer-box-glaceon-vaporeon-sylveon-espeon-exclusive?page=1&Language=English
+
+# Evolving Skies Pokemon Center Elite Trainer Box [Jolteon/Flareon/Umbreon/Leafeon] (Exclusive)
+https://www.tcgplayer.com/product/245376/pokemon-swsh07-evolving-skies-evolving-skies-pokemon-center-elite-trainer-box-jolteon-flareon-umbreon-leafeon-exclusive?page=1&Language=English
+
+# Set: Celebrations
+
+# Celebrations Elite Trainer Box
+https://www.tcgplayer.com/product/242811/pokemon-celebrations-celebrations-elite-trainer-box?page=1&Language=English
+
+# Celebrations Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/251199/pokemon-celebrations-celebrations-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Set: Fusion Strike
+
+# Fusion Strike Booster Box
+https://www.tcgplayer.com/product/247654/pokemon-swsh08-fusion-strike-fusion-strike-booster-box?page=1&Language=English
+
+# Fusion Strike Elite Trainer Box
+https://www.tcgplayer.com/product/247671/pokemon-swsh08-fusion-strike-fusion-strike-elite-trainer-box?page=1&Language=English
+
+# Fusion Strike Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/247673/pokemon-swsh08-fusion-strike-fusion-strike-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Set: Brilliant Stars
+
+# Brilliant Stars Booster Box
+https://www.tcgplayer.com/product/256141/pokemon-swsh09-brilliant-stars-brilliant-stars-booster-box?page=1&Language=English
+
+# Brilliant Stars Elite Trainer Box
+https://www.tcgplayer.com/product/256138/pokemon-swsh09-brilliant-stars-brilliant-stars-elite-trainer-box?page=1&Language=English
+
+# Brilliant Stars Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/256140/pokemon-swsh09-brilliant-stars-brilliant-stars-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Set: Astral Radiance
+
+# Astral Radiance Booster Box
+https://www.tcgplayer.com/product/265519/pokemon-swsh10-astral-radiance-astral-radiance-booster-box?page=1&Language=English
+
+# Astral Radiance Elite Trainer Box
+https://www.tcgplayer.com/product/265527/pokemon-swsh10-astral-radiance-astral-radiance-elite-trainer-box?page=1&Language=English
+
+# Astral Radiance Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/265528/pokemon-swsh10-astral-radiance-astral-radiance-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Set: Pokémon GO
+
+# Pokemon GO Elite Trainer Box
+https://www.tcgplayer.com/product/270708/pokemon-pokemon-go-pokemon-go-elite-trainer-box?page=1&Language=English
+
+# Pokemon GO Pokemon Center Elite Trainer Box Plus (Exclusive)
+https://www.tcgplayer.com/product/270709/pokemon-pokemon-go-pokemon-go-pokemon-center-elite-trainer-box-plus-exclusive?page=1&Language=English
+
+# Set: Lost Origin
+
+# Lost Origin Booster Box
+https://www.tcgplayer.com/product/277324/pokemon-swsh11-lost-origin-lost-origin-booster-box?page=1&Language=English
+
+# Lost Origin Elite Trainer Box
+https://www.tcgplayer.com/product/277335/pokemon-swsh11-lost-origin-lost-origin-elite-trainer-box?page=1&Language=English
+
+# Lost Origin Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/277336/pokemon-swsh11-lost-origin-lost-origin-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Lost Origin Booster Bundle
+https://www.tcgplayer.com/product/278819/pokemon-swsh11-lost-origin-lost-origin-booster-bundle?page=1&Language=English
+
+# Set: Silver Tempest
+
+# Silver Tempest Booster Box
+https://www.tcgplayer.com/product/283389/pokemon-swsh12-silver-tempest-silver-tempest-booster-box?page=1&Language=English
+
+# Silver Tempest Elite Trainer Box
+https://www.tcgplayer.com/product/283401/pokemon-swsh12-silver-tempest-silver-tempest-elite-trainer-box?page=1&Language=English
+
+# Silver Tempest Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/285860/pokemon-swsh12-silver-tempest-silver-tempest-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Silver Tempest Booster Bundle
+https://www.tcgplayer.com/product/283396/pokemon-swsh12-silver-tempest-silver-tempest-booster-bundle?page=1&Language=English
+
+# Set: Crown Zenith
+
+# Crown Zenith Elite Trainer Box
+https://www.tcgplayer.com/product/453470/pokemon-swsh-crown-zenith-crown-zenith-elite-trainer-box?page=1&Language=English
+
+# Crown Zenith Pokemon Center Elite Trainer Box Plus
+https://www.tcgplayer.com/product/454246/pokemon-swsh-crown-zenith-crown-zenith-pokemon-center-elite-trainer-box-plus?page=1&Language=English
+
+# Crown Zenith Booster Bundle
+https://www.tcgplayer.com/product/527562/pokemon-swsh-crown-zenith-crown-zenith-booster-bundle?page=1&Language=English
+
+# Set: Scarlet & Violet
+
+# Scarlet & Violet Booster Box
+https://www.tcgplayer.com/product/476452/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-booster-box?page=1&Language=English
+
+# Scarlet & Violet Elite Trainer Box [Koraidon]
+https://www.tcgplayer.com/product/478335/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-elite-trainer-box-koraidon?page=1&Language=English
+
+# Scarlet & Violet Elite Trainer Box [Miraidon]
+https://www.tcgplayer.com/product/478336/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-elite-trainer-box-miraidon?page=1&Language=English
+
+# Scarlet & Violet Pokemon Center Elite Trainer Box (Exclusive) [Koraidon]
+https://www.tcgplayer.com/product/478758/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-pokemon-center-elite-trainer-box-exclusive-koraidon?page=1&Language=English
+
+# Scarlet & Violet Pokemon Center Elite Trainer Box (Exclusive) [Miraidon]
+https://www.tcgplayer.com/product/478756/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-pokemon-center-elite-trainer-box-exclusive-miraidon?page=1&Language=English
+
+# Scarlet & Violet Booster Bundle
+https://www.tcgplayer.com/product/478258/pokemon-sv01-scarlet-and-violet-base-set-scarlet-and-violet-booster-bundle?page=1&Language=English
+
+# Set: Paldea Evolved
+
+# Paldea Evolved Booster Box
+https://www.tcgplayer.com/product/493975/pokemon-sv02-paldea-evolved-paldea-evolved-booster-box?page=1&Language=English
+
+# Paldea Evolved Elite Trainer Box
+https://www.tcgplayer.com/product/493974/pokemon-sv02-paldea-evolved-paldea-evolved-elite-trainer-box?page=1&Language=English
+
+# Paldea Evolved Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/493973/pokemon-sv02-paldea-evolved-paldea-evolved-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Paldea Evolved Booster Bundle
+https://www.tcgplayer.com/product/496914/pokemon-sv02-paldea-evolved-paldea-evolved-booster-bundle?page=1&Language=English
+
+# Set: Obsidian Flames
+
+# Obsidian Flames Booster Box
+https://www.tcgplayer.com/product/501257/pokemon-sv03-obsidian-flames-obsidian-flames-booster-box?page=1&Language=English
+
+# Obsidian Flames Elite Trainer Box
+https://www.tcgplayer.com/product/501264/pokemon-sv03-obsidian-flames-obsidian-flames-elite-trainer-box?page=1&Language=English
+
+# Obsidian Flames Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/501266/pokemon-sv03-obsidian-flames-obsidian-flames-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Obsidian Flames Booster Bundle
+https://www.tcgplayer.com/product/501263/pokemon-sv03-obsidian-flames-obsidian-flames-booster-bundle?page=1&Language=English
+
+# Set: 151
+
+# 151 Elite Trainer Box
+https://www.tcgplayer.com/product/503313/pokemon-sv-scarlet-and-violet-151-151-elite-trainer-box?page=1&Language=English
+
+# 151 Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/501999/pokemon-sv-scarlet-and-violet-151-151-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# 151 Booster Bundle
+https://www.tcgplayer.com/product/502000/pokemon-sv-scarlet-and-violet-151-151-booster-bundle?page=1&Language=English
+
+# Set: Paradox Rift
+
+# Paradox Rift Booster Box
+https://www.tcgplayer.com/product/512821/pokemon-sv04-paradox-rift-paradox-rift-booster-box?page=1&Language=English
+
+# Paradox Rift Elite Trainer Box [Iron Valiant]
+https://www.tcgplayer.com/product/512813/pokemon-sv04-paradox-rift-paradox-rift-elite-trainer-box-iron-valiant?page=1&Language=English
+
+# Paradox Rift Elite Trainer Box [Roaring Moon]
+https://www.tcgplayer.com/product/512815/pokemon-sv04-paradox-rift-paradox-rift-elite-trainer-box-roaring-moon?page=1&Language=English
+
+# Paradox Rift Pokemon Center Elite Trainer Box (Exclusive) [Iron Valiant]
+https://www.tcgplayer.com/product/512801/pokemon-sv04-paradox-rift-paradox-rift-pokemon-center-elite-trainer-box-exclusive-iron-valiant?page=1&Language=English
+
+# Paradox Rift Pokemon Center Elite Trainer Box (Exclusive) [Roaring Moon]
+https://www.tcgplayer.com/product/512809/pokemon-sv04-paradox-rift-paradox-rift-pokemon-center-elite-trainer-box-exclusive-roaring-moon?page=1&Language=English
+
+# Paradox Rift Booster Bundle
+https://www.tcgplayer.com/product/512820/pokemon-sv04-paradox-rift-paradox-rift-booster-bundle?page=1&Language=English
+
+# Set: Paldean Fates
+
+# Paldean Fates Elite Trainer Box
+https://www.tcgplayer.com/product/528040/pokemon-sv-paldean-fates-paldean-fates-elite-trainer-box?page=1&Language=English
+
+# Paldean Fates Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/528039/pokemon-sv-paldean-fates-paldean-fates-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Paldean Fates Booster Bundle
+https://www.tcgplayer.com/product/528771/pokemon-sv-paldean-fates-paldean-fates-booster-bundle?page=1&Language=English
+
+# Set: Temporal Forces
+
+# Temporal Forces Booster Box
+https://www.tcgplayer.com/product/536225/pokemon-sv05-temporal-forces-temporal-forces-booster-box?page=1&Language=English
+
+# Temporal Forces Elite Trainer Box [Iron Leaves ex]
+https://www.tcgplayer.com/product/532848/pokemon-sv05-temporal-forces-temporal-forces-elite-trainer-box-iron-leaves-ex?page=1&Language=English
+
+# Temporal Forces Elite Trainer Box [Walking Wake]
+https://www.tcgplayer.com/product/532845/pokemon-sv05-temporal-forces-temporal-forces-elite-trainer-box-walking-wake?page=1&Language=English
+
+# Temporal Forces Pokemon Center Elite Trainer Box (Exclusive) [Iron Leaves]
+https://www.tcgplayer.com/product/532853/pokemon-sv05-temporal-forces-temporal-forces-pokemon-center-elite-trainer-box-exclusive-iron-leaves?page=1&Language=English
+
+# Temporal Forces Pokemon Center Elite Trainer Box (Exclusive) [Walking Wake]
+https://www.tcgplayer.com/product/538775/pokemon-sv05-temporal-forces-temporal-forces-pokemon-center-elite-trainer-box-exclusive-walking-wake?page=1&Language=English
+
+# Temporal Forces Booster Bundle
+https://www.tcgplayer.com/product/541017/pokemon-sv05-temporal-forces-temporal-forces-booster-bundle?page=1&Language=English
+
+# Set: Twilight Masquerade
+
+# Twilight Masquerade Booster Box
+https://www.tcgplayer.com/product/543846/pokemon-sv06-twilight-masquerade-twilight-masquerade-booster-box?page=1&Language=English
+
+# Twilight Masquerade Elite Trainer Box
+https://www.tcgplayer.com/product/543845/pokemon-sv06-twilight-masquerade-twilight-masquerade-elite-trainer-box?page=1&Language=English
+
+# Twilight Masquerade Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/543844/pokemon-sv06-twilight-masquerade-twilight-masquerade-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Twilight Masquerade Booster Bundle
+https://www.tcgplayer.com/product/543852/pokemon-sv06-twilight-masquerade-twilight-masquerade-booster-bundle?page=1&Language=English
+
+# Set: Shrouded Fable
+
+# Shrouded Fable Elite Trainer Box
+https://www.tcgplayer.com/product/552999/pokemon-sv-shrouded-fable-shrouded-fable-elite-trainer-box?page=1&Language=English
+
+# Shrouded Fable Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/552998/pokemon-sv-shrouded-fable-shrouded-fable-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Shrouded Fable Booster Bundle
+https://www.tcgplayer.com/product/553031/pokemon-sv-shrouded-fable-shrouded-fable-booster-bundle?page=1&Language=English
+
+# Set: Stellar Crown
+
+# Stellar Crown Booster Box
+https://www.tcgplayer.com/product/557354/pokemon-sv07-stellar-crown-stellar-crown-booster-box?page=1&Language=English
+
+# Stellar Crown Elite Trainer Box
+https://www.tcgplayer.com/product/557350/pokemon-sv07-stellar-crown-stellar-crown-elite-trainer-box?page=1&Language=English
+
+# Stellar Crown Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/557340/pokemon-sv07-stellar-crown-stellar-crown-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Stellar Crown Booster Bundle
+https://www.tcgplayer.com/product/557345/pokemon-sv07-stellar-crown-stellar-crown-booster-bundle?page=1&Language=English
+
+# Set: Surging Sparks
+
+# Surging Sparks Booster Box
+https://www.tcgplayer.com/product/565606/pokemon-sv08-surging-sparks-surging-sparks-booster-box?page=1&Language=English
+
+# Surging Sparks Elite Trainer Box
+https://www.tcgplayer.com/product/565630/pokemon-sv08-surging-sparks-surging-sparks-elite-trainer-box?page=1&Language=English
+
+# Surging Sparks Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/565632/pokemon-sv08-surging-sparks-surging-sparks-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Surging Sparks Booster Bundle (LGS)
+https://www.tcgplayer.com/product/565629/pokemon-sv08-surging-sparks-surging-sparks-booster-bundle-lgs?page=1&Language=English
+
+# Surging Sparks Booster Bundle (Retail)
+https://www.tcgplayer.com/product/679564/pokemon-sv08-surging-sparks-surging-sparks-booster-bundle-retail?page=1&Language=English
+
+# Set: Prismatic Evolutions
+
+# Prismatic Evolutions Elite Trainer Box
+https://www.tcgplayer.com/product/593355/pokemon-sv-prismatic-evolutions-prismatic-evolutions-elite-trainer-box?page=1&Language=English
+
+# Prismatic Evolutions Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/593324/pokemon-sv-prismatic-evolutions-prismatic-evolutions-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Prismatic Evolutions Booster Bundle
+https://www.tcgplayer.com/product/600518/pokemon-sv-prismatic-evolutions-prismatic-evolutions-booster-bundle?page=1&Language=English
+
+# Set: Journey Together
+
+# Journey Together Booster Box
+https://www.tcgplayer.com/product/610931/pokemon-sv09-journey-together-journey-together-booster-box?page=1&Language=English
+
+# Journey Together Enhanced Booster Box
+https://www.tcgplayer.com/product/623628/pokemon-sv09-journey-together-journey-together-enhanced-booster-box?page=1&Language=English
+
+# Journey Together Elite Trainer Box
+https://www.tcgplayer.com/product/610930/pokemon-sv09-journey-together-journey-together-elite-trainer-box?page=1&Language=English
+
+# Journey Together Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/610929/pokemon-sv09-journey-together-journey-together-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Journey Together Booster Bundle
+https://www.tcgplayer.com/product/610953/pokemon-sv09-journey-together-journey-together-booster-bundle?page=1&Language=English
+
+# Set: Destined Rivals
+
+# Destined Rivals Booster Box
+https://www.tcgplayer.com/product/624679/pokemon-sv10-destined-rivals-destined-rivals-booster-box?page=1&Language=English
+
+# Destined Rivals Elite Trainer Box
+https://www.tcgplayer.com/product/624676/pokemon-sv10-destined-rivals-destined-rivals-elite-trainer-box?page=1&Language=English
+
+# Destined Rivals Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/624675/pokemon-sv10-destined-rivals-destined-rivals-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Destined Rivals Booster Bundle
+https://www.tcgplayer.com/product/625670/pokemon-sv10-destined-rivals-destined-rivals-booster-bundle?page=1&Language=English
+
+# Set: Black Bolt
+
+# Black Bolt Elite Trainer Box
+https://www.tcgplayer.com/product/630686/pokemon-sv-black-bolt-black-bolt-elite-trainer-box?page=1&Language=English
+
+# Black Bolt Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/630687/pokemon-sv-black-bolt-black-bolt-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Black Bolt Booster Bundle
+https://www.tcgplayer.com/product/630431/pokemon-sv-black-bolt-black-bolt-booster-bundle?page=1&Language=English
+
+# Set: White Flare
+
+# White Flare Elite Trainer Box
+https://www.tcgplayer.com/product/630689/pokemon-sv-white-flare-white-flare-elite-trainer-box?page=1&Language=English
+
+# White Flare Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/630688/pokemon-sv-white-flare-white-flare-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# White Flare Booster Bundle
+https://www.tcgplayer.com/product/630696/pokemon-sv-white-flare-white-flare-booster-bundle?page=1&Language=English
+
+# Set: Mega Evolution
+
+# Mega Evolution Booster Box
+https://www.tcgplayer.com/product/644298/pokemon-me01-mega-evolution-mega-evolution-booster-box?page=1&Language=English
+
+# Mega Evolution Enhanced Booster Box
+https://www.tcgplayer.com/product/644300/pokemon-me01-mega-evolution-mega-evolution-enhanced-booster-box?page=1&Language=English
+
+# Mega Evolution Elite Trainer Box [Mega Gardevoir]
+https://www.tcgplayer.com/product/644279/pokemon-me01-mega-evolution-mega-evolution-elite-trainer-box-mega-gardevoir?page=1&Language=English
+
+# Mega Evolution Elite Trainer Box [Mega Lucario]
+https://www.tcgplayer.com/product/648394/pokemon-me01-mega-evolution-mega-evolution-elite-trainer-box-mega-lucario?page=1&Language=English
+
+# Mega Evolution Pokemon Center Elite Trainer Box (Exclusive) [Mega Gardevoir]
+https://www.tcgplayer.com/product/648415/pokemon-me01-mega-evolution-mega-evolution-pokemon-center-elite-trainer-box-exclusive-mega-gardevoir?page=1&Language=English
+
+# Mega Evolution Pokemon Center Elite Trainer Box (Exclusive) [Mega Lucario]
+https://www.tcgplayer.com/product/644282/pokemon-me01-mega-evolution-mega-evolution-pokemon-center-elite-trainer-box-exclusive-mega-lucario?page=1&Language=English
+
+# Mega Evolution Booster Bundle
+https://www.tcgplayer.com/product/644362/pokemon-me01-mega-evolution-mega-evolution-booster-bundle?page=1&Language=English
+
+# Set: Phantasmal Flames
+
+# Phantasmal Flames Booster Box
+https://www.tcgplayer.com/product/654137/pokemon-me02-phantasmal-flames-phantasmal-flames-booster-box?page=1&Language=English
+
+# Phantasmal Flames Elite Trainer Box
+https://www.tcgplayer.com/product/654136/pokemon-me02-phantasmal-flames-phantasmal-flames-elite-trainer-box?page=1&Language=English
+
+# Phantasmal Flames Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/654135/pokemon-me02-phantasmal-flames-phantasmal-flames-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Phantasmal Flames Booster Bundle
+https://www.tcgplayer.com/product/654160/pokemon-me02-phantasmal-flames-phantasmal-flames-booster-bundle?page=1&Language=English
+
+# Set: Ascended Heroes
+
+# Ascended Heroes Elite Trainer Box
+https://www.tcgplayer.com/product/668496/pokemon-me-ascended-heroes-ascended-heroes-elite-trainer-box?page=1&Language=English
+
+# Ascended Heroes Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/668497/pokemon-me-ascended-heroes-ascended-heroes-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Ascended Heroes Booster Bundle
+https://www.tcgplayer.com/product/668541/pokemon-me-ascended-heroes-ascended-heroes-booster-bundle?page=1&Language=English
 
 # Set: Perfect Order
 
 # Perfect Order Booster Box
 https://www.tcgplayer.com/product/672394/pokemon-me03-perfect-order-perfect-order-booster-box?page=1&Language=English
 
-# Perfect Order Pokemon Center Elite Trainer Box
-https://www.tcgplayer.com/product/672404/pokemon-me03-perfect-order-perfect-order-pokemon-center-elite-trainer-box?page=1&Language=English
-
 # Perfect Order Elite Trainer Box
 https://www.tcgplayer.com/product/672401/pokemon-me03-perfect-order-perfect-order-elite-trainer-box?page=1&Language=English
 
-# Add your next set/link below:
-# Set: Example Set
-# https://www.tcgplayer.com/product/...
+# Perfect Order Pokemon Center Elite Trainer Box
+https://www.tcgplayer.com/product/672404/pokemon-me03-perfect-order-perfect-order-pokemon-center-elite-trainer-box?page=1&Language=English
+
+# Perfect Order Booster Bundle
+https://www.tcgplayer.com/product/672396/pokemon-me03-perfect-order-perfect-order-booster-bundle?page=1&Language=English
+
+# Set: Chaos Rising
+
+# Chaos Rising Booster Box
+https://www.tcgplayer.com/product/684444/pokemon-me04-chaos-rising-chaos-rising-booster-box?page=1&Language=English
+
+# Chaos Rising Elite Trainer Box
+https://www.tcgplayer.com/product/684450/pokemon-me04-chaos-rising-chaos-rising-elite-trainer-box?page=1&Language=English
+
+# Chaos Rising Pokemon Center Elite Trainer Box
+https://www.tcgplayer.com/product/684452/pokemon-me04-chaos-rising-chaos-rising-pokemon-center-elite-trainer-box?page=1&Language=English
+
+# Chaos Rising Booster Bundle
+https://www.tcgplayer.com/product/684456/pokemon-me04-chaos-rising-chaos-rising-booster-bundle?page=1&Language=English
+
+# Set: Pitch Black
+
+# Pitch Black Booster Box
+https://www.tcgplayer.com/product/692939/pokemon-me05-pitch-black-pitch-black-booster-box?page=1&Language=English
+
+# Pitch Black Elite Trainer Box
+https://www.tcgplayer.com/product/692947/pokemon-me05-pitch-black-pitch-black-elite-trainer-box?page=1&Language=English
+
+# Pitch Black Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/692949/pokemon-me05-pitch-black-pitch-black-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Pitch Black Booster Bundle
+https://www.tcgplayer.com/product/692942/pokemon-me05-pitch-black-pitch-black-booster-bundle?page=1&Language=English
+
+# Set: 30th Celebration
+
+# 30th Celebration Elite Trainer Box
+https://www.tcgplayer.com/product/704143/pokemon-me-30th-celebration-30th-celebration-elite-trainer-box?page=1&Language=English
+
+# 30th Celebration Pokemon Center Elite Trainer Box
+https://www.tcgplayer.com/product/704144/pokemon-me-30th-celebration-30th-celebration-pokemon-center-elite-trainer-box?page=1&Language=English
+
+# 30th Celebration Booster Bundle
+https://www.tcgplayer.com/product/704171/pokemon-me-30th-celebration-30th-celebration-booster-bundle?page=1&Language=English
+
+# Set: Delta Reign
+
+# Delta Reign Booster Box
+https://www.tcgplayer.com/product/712094/pokemon-me06-delta-reign-delta-reign-booster-box?page=1&Language=English
+
+# Delta Reign Elite Trainer Box
+https://www.tcgplayer.com/product/712102/pokemon-me06-delta-reign-delta-reign-elite-trainer-box?page=1&Language=English
+
+# Delta Reign Pokemon Center Elite Trainer Box (Exclusive)
+https://www.tcgplayer.com/product/712104/pokemon-me06-delta-reign-delta-reign-pokemon-center-elite-trainer-box-exclusive?page=1&Language=English
+
+# Delta Reign Booster Bundle
+https://www.tcgplayer.com/product/712097/pokemon-me06-delta-reign-delta-reign-booster-bundle?page=1&Language=English

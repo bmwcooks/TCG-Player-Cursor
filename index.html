@@ -332,6 +332,14 @@
 
     let catalog = { games: [] };
     let currentCatalogSet = null;
+    let pokemonProducts = { products: [] };
+    let imageOverrides = {};
+
+    const KIND_LABEL = {
+      "booster-box": "Booster Box",
+      "etb": "Elite Trainer Box",
+      "booster-bundle": "Booster Bundle",
+    };
 
     const RANGE_COPY = {
       "1M": { title: "Market Price History · 1M", subtitle: "Daily items sold and market price (TCGPlayer 1M chart)" },
@@ -399,7 +407,47 @@
       records.forEach((row) => names.add(setNameOf(row)));
       (chartHistory.products || []).forEach((row) => names.add(setNameOf(row)));
       latestSales.forEach((row) => names.add(setNameOf(row)));
+      (pokemonProducts.products || []).forEach((row) => names.add(row.setName));
       return names;
+    }
+
+    function catalogProductsInSet() {
+      return (pokemonProducts.products || []).filter((row) => row.setName === selectedSet);
+    }
+
+    function productById(productId) {
+      return (pokemonProducts.products || []).find((row) => String(row.productId) === String(productId)) || null;
+    }
+
+    function productImageUrl(row) {
+      const id = String((row && row.productId) || "");
+      if (id && imageOverrides[id]) return imageOverrides[id];
+      if (row && row.imageUrl) return row.imageUrl;
+      const listed = productById(id);
+      if (listed && listed.imageUrl) return listed.imageUrl;
+      if (id) return `https://tcgplayer-cdn.tcgplayer.com/product/${id}_200w.jpg`;
+      return "";
+    }
+
+    function productKindOf(row) {
+      if (row && row.productKind) return row.productKind;
+      const listed = productById(row && row.productId);
+      return (listed && listed.kind) || "";
+    }
+
+    function setThumb(set) {
+      const listed = (pokemonProducts.products || []).filter((row) => row.setName === set.setName);
+      return (listed.find((row) => row.kind === "booster-box") || listed[0] || {}).imageUrl || "";
+    }
+
+    function imageMarkup(row, sizeClass) {
+      const src = productImageUrl(row);
+      const size = sizeClass || "h-14 w-14";
+      const fallback = `<div class="image-fallback hidden ${size} shrink-0 items-center justify-center rounded-lg bg-ink-50 text-slate-400 dark:bg-ink-950"><i data-lucide="image-off" class="h-5 w-5"></i></div>`;
+      if (!src) {
+        return `<div class="${size} flex shrink-0 items-center justify-center rounded-lg bg-ink-50 text-slate-400 dark:bg-ink-950"><i data-lucide="image-off" class="h-5 w-5"></i></div>`;
+      }
+      return `<img src="${escapeHtml(src)}" alt="" class="${size} shrink-0 rounded-lg object-contain bg-ink-50 dark:bg-ink-950" onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');">${fallback}`;
     }
 
     function setIsTracked(set) {
@@ -452,11 +500,13 @@
             ${sets.map((set) => {
               const status = setStatus(set);
               const tracking = tracked.has(set.setName);
+              const thumb = setThumb(set);
               return `
                 <a href="${escapeHtml(routeHref([game.id, family.id, set.slug]))}" class="choice-card rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
                   <div class="flex items-start justify-between gap-3">
-                    <span class="rounded-full bg-ink-50 px-2.5 py-1 text-xs font-semibold tabular text-slate-600 dark:bg-ink-950 dark:text-slate-300">${escapeHtml(set.code || "")}</span>
+                    ${thumb ? `<img src="${escapeHtml(thumb)}" alt="" class="h-16 w-16 rounded-xl object-contain bg-ink-50 dark:bg-ink-950" onerror="this.style.display='none'">` : `<span class="rounded-full bg-ink-50 px-2.5 py-1 text-xs font-semibold tabular text-slate-600 dark:bg-ink-950 dark:text-slate-300">${escapeHtml(set.code || "")}</span>`}
                     <div class="flex flex-wrap justify-end gap-1">
+                      <span class="rounded-full bg-ink-50 px-2.5 py-1 text-xs font-semibold tabular text-slate-600 dark:bg-ink-950 dark:text-slate-300">${escapeHtml(set.code || "")}</span>
                       ${set.kind === "special" ? `<span class="rounded-full bg-sky-500/10 px-2 py-1 text-[11px] font-semibold text-sky-700 dark:text-sky-300">Special</span>` : ""}
                       ${statusLabel(status) ? `<span class="rounded-full bg-amber-500/10 px-2 py-1 text-[11px] font-semibold text-amber-800 dark:text-amber-200">${escapeHtml(statusLabel(status))}</span>` : ""}
                       ${tracking ? `<span class="rounded-full bg-emerald-500/15 px-2 py-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">Tracking</span>` : ""}
@@ -712,19 +762,52 @@
 
     function refreshSetView() {
       const scoped = recordsInSet();
-      latestByProduct = latestSnapshots(scoped);
-      const hasData = scoped.length > 0 || chartProductsInSet().length > 0 || salesInSet().length > 0;
-      document.getElementById("empty-set").classList.toggle("hidden", hasData || activeTab !== "overview");
-      document.getElementById("overview-data").classList.toggle("hidden", !hasData);
-      if (hasData) {
-        renderMetrics(latestByProduct, scoped);
-        renderPills(uniqueProducts(scoped));
-        renderChart();
-        renderTable();
+      latestByProduct = latestSnapshots(scoped).map((row) => ({
+        ...row,
+        imageUrl: productImageUrl(row),
+        productKind: productKindOf(row),
+      }));
+      const seen = new Set(latestByProduct.map((row) => String(row.productId || "")));
+      catalogProductsInSet().forEach((product) => {
+        if (seen.has(String(product.productId))) return;
+        latestByProduct.push({
+          productId: product.productId,
+          productName: product.name,
+          setName: product.setName,
+          productKind: product.kind,
+          imageUrl: product.imageUrl,
+          url: product.url,
+          date: "",
+          marketPrice: null,
+          lastDaySales: null,
+          currentQuantity: null,
+          currentSellers: null,
+        });
+      });
+      const hasListings = latestByProduct.length > 0;
+      const hasMarket = scoped.length > 0;
+      document.getElementById("empty-set").classList.toggle("hidden", hasListings || activeTab !== "overview");
+      document.getElementById("overview-data").classList.toggle("hidden", !hasListings);
+      if (hasMarket) {
+        renderMetrics(latestSnapshots(scoped), scoped);
+      } else if (hasListings) {
+        document.getElementById("metric-tracked").textContent = integer.format(latestByProduct.length);
+        document.getElementById("metric-volume-name").textContent = "Awaiting first scrape";
+        document.getElementById("metric-volume-value").textContent = "Listings are linked; market snapshots fill in after the daily scraper runs";
+        document.getElementById("metric-avg-price").textContent = "—";
+        document.getElementById("metric-total-sales").textContent = "—";
+        const badge = document.getElementById("updated-badge");
+        badge.classList.add("hidden");
+        badge.classList.remove("inline-flex");
       } else {
         const badge = document.getElementById("updated-badge");
         badge.classList.add("hidden");
         badge.classList.remove("inline-flex");
+      }
+      if (hasListings) {
+        renderPills(uniqueProducts(latestByProduct));
+        renderChart();
+        renderTable();
       }
       populateSalesProductFilter();
       renderSalesTable();
@@ -734,8 +817,8 @@
       activeTab = tab;
       document.getElementById("panel-overview").classList.toggle("hidden", tab !== "overview");
       document.getElementById("panel-sales").classList.toggle("hidden", tab !== "sales");
-      const hasData = recordsInSet().length > 0 || chartProductsInSet().length > 0 || salesInSet().length > 0;
-      document.getElementById("empty-set").classList.toggle("hidden", hasData || tab !== "overview");
+      const hasListings = latestByProduct.length > 0;
+      document.getElementById("empty-set").classList.toggle("hidden", hasListings || tab !== "overview");
       document.querySelectorAll(".tab-btn").forEach((button) => {
         const selected = button.dataset.tab === tab;
         button.classList.toggle("pill-active", selected);
@@ -769,7 +852,8 @@
       const host = document.getElementById("product-pills");
       const options = [{ id: "all", name: "All products" }, ...products];
       host.innerHTML = options.map((product) => `
-        <button type="button" data-product-id="${escapeHtml(product.id)}" class="pill rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-gold-500 dark:border-white/10 dark:text-slate-300 ${selectedProductId === product.id ? "pill-active" : "bg-ink-50 dark:bg-ink-950"}">
+        <button type="button" data-product-id="${escapeHtml(product.id)}" class="pill inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-gold-500 dark:border-white/10 dark:text-slate-300 ${selectedProductId === product.id ? "pill-active" : "bg-ink-50 dark:bg-ink-950"}">
+          ${product.id !== "all" ? imageMarkup({ productId: product.id }, "h-6 w-6") : ""}
           ${escapeHtml(product.name)}
         </button>
       `).join("");
@@ -950,8 +1034,13 @@
       body.innerHTML = rows.map((row) => `
         <tr class="hover:bg-ink-50/80 dark:hover:bg-white/5">
           <td class="px-3 py-3">
-            <div class="font-medium">${escapeHtml(row.productName || "Unknown product")}</div>
-            <div class="text-xs text-slate-500">ID ${escapeHtml(row.productId || "—")} · ${escapeHtml(row.date || "")}</div>
+            <div class="flex items-center gap-3">
+              ${imageMarkup(row, "h-14 w-14")}
+              <div>
+                <div class="font-medium">${escapeHtml(row.productName || "Unknown product")}</div>
+                <div class="text-xs text-slate-500">${escapeHtml(KIND_LABEL[productKindOf(row)] || "Sealed")} · ID ${escapeHtml(row.productId || "—")}${row.date ? ` · ${escapeHtml(row.date)}` : ""}</div>
+              </div>
+            </div>
           </td>
           <td class="px-3 py-3 tabular font-medium">${formatMoney(row.marketPrice)}</td>
           <td class="px-3 py-3 tabular">${formatInt(row.lastDaySales)}</td>
@@ -1055,6 +1144,20 @@
         if (!catalog || !Array.isArray(catalog.games)) catalog = { games: [] };
       } catch (error) {
         catalog = { games: [] };
+      }
+
+      try {
+        pokemonProducts = await loadJson("data/pokemon_products.json");
+        if (!pokemonProducts || !Array.isArray(pokemonProducts.products)) pokemonProducts = { products: [] };
+      } catch (error) {
+        pokemonProducts = { products: [] };
+      }
+
+      try {
+        imageOverrides = await loadJson("data/product_image_overrides.json");
+        if (!imageOverrides || typeof imageOverrides !== "object" || Array.isArray(imageOverrides)) imageOverrides = {};
+      } catch (error) {
+        imageOverrides = {};
       }
 
       try {
