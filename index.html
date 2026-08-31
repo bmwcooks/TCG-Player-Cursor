@@ -131,6 +131,39 @@
     .sort-btn[aria-sort="ascending"] .sort-caret {
       opacity: 1;
     }
+    .exclude-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #12161d;
+      padding: 0.2rem 0.35rem 0.2rem 0.6rem;
+      font-size: 11px;
+      color: #d4d4d8;
+    }
+    .exclude-chip button {
+      display: inline-flex;
+      height: 1.15rem;
+      width: 1.15rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      color: #a1a1aa;
+    }
+    .exclude-chip button:hover {
+      background: rgba(251, 113, 133, 0.18);
+      color: #fb7185;
+    }
+    .movers-hide-btn {
+      opacity: 0.28;
+    }
+    .movers-table tbody tr:hover .movers-hide-btn {
+      opacity: 1;
+    }
+    .movers-check {
+      accent-color: #d4a054;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-ink-50 text-ink-900 font-sans antialiased dark:bg-ink-950 dark:text-ink-50">
@@ -401,23 +434,13 @@
                 <option value="one-piece">One Piece</option>
               </select>
             </label>
-            <label class="flex items-center gap-2 text-xs text-zinc-400">
-              Language
-              <select id="movers-language" class="rounded-lg border border-white/10 bg-[#12161d] px-2.5 py-1.5 text-sm text-zinc-100 outline-none ring-gold-400 focus:ring-2">
-                <option value="all">All</option>
-                <option value="english">English</option>
-                <option value="japanese">Japanese</option>
-              </select>
-            </label>
-            <label class="flex items-center gap-2 text-xs text-zinc-400">
-              Grade
-              <select id="movers-grade" class="rounded-lg border border-white/10 bg-[#12161d] px-2.5 py-1.5 text-sm text-zinc-100 outline-none ring-gold-400 focus:ring-2">
-                <option value="all">All</option>
-                <option value="raw">Raw</option>
-                <option value="psa-10">PSA 10</option>
-                <option value="bgs-95">BGS 9.5</option>
-              </select>
-            </label>
+            <div id="movers-exclude-wrap">
+              <button type="button" id="movers-exclude-toggle" class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-[#12161d] px-2.5 py-1.5 text-sm font-medium text-zinc-100 transition hover:border-gold-500" aria-expanded="false" aria-controls="movers-exclude-panel">
+                <i data-lucide="filter-x" class="h-3.5 w-3.5"></i>
+                Exclude
+                <span id="movers-exclude-badge" class="hidden rounded-full bg-gold-500 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-ink-950">0</span>
+              </button>
+            </div>
             <label class="relative block">
               <span class="sr-only">Search movers</span>
               <i data-lucide="search" class="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500"></i>
@@ -425,12 +448,24 @@
             </label>
           </div>
         </div>
+        <div id="movers-exclude-chips" class="mb-3 hidden flex-wrap items-center gap-1.5"></div>
+        <div id="movers-exclude-panel" class="mb-3 hidden overflow-hidden rounded-xl border border-white/10 bg-[#12161d]">
+          <div class="border-b border-white/10 p-3">
+            <label class="relative block">
+              <span class="sr-only">Search eras, sets, or items to exclude</span>
+              <i data-lucide="search" class="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500"></i>
+              <input id="movers-exclude-search" type="search" placeholder="Search eras, sets, or items…" class="w-full rounded-lg border border-white/10 bg-[#0b0e14] py-1.5 pl-8 pr-3 text-sm text-zinc-100 outline-none ring-gold-400 placeholder:text-zinc-500 focus:ring-2" />
+            </label>
+            <p class="mt-2 text-[11px] leading-relaxed text-zinc-500">Check an era to hide every set in it (XY, Sun and Moon, OP…). Check a set to hide only that set. Hide one listing with the × on its row.</p>
+          </div>
+          <div id="movers-exclude-body" class="max-h-[24rem] overflow-y-auto p-3"></div>
+        </div>
         <p id="movers-meta" class="mb-3 text-xs text-zinc-500"></p>
         <div class="overflow-auto rounded-xl border border-white/10 movers-scroll">
           <table class="movers-table w-full text-left text-xs">
             <thead class="text-[11px] uppercase tracking-wide text-zinc-400">
               <tr>
-                <th class="sticky-col min-w-[240px] px-3 py-2.5 font-medium">Item</th>
+                <th class="sticky-col min-w-[280px] px-3 py-2.5 font-medium">Item</th>
                 <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="priceChangePct" aria-sort="descending">Price Change % <span class="sort-caret opacity-40">▾</span></button></th>
                 <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="priceChangeAbs">Price Change $ <span class="sort-caret opacity-40">▾</span></button></th>
                 <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="lastSale">Last Sale <span class="sort-caret opacity-40">▾</span></button></th>
@@ -474,10 +509,22 @@
     let moversSortKey = "priceChangePct";
     let moversSortDir = "desc";
     let moversCategory = "all";
-    let moversLanguage = "all";
-    let moversGrade = "all";
     let moversQuery = "";
+    let moversExcludeOpen = false;
+    let moversExcludeQuery = "";
+    let moversExclusions = { families: [], sets: [], products: [] };
     const MOVERS_RANGES = [7, 14, 30, 60, 90, 180, 365];
+    const MOVERS_EXCLUDE_KEY = "moversExclusions";
+    const FAMILY_SHORT_NAMES = {
+      xy: "XY",
+      "sun-and-moon": "Sun and Moon",
+      "sword-and-shield": "Sword and Shield",
+      "scarlet-and-violet": "Scarlet and Violet",
+      "mega-evolution": "Mega Evolution",
+      op: "OP",
+      eb: "EB",
+      prb: "PRB",
+    };
 
     let catalog = { games: [] };
     let currentCatalogSet = null;
@@ -914,18 +961,171 @@
       return "#/";
     }
 
-    function saleGrade(row) {
-      const text = String((row && row.condition) || "").toLowerCase();
-      if (text.includes("psa 10") || text.includes("psa-10")) return "psa-10";
-      if (text.includes("bgs 9.5") || text.includes("bgs-9.5") || text.includes("bgs 95")) return "bgs-95";
-      return "raw";
+    function catalogEntryForSet(setName) {
+      for (const game of catalog.games || []) {
+        for (const family of game.families || []) {
+          const set = (family.sets || []).find((item) => item.setName === setName);
+          if (set) return { game, family, set };
+        }
+      }
+      return null;
     }
 
-    function saleLanguageBucket(row) {
-      const text = String((row && row.language) || "").trim().toLowerCase();
-      if (text === "japanese" || text === "jp") return "japanese";
-      if (text === "english" || text === "en" || !text) return "english";
-      return text;
+    function familyById(familyId) {
+      for (const game of catalog.games || []) {
+        const family = (game.families || []).find((item) => item.id === familyId);
+        if (family) return { game, family };
+      }
+      return null;
+    }
+
+    function familyLabel(family) {
+      if (!family) return "";
+      return FAMILY_SHORT_NAMES[family.id] || family.name || family.id;
+    }
+
+    function setDisplayName(set, family) {
+      if (!set) return "";
+      if ((family && family.id === "xy" && set.setName === "XY") || set.setName === "XY") return "XY Base";
+      return set.name || set.setName;
+    }
+
+    function familyIdForProduct(row) {
+      const listed = productById(row && row.productId) || row || {};
+      if (listed.familyId) return listed.familyId;
+      return catalogEntryForSet(listed.setName || row.setName)?.family?.id || "";
+    }
+
+    function emptyExclusions() {
+      return { families: [], sets: [], products: [] };
+    }
+
+    function uniqueList(values) {
+      return [...new Set((values || []).map(String).filter(Boolean))];
+    }
+
+    function loadExclusions() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(MOVERS_EXCLUDE_KEY) || "null");
+        if (!raw || typeof raw !== "object") return emptyExclusions();
+        return {
+          families: uniqueList(raw.families),
+          sets: uniqueList(raw.sets),
+          products: uniqueList(raw.products),
+        };
+      } catch (error) {
+        return emptyExclusions();
+      }
+    }
+
+    function saveExclusions() {
+      localStorage.setItem(MOVERS_EXCLUDE_KEY, JSON.stringify({
+        families: uniqueList(moversExclusions.families),
+        sets: uniqueList(moversExclusions.sets),
+        products: uniqueList(moversExclusions.products),
+      }));
+    }
+
+    function exclusionCount() {
+      return moversExclusions.families.length + moversExclusions.sets.length + moversExclusions.products.length;
+    }
+
+    function setsInFamily(familyId) {
+      return familyById(familyId)?.family?.sets || [];
+    }
+
+    function familyIsExcluded(familyId) {
+      return Boolean(familyId) && moversExclusions.families.includes(String(familyId));
+    }
+
+    function setIsExcluded(setName, familyId) {
+      if (!setName) return false;
+      if (familyIsExcluded(familyId || catalogEntryForSet(setName)?.family?.id)) return true;
+      return moversExclusions.sets.includes(String(setName));
+    }
+
+    function productIsExcluded(productId, setName, familyId) {
+      if (moversExclusions.products.includes(String(productId))) return true;
+      return setIsExcluded(setName, familyId);
+    }
+
+    function excludeFamily(familyId, persist = true) {
+      const id = String(familyId || "");
+      if (!id) return;
+      const familySets = new Set(setsInFamily(id).map((set) => set.setName));
+      moversExclusions.families = uniqueList([...moversExclusions.families, id]);
+      moversExclusions.sets = moversExclusions.sets.filter((name) => !familySets.has(name));
+      if (persist) {
+        saveExclusions();
+        renderMovers();
+      }
+    }
+
+    function includeFamily(familyId, persist = true) {
+      const id = String(familyId || "");
+      moversExclusions.families = moversExclusions.families.filter((item) => item !== id);
+      if (persist) {
+        saveExclusions();
+        renderMovers();
+      }
+    }
+
+    function excludeSet(setName, familyId, persist = true) {
+      const name = String(setName || "");
+      if (!name) return;
+      const family = familyId || catalogEntryForSet(name)?.family?.id || "";
+      if (familyIsExcluded(family)) return;
+      moversExclusions.sets = uniqueList([...moversExclusions.sets, name]);
+      const names = setsInFamily(family).map((set) => set.setName).filter(Boolean);
+      if (family && names.length && names.every((item) => moversExclusions.sets.includes(item))) {
+        excludeFamily(family, persist);
+        return;
+      }
+      if (persist) {
+        saveExclusions();
+        renderMovers();
+      }
+    }
+
+    function includeSet(setName, familyId, persist = true) {
+      const name = String(setName || "");
+      const family = familyId || catalogEntryForSet(name)?.family?.id || "";
+      if (familyIsExcluded(family)) {
+        includeFamily(family, false);
+        const others = setsInFamily(family).map((set) => set.setName).filter((item) => item && item !== name);
+        moversExclusions.sets = uniqueList([...moversExclusions.sets, ...others]);
+      } else {
+        moversExclusions.sets = moversExclusions.sets.filter((item) => item !== name);
+      }
+      if (persist) {
+        saveExclusions();
+        renderMovers();
+      }
+    }
+
+    function excludeProduct(productId, persist = true) {
+      const id = String(productId || "");
+      if (!id) return;
+      moversExclusions.products = uniqueList([...moversExclusions.products, id]);
+      if (persist) {
+        saveExclusions();
+        renderMovers();
+      }
+    }
+
+    function includeProduct(productId, persist = true) {
+      const id = String(productId || "");
+      moversExclusions.products = moversExclusions.products.filter((item) => item !== id);
+      if (persist) {
+        saveExclusions();
+        renderMovers();
+      }
+    }
+
+    function clearExclusions() {
+      moversExclusions = emptyExclusions();
+      saveExclusions();
+      renderMovers();
     }
 
     function chartPointsForWindow(product, days) {
@@ -1005,8 +1205,6 @@
         if (String(row.productId) !== String(productId)) return false;
         if (row.purchasePrice == null) return false;
         if (outlierProtectionOn() && saleIsOutlier(row, salesForProduct(productId))) return false;
-        if (moversLanguage !== "all" && saleLanguageBucket(row) !== moversLanguage) return false;
-        if (moversGrade !== "all" && saleGrade(row) !== moversGrade) return false;
         return true;
       });
     }
@@ -1057,21 +1255,18 @@
             return max == null ? value : Math.max(max, value);
           }, null);
 
-      const languages = new Set(filteredSalesForMovers(product.productId).map(saleLanguageBucket));
-      const grades = new Set(filteredSalesForMovers(product.productId).map(saleGrade));
-      if (!grades.size) grades.add("raw");
-      if (!languages.size) languages.add("english");
+      const setName = listed.setName || product.setName || "";
+      const familyId = listed.familyId || familyIdForProduct(product) || catalogEntryForSet(setName)?.family?.id || "";
 
       return {
         productId: String(product.productId),
         name: listed.name || product.productName || "Unknown product",
-        setName: listed.setName || product.setName || "",
+        setName,
+        familyId,
         imageUrl: listed.imageUrl || product.imageUrl,
         url: listed.url || product.url,
         kind: listed.kind || product.productKind || "",
         gameId: productGameId(product),
-        languages: [...languages],
-        grades: [...grades],
         priceChangePct,
         priceChangeAbs,
         lastSale: lastSaleRow ? lastSaleRow.purchasePrice : null,
@@ -1111,18 +1306,17 @@
       return [...byId.values()].map(buildMoverRow);
     }
 
+    function rowMatchesMoversQuery(row, query) {
+      if (!query) return true;
+      return `${row.name} ${row.setName}`.toLowerCase().includes(query);
+    }
+
     function visibleMoverRows() {
       const query = moversQuery.trim().toLowerCase();
-      const rows = allMoverRows().filter((row) => {
-        if (moversCategory !== "all" && row.gameId !== moversCategory) return false;
-        if (moversLanguage !== "all" && !row.languages.includes(moversLanguage)) return false;
-        if (moversGrade !== "all" && !row.grades.includes(moversGrade)) return false;
-        if (query) {
-          const haystack = `${row.name} ${row.setName}`.toLowerCase();
-          if (!haystack.includes(query)) return false;
-        }
-        return true;
-      });
+      const all = allMoverRows();
+      const inCategory = all.filter((row) => moversCategory === "all" || row.gameId === moversCategory);
+      const afterExclusions = inCategory.filter((row) => !productIsExcluded(row.productId, row.setName, row.familyId));
+      const rows = afterExclusions.filter((row) => rowMatchesMoversQuery(row, query));
       rows.sort((a, b) => {
         const av = a[moversSortKey];
         const bv = b[moversSortKey];
@@ -1134,7 +1328,201 @@
         if (av === bv) return (a.name || "").localeCompare(b.name || "");
         return moversSortDir === "asc" ? av - bv : bv - av;
       });
-      return rows;
+      return {
+        rows,
+        total: inCategory.length,
+        hidden: inCategory.length - afterExclusions.length,
+      };
+    }
+
+    function catalogSetNames() {
+      const names = new Set();
+      for (const game of catalog.games || []) {
+        for (const family of game.families || []) {
+          (family.sets || []).forEach((set) => names.add(set.setName));
+        }
+      }
+      return names;
+    }
+
+    function familyCheckboxState(family) {
+      if (familyIsExcluded(family.id)) return "checked";
+      const names = (family.sets || []).map((set) => set.setName).filter(Boolean);
+      if (!names.length) return "unchecked";
+      const excluded = names.filter((name) => moversExclusions.sets.includes(name)).length;
+      if (excluded === 0) return "unchecked";
+      if (excluded === names.length) return "checked";
+      return "indeterminate";
+    }
+
+    function matchesExcludeQuery(parts, query) {
+      if (!query) return true;
+      return parts.filter(Boolean).join(" ").toLowerCase().includes(query);
+    }
+
+    function productCountForSet(setName) {
+      return (catalogProducts.products || []).filter((row) => row.setName === setName).length;
+    }
+
+    function exclusionChipLabel(kind, value) {
+      if (kind === "family") {
+        const found = familyById(value);
+        return found ? familyLabel(found.family) : value;
+      }
+      if (kind === "set") {
+        const found = catalogEntryForSet(value);
+        return found ? setDisplayName(found.set, found.family) : value;
+      }
+      const listed = productById(value);
+      return listed?.name || `Item ${value}`;
+    }
+
+    function renderMoversExcludeChips() {
+      const host = document.getElementById("movers-exclude-chips");
+      if (!host) return;
+      const count = exclusionCount();
+      if (!count) {
+        host.className = "mb-3 hidden flex-wrap items-center gap-1.5";
+        host.innerHTML = "";
+        return;
+      }
+      host.className = "mb-3 flex flex-wrap items-center gap-1.5";
+      const chips = [
+        ...moversExclusions.families.map((id) => ({ kind: "family", value: id, label: exclusionChipLabel("family", id) })),
+        ...moversExclusions.sets.map((name) => ({ kind: "set", value: name, label: exclusionChipLabel("set", name) })),
+        ...moversExclusions.products.map((id) => ({ kind: "product", value: id, label: exclusionChipLabel("product", id) })),
+      ];
+      host.innerHTML = `
+        <span class="text-[11px] uppercase tracking-wide text-zinc-500">Hiding</span>
+        ${chips.map((chip) => `
+          <span class="exclude-chip">
+            <span class="max-w-[14rem] truncate">${escapeHtml(chip.label)}</span>
+            <button type="button" data-include-${chip.kind}="${escapeHtml(chip.value)}" aria-label="Stop hiding ${escapeHtml(chip.label)}">×</button>
+          </span>
+        `).join("")}
+        <button type="button" data-clear-exclusions class="text-[11px] font-medium text-zinc-400 underline-offset-2 hover:text-zinc-200 hover:underline">Clear all</button>
+      `;
+    }
+
+    function renderMoversExcludeBadge() {
+      const button = document.getElementById("movers-exclude-toggle");
+      const badge = document.getElementById("movers-exclude-badge");
+      const panel = document.getElementById("movers-exclude-panel");
+      const count = exclusionCount();
+      if (button) {
+        button.setAttribute("aria-expanded", moversExcludeOpen ? "true" : "false");
+        button.classList.toggle("border-gold-500", moversExcludeOpen);
+        button.classList.toggle("text-gold-400", moversExcludeOpen);
+      }
+      if (panel) panel.classList.toggle("hidden", !moversExcludeOpen);
+      if (!badge) return;
+      if (!count) {
+        badge.classList.add("hidden");
+        badge.textContent = "0";
+        return;
+      }
+      badge.classList.remove("hidden");
+      badge.textContent = String(count);
+    }
+
+    function renderMoversExcludePanel() {
+      const body = document.getElementById("movers-exclude-body");
+      if (!body || !moversExcludeOpen) return;
+      const query = moversExcludeQuery.trim().toLowerCase();
+      const knownSets = catalogSetNames();
+      const productHits = query
+        ? (catalogProducts.products || []).filter((row) => matchesExcludeQuery([row.name, row.setName], query)).slice(0, 24)
+        : [];
+
+      const gameBlocks = [...(catalog.games || [])].sort((a, b) => {
+        if (a.id === "pokemon") return -1;
+        if (b.id === "pokemon") return 1;
+        return 0;
+      }).map((game) => {
+        const families = (game.families || []).map((family) => {
+          const familyName = familyLabel(family);
+          const familyHit = matchesExcludeQuery([familyName, family.name, family.fullName, game.name], query);
+          const sets = (family.sets || []).filter((set) => {
+            if (set.status === "japan-only" && !productCountForSet(set.setName)) return false;
+            if (familyHit) return true;
+            return matchesExcludeQuery([setDisplayName(set, family), set.setName, set.code, familyName], query);
+          });
+          if (!familyHit && !sets.length) return "";
+          const state = familyCheckboxState(family);
+          const familyChecked = state === "checked";
+          return `
+            <div class="mb-3">
+              <label class="flex cursor-pointer items-center gap-2 rounded-lg px-1.5 py-1 hover:bg-white/5">
+                <input type="checkbox" class="movers-check" data-exclude-family="${escapeHtml(family.id)}" ${familyChecked ? "checked" : ""} ${state === "indeterminate" ? 'data-indeterminate="1"' : ""} />
+                <span class="text-sm font-semibold text-zinc-100">${escapeHtml(familyName)}</span>
+                <span class="text-[11px] text-zinc-500">whole era</span>
+              </label>
+              <div class="ml-6 mt-1 grid gap-0.5 sm:grid-cols-2">
+                ${sets.map((set) => {
+                  const checked = setIsExcluded(set.setName, family.id);
+                  const n = productCountForSet(set.setName);
+                  return `
+                    <label class="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm text-zinc-300 hover:bg-white/5 ${n ? "" : "opacity-50"}">
+                      <input type="checkbox" class="movers-check" data-exclude-set="${escapeHtml(set.setName)}" data-family="${escapeHtml(family.id)}" ${checked ? "checked" : ""} />
+                      <span class="truncate">${escapeHtml(setDisplayName(set, family))}</span>
+                    </label>
+                  `;
+                }).join("")}
+              </div>
+            </div>
+          `;
+        }).filter(Boolean).join("");
+        if (!families) return "";
+        return `
+          <section class="mb-4">
+            <h3 class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">${escapeHtml(game.name)}</h3>
+            ${families || `<p class="px-1.5 text-xs text-zinc-500">No matching eras or sets.</p>`}
+          </section>
+        `;
+      }).filter(Boolean).join("");
+
+      const orphans = [...trackedSetNames()].filter((name) => name && !knownSets.has(name));
+      const orphanHits = orphans.filter((name) => matchesExcludeQuery([name], query));
+      const orphanBlock = orphanHits.length ? `
+        <section class="mb-4">
+          <h3 class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">Other sets</h3>
+          <div class="grid gap-0.5 sm:grid-cols-2">
+            ${orphanHits.map((name) => `
+              <label class="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm text-zinc-300 hover:bg-white/5">
+                <input type="checkbox" class="movers-check" data-exclude-set="${escapeHtml(name)}" ${setIsExcluded(name) ? "checked" : ""} />
+                <span class="truncate">${escapeHtml(name)}</span>
+              </label>
+            `).join("")}
+          </div>
+        </section>
+      ` : "";
+
+      const itemBlock = productHits.length ? `
+        <section class="mb-4">
+          <h3 class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">Items</h3>
+          <div class="space-y-0.5">
+            ${productHits.map((row) => `
+              <label class="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 text-sm text-zinc-300 hover:bg-white/5">
+                <input type="checkbox" class="movers-check" data-exclude-product="${escapeHtml(String(row.productId))}" ${moversExclusions.products.includes(String(row.productId)) ? "checked" : ""} />
+                <span class="min-w-0 truncate">${escapeHtml(row.name)}</span>
+                <span class="shrink-0 text-[11px] text-zinc-500">${escapeHtml(row.setName || "")}</span>
+              </label>
+            `).join("")}
+          </div>
+        </section>
+      ` : "";
+
+      const html = `${itemBlock}${gameBlocks}${orphanBlock}`;
+      body.innerHTML = html || `<p class="px-1.5 py-6 text-center text-sm text-zinc-500">No eras, sets, or items match that search.</p>`;
+      body.querySelectorAll("[data-indeterminate='1']").forEach((input) => {
+        input.indeterminate = true;
+      });
+    }
+
+    function renderMoversExcludeUi() {
+      renderMoversExcludeBadge();
+      renderMoversExcludeChips();
+      renderMoversExcludePanel();
     }
 
     function renderMoversRange() {
@@ -1163,14 +1551,17 @@
     function renderMovers() {
       renderMoversRange();
       renderMoversSortState();
-      const rows = visibleMoverRows();
+      renderMoversExcludeUi();
+      const { rows, total, hidden } = visibleMoverRows();
       const body = document.getElementById("movers-body");
       const empty = document.getElementById("movers-empty");
       const meta = document.getElementById("movers-meta");
-      meta.textContent = `${integer.format(rows.length)} listings · ${moversRangeDays} day window ending ${moversAsOf()}`;
+      const hiddenNote = hidden ? ` · ${integer.format(hidden)} hidden by exclusions` : "";
+      meta.textContent = `${integer.format(rows.length)} of ${integer.format(total)} listings${hiddenNote} · ${moversRangeDays} day window ending ${moversAsOf()}`;
       if (!rows.length) {
         body.innerHTML = "";
         empty.classList.remove("hidden");
+        lucide.createIcons();
         return;
       }
       empty.classList.add("hidden");
@@ -1179,10 +1570,13 @@
           <td class="sticky-col px-3 py-2">
             <div class="flex items-center gap-2.5">
               ${imageMarkup(row, "h-10 w-10")}
-              <div class="min-w-0">
+              <div class="min-w-0 flex-1">
                 <a href="${escapeHtml(row.href || "#/")}" class="block truncate font-medium text-zinc-100 hover:text-gold-400">${escapeHtml(row.name)}</a>
-                <div class="truncate text-[11px] text-zinc-500">${escapeHtml(row.setName || "—")}${row.kind ? ` · ${escapeHtml(KIND_LABEL[row.kind] || row.kind)}` : ""}</div>
+                <div class="truncate text-[11px] text-zinc-500">${escapeHtml(row.setName === "XY" ? "XY Base" : (row.setName || "—"))}${row.kind ? ` · ${escapeHtml(KIND_LABEL[row.kind] || row.kind)}` : ""}</div>
               </div>
+              <button type="button" class="movers-hide-btn shrink-0 rounded-md p-1 text-zinc-400 hover:bg-white/10 hover:text-rose-400" data-exclude-product="${escapeHtml(row.productId)}" title="Hide this listing" aria-label="Hide ${escapeHtml(row.name)}">
+                <i data-lucide="x" class="h-3.5 w-3.5"></i>
+              </button>
             </div>
           </td>
           <td class="px-3 py-2 tabular font-semibold ${changeClass(row.priceChangePct)}">${formatPct(row.priceChangePct)}</td>
@@ -1766,6 +2160,7 @@
 
     async function init() {
       lucide.createIcons();
+      moversExclusions = loadExclusions();
       renderOutlierToggle();
       document.querySelectorAll(".theme-toggle").forEach((button) => {
         button.addEventListener("click", toggleTheme);
@@ -1784,19 +2179,67 @@
         moversCategory = event.target.value;
         renderMovers();
       });
-      document.getElementById("movers-language").addEventListener("change", (event) => {
-        moversLanguage = event.target.value;
-        renderMovers();
-      });
-      document.getElementById("movers-grade").addEventListener("change", (event) => {
-        moversGrade = event.target.value;
-        renderMovers();
-      });
       document.getElementById("movers-search").addEventListener("input", (event) => {
         moversQuery = event.target.value;
         renderMovers();
       });
+      document.getElementById("movers-exclude-toggle").addEventListener("click", (event) => {
+        event.stopPropagation();
+        moversExcludeOpen = !moversExcludeOpen;
+        renderMoversExcludeUi();
+        lucide.createIcons();
+      });
+      document.getElementById("movers-exclude-search").addEventListener("input", (event) => {
+        moversExcludeQuery = event.target.value;
+        renderMoversExcludePanel();
+      });
+      document.getElementById("movers-exclude-panel").addEventListener("change", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLInputElement) || target.type !== "checkbox") return;
+        const familyId = target.dataset.excludeFamily;
+        const setName = target.dataset.excludeSet;
+        const productId = target.dataset.excludeProduct;
+        if (familyId) {
+          if (target.checked) excludeFamily(familyId);
+          else includeFamily(familyId);
+          return;
+        }
+        if (setName) {
+          if (target.checked) excludeSet(setName, target.dataset.family);
+          else includeSet(setName, target.dataset.family);
+          return;
+        }
+        if (productId) {
+          if (target.checked) excludeProduct(productId);
+          else includeProduct(productId);
+        }
+      });
       document.getElementById("view-movers").addEventListener("click", (event) => {
+        const hideItem = event.target.closest("#movers-body button[data-exclude-product]");
+        if (hideItem) {
+          event.preventDefault();
+          excludeProduct(hideItem.dataset.excludeProduct);
+          return;
+        }
+        const includeFamilyBtn = event.target.closest("[data-include-family]");
+        if (includeFamilyBtn) {
+          includeFamily(includeFamilyBtn.getAttribute("data-include-family"));
+          return;
+        }
+        const includeSetBtn = event.target.closest("[data-include-set]");
+        if (includeSetBtn) {
+          includeSet(includeSetBtn.getAttribute("data-include-set"));
+          return;
+        }
+        const includeProductBtn = event.target.closest("[data-include-product]");
+        if (includeProductBtn) {
+          includeProduct(includeProductBtn.getAttribute("data-include-product"));
+          return;
+        }
+        if (event.target.closest("[data-clear-exclusions]")) {
+          clearExclusions();
+          return;
+        }
         const button = event.target.closest(".sort-btn");
         if (!button) return;
         const key = button.dataset.sort;
@@ -1808,6 +2251,17 @@
           moversSortDir = key === "priceChangePct" ? "desc" : "desc";
         }
         renderMovers();
+      });
+      document.addEventListener("click", (event) => {
+        if (!moversExcludeOpen) return;
+        if (event.target.closest("#movers-exclude-wrap, #movers-exclude-panel, #movers-exclude-chips")) return;
+        moversExcludeOpen = false;
+        renderMoversExcludeUi();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || !moversExcludeOpen) return;
+        moversExcludeOpen = false;
+        renderMoversExcludeUi();
       });
       window.addEventListener("hashchange", applyRoute);
       window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
