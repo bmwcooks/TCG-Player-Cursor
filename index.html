@@ -1434,7 +1434,11 @@
         ? (catalogProducts.products || []).filter((row) => matchesExcludeQuery([row.name, row.setName], query)).slice(0, 24)
         : [];
 
-      const gameBlocks = (catalog.games || []).map((game) => {
+      const gameBlocks = [...(catalog.games || [])].sort((a, b) => {
+        if (a.id === "pokemon") return -1;
+        if (b.id === "pokemon") return 1;
+        return 0;
+      }).map((game) => {
         const families = (game.families || []).map((family) => {
           const familyName = familyLabel(family);
           const familyHit = matchesExcludeQuery([familyName, family.name, family.fullName, game.name], query);
