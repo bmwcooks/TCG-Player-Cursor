@@ -90,6 +90,47 @@
     .dark .choice-card:hover {
       box-shadow: 0 18px 40px -24px rgba(232, 184, 109, 0.25);
     }
+    #view-movers {
+      color-scheme: dark;
+    }
+    .movers-scroll {
+      max-height: calc(100vh - 11.5rem);
+    }
+    .movers-table {
+      min-width: 1280px;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .movers-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #12161d;
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.08);
+    }
+    .movers-table th.sticky-col,
+    .movers-table td.sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background: #12161d;
+    }
+    .movers-table thead th.sticky-col {
+      z-index: 3;
+    }
+    .movers-table tbody tr:hover td {
+      background: #1a2029;
+    }
+    .movers-table tbody tr:hover td.sticky-col {
+      background: #1a2029;
+    }
+    .movers-up { color: #34d399; }
+    .movers-down { color: #fb7185; }
+    .movers-flat { color: #94a3b8; }
+    .sort-btn[aria-sort="descending"] .sort-caret,
+    .sort-btn[aria-sort="ascending"] .sort-caret {
+      opacity: 1;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-ink-50 text-ink-900 font-sans antialiased dark:bg-ink-950 dark:text-ink-50">
@@ -107,6 +148,10 @@
             </div>
           </a>
           <div class="flex items-center gap-2 sm:gap-3">
+            <a href="#/movers" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200">
+              <i data-lucide="trending-up" class="h-4 w-4"></i>
+              <span class="hidden sm:inline">Market Movers</span>
+            </a>
             <button type="button" class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200" aria-label="Toggle color theme">
               <i data-lucide="sun" class="hidden h-4 w-4 dark:block"></i>
               <i data-lucide="moon" class="h-4 w-4 dark:hidden"></i>
@@ -135,6 +180,10 @@
           <a id="change-set" href="#/" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200">
             <i data-lucide="layout-grid" class="h-4 w-4"></i>
             <span class="hidden sm:inline">Change set</span>
+          </a>
+          <a href="#/movers" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200">
+            <i data-lucide="trending-up" class="h-4 w-4"></i>
+            <span class="hidden sm:inline">Movers</span>
           </a>
           <span id="updated-badge" class="hidden items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 dark:border-white/10 dark:bg-ink-900 dark:text-slate-300">
             <i data-lucide="clock-3" class="h-3.5 w-3.5"></i>
@@ -311,6 +360,96 @@
       </div>
     </main>
     </div>
+
+    <div id="view-movers" class="hidden min-h-screen bg-[#0b0e14] text-zinc-100">
+      <header class="sticky top-0 z-30 border-b border-white/10 bg-[#0b0e14]/90 backdrop-blur-md">
+        <div class="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <div class="flex min-w-0 items-center gap-3">
+            <a href="#/" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gold-500 text-ink-950 shadow-lg shadow-amber-700/20" aria-label="Back to games">
+              <i data-lucide="bar-chart-3" class="h-5 w-5"></i>
+            </a>
+            <div class="min-w-0">
+              <h1 class="truncate font-display text-lg font-semibold tracking-tight sm:text-xl">Market Movers</h1>
+              <p class="text-xs text-zinc-400">Price and volume over a selected window · all tracked listings</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 sm:gap-3">
+            <button type="button" data-outlier-toggle class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-[#12161d] px-3 py-2 text-sm font-medium text-zinc-200 transition hover:border-gold-500" aria-pressed="true" title="When on, hide Japanese, Korean, and Chinese sales, and drop prices that swing more than 50% when a product has enough sales that day or week to judge.">
+              <span data-outlier-icon-on class="inline-flex"><i data-lucide="shield-check" class="h-4 w-4"></i></span>
+              <span data-outlier-icon-off class="hidden inline-flex"><i data-lucide="shield-off" class="h-4 w-4"></i></span>
+              <span class="hidden sm:inline" data-outlier-label>Outliers on</span>
+            </button>
+            <button type="button" class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-[#12161d] text-zinc-200 transition hover:border-gold-500" aria-label="Toggle color theme">
+              <i data-lucide="sun" class="hidden h-4 w-4 dark:block"></i>
+              <i data-lucide="moon" class="h-4 w-4 dark:hidden"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="mx-auto max-w-[1600px] px-4 py-4 sm:px-6">
+        <div class="mb-4 flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+          <div>
+            <div id="movers-range" class="flex flex-wrap gap-1.5" role="group" aria-label="Date range"></div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="flex items-center gap-2 text-xs text-zinc-400">
+              Category
+              <select id="movers-category" class="rounded-lg border border-white/10 bg-[#12161d] px-2.5 py-1.5 text-sm text-zinc-100 outline-none ring-gold-400 focus:ring-2">
+                <option value="all">All</option>
+                <option value="pokemon">Pokémon</option>
+                <option value="one-piece">One Piece</option>
+              </select>
+            </label>
+            <label class="flex items-center gap-2 text-xs text-zinc-400">
+              Language
+              <select id="movers-language" class="rounded-lg border border-white/10 bg-[#12161d] px-2.5 py-1.5 text-sm text-zinc-100 outline-none ring-gold-400 focus:ring-2">
+                <option value="all">All</option>
+                <option value="english">English</option>
+                <option value="japanese">Japanese</option>
+              </select>
+            </label>
+            <label class="flex items-center gap-2 text-xs text-zinc-400">
+              Grade
+              <select id="movers-grade" class="rounded-lg border border-white/10 bg-[#12161d] px-2.5 py-1.5 text-sm text-zinc-100 outline-none ring-gold-400 focus:ring-2">
+                <option value="all">All</option>
+                <option value="raw">Raw</option>
+                <option value="psa-10">PSA 10</option>
+                <option value="bgs-95">BGS 9.5</option>
+              </select>
+            </label>
+            <label class="relative block">
+              <span class="sr-only">Search movers</span>
+              <i data-lucide="search" class="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500"></i>
+              <input id="movers-search" type="search" placeholder="Search item or set…" class="w-full rounded-lg border border-white/10 bg-[#12161d] py-1.5 pl-8 pr-3 text-sm text-zinc-100 outline-none ring-gold-400 placeholder:text-zinc-500 focus:ring-2 sm:w-56" />
+            </label>
+          </div>
+        </div>
+        <p id="movers-meta" class="mb-3 text-xs text-zinc-500"></p>
+        <div class="overflow-auto rounded-xl border border-white/10 movers-scroll">
+          <table class="movers-table w-full text-left text-xs">
+            <thead class="text-[11px] uppercase tracking-wide text-zinc-400">
+              <tr>
+                <th class="sticky-col min-w-[240px] px-3 py-2.5 font-medium">Item</th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="priceChangePct" aria-sort="descending">Price Change % <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="priceChangeAbs">Price Change $ <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="lastSale">Last Sale <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="avgPrice">Avg Price <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="startPrice">Starting Price $ <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="lowSale">Low Sale <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="highSale">High Sale <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="volumeChangePct">Volume Change % <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="salesCount"># of Sales <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="salesTotal">Total Sales ($) <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium">Trend</th>
+              </tr>
+            </thead>
+            <tbody id="movers-body" class="divide-y divide-white/5 text-zinc-200"></tbody>
+          </table>
+          <p id="movers-empty" class="hidden px-4 py-12 text-center text-sm text-zinc-500">No listings match these filters for the selected window.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -331,6 +470,14 @@
     let activeTab = "overview";
     let salesChart = null;
     let latestByProduct = [];
+    let moversRangeDays = 30;
+    let moversSortKey = "priceChangePct";
+    let moversSortDir = "desc";
+    let moversCategory = "all";
+    let moversLanguage = "all";
+    let moversGrade = "all";
+    let moversQuery = "";
+    const MOVERS_RANGES = [7, 14, 30, 60, 90, 180, 365];
 
     let catalog = { games: [] };
     let currentCatalogSet = null;
@@ -360,6 +507,7 @@
       renderOutlierToggle();
       if (salesChart) renderChart();
       renderSalesTable();
+      if (!document.getElementById("view-movers").classList.contains("hidden")) renderMovers();
     }
 
     function renderOutlierToggle() {
@@ -497,7 +645,11 @@
     function parseRoute() {
       const hash = (location.hash || "#/").replace(/^#/, "");
       const parts = hash.split("/").filter(Boolean);
+      if (parts[0] === "movers") {
+        return { view: "movers", gameId: null, familyId: null, setSlug: null, tab: "overview" };
+      }
       return {
+        view: "page",
         gameId: parts[0] || null,
         familyId: parts[1] || null,
         setSlug: parts[2] || null,
@@ -703,7 +855,7 @@
         <div class="mx-auto mb-10 max-w-2xl text-center">
           <p class="text-sm font-semibold uppercase tracking-[0.25em] text-gold-500">TCG Marketplace Tracker</p>
           <h2 class="mt-3 font-display text-4xl font-semibold sm:text-5xl">Choose a game</h2>
-          <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">Start with One Piece or Pokémon, then drill into a product line and set. Live market data appears once a set is added to the scraper.</p>
+          <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">Start with One Piece or Pokémon, then drill into a product line and set. Or open <a href="#/movers" class="font-semibold text-gold-500 hover:underline">Market Movers</a> to scan price and volume across every tracked listing.</p>
         </div>
         <div class="mx-auto grid max-w-4xl grid-cols-1 gap-5 md:grid-cols-2">
           ${(catalog.games || []).map((item) => `
@@ -730,6 +882,326 @@
     function showView(name) {
       document.getElementById("view-landing").classList.toggle("hidden", name !== "landing");
       document.getElementById("view-dashboard").classList.toggle("hidden", name !== "dashboard");
+      document.getElementById("view-movers").classList.toggle("hidden", name !== "movers");
+    }
+
+    function isoAddDays(iso, days) {
+      const [year, month, day] = iso.split("-").map(Number);
+      const date = new Date(Date.UTC(year, month - 1, day + days));
+      return date.toISOString().slice(0, 10);
+    }
+
+    function moversAsOf() {
+      return chartHistory.updatedAt || latestSalesDate(records) || new Date().toISOString().slice(0, 10);
+    }
+
+    function productGameId(row) {
+      const listed = productById(row && row.productId) || row || {};
+      const familyId = listed.familyId || "";
+      if (familyId === "op" || familyId === "eb" || familyId === "prb") return "one-piece";
+      const url = listed.url || row.url || "";
+      if (/one-piece/i.test(url)) return "one-piece";
+      return "pokemon";
+    }
+
+    function catalogHrefForSet(setName) {
+      for (const game of catalog.games || []) {
+        for (const family of game.families || []) {
+          const set = (family.sets || []).find((item) => item.setName === setName);
+          if (set) return routeHref([game.id, family.id, set.slug]);
+        }
+      }
+      return "#/";
+    }
+
+    function saleGrade(row) {
+      const text = String((row && row.condition) || "").toLowerCase();
+      if (text.includes("psa 10") || text.includes("psa-10")) return "psa-10";
+      if (text.includes("bgs 9.5") || text.includes("bgs-9.5") || text.includes("bgs 95")) return "bgs-95";
+      return "raw";
+    }
+
+    function saleLanguageBucket(row) {
+      const text = String((row && row.language) || "").trim().toLowerCase();
+      if (text === "japanese" || text === "jp") return "japanese";
+      if (text === "english" || text === "en" || !text) return "english";
+      return text;
+    }
+
+    function chartPointsForWindow(product, days) {
+      const end = moversAsOf();
+      const start = isoAddDays(end, -days);
+      const ranges = product.ranges || {};
+      let points = [];
+      if (days <= 35) points = ranges["1M"]?.points || [];
+      if ((days > 35 && days <= 100) || points.length < 2) {
+        const quarterly = ranges["3M"]?.points || [];
+        if (quarterly.length > points.length) points = quarterly;
+      }
+      if (days > 100 || points.length < 2) {
+        const annual = ranges["1Y"]?.points || [];
+        if (annual.length) points = annual;
+      }
+      return protectPriceSeries(points, days <= 35 ? "1M" : days <= 100 ? "3M" : "1Y")
+        .filter((point) => point && point.date)
+        .sort((a, b) => a.date.localeCompare(b.date));
+    }
+
+    function pointsInRange(points, start, end) {
+      return points.filter((point) => point.date >= start && point.date <= end);
+    }
+
+    function lastPriceOnOrBefore(points, date) {
+      for (let index = points.length - 1; index >= 0; index -= 1) {
+        if (points[index].date <= date && points[index].marketPrice != null) return points[index].marketPrice;
+      }
+      return null;
+    }
+
+    function sparklineSvg(values) {
+      const nums = values.filter((value) => value != null);
+      if (nums.length < 2) return `<span class="text-zinc-600">—</span>`;
+      const width = 96;
+      const height = 28;
+      const min = Math.min(...nums);
+      const max = Math.max(...nums);
+      const span = max - min || 1;
+      const step = (width - 2) / Math.max(values.length - 1, 1);
+      const coords = [];
+      values.forEach((value, index) => {
+        if (value == null) return;
+        const x = 1 + index * step;
+        const y = height - 3 - ((value - min) / span) * (height - 6);
+        coords.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+      });
+      const up = nums[nums.length - 1] >= nums[0];
+      const color = up ? "#34d399" : "#fb7185";
+      return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" aria-hidden="true"><polyline fill="none" stroke="${color}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" points="${coords.join(" ")}"/></svg>`;
+    }
+
+    function changeClass(value) {
+      if (value == null || Number.isNaN(value) || value === 0) return "movers-flat";
+      return value > 0 ? "movers-up" : "movers-down";
+    }
+
+    function formatPct(value) {
+      if (value == null || Number.isNaN(value) || !Number.isFinite(value)) return "—";
+      const sign = value > 0 ? "+" : "";
+      return `${sign}${value.toFixed(1)}%`;
+    }
+
+    function daysAgoLabel(iso) {
+      if (!iso) return "";
+      const date = new Date(iso);
+      if (Number.isNaN(date.getTime())) return "";
+      const days = Math.max(0, Math.floor((Date.now() - date.getTime()) / DAY_MS));
+      if (days === 0) return "today";
+      if (days === 1) return "1d ago";
+      return `${days}d ago`;
+    }
+
+    function filteredSalesForMovers(productId) {
+      return latestSales.filter((row) => {
+        if (String(row.productId) !== String(productId)) return false;
+        if (row.purchasePrice == null) return false;
+        if (outlierProtectionOn() && saleIsOutlier(row, salesForProduct(productId))) return false;
+        if (moversLanguage !== "all" && saleLanguageBucket(row) !== moversLanguage) return false;
+        if (moversGrade !== "all" && saleGrade(row) !== moversGrade) return false;
+        return true;
+      });
+    }
+
+    function buildMoverRow(product) {
+      const days = moversRangeDays;
+      const end = moversAsOf();
+      const start = isoAddDays(end, -days);
+      const prevStart = isoAddDays(start, -days);
+      const listed = productById(product.productId) || {};
+      const points = chartPointsForWindow(product, days);
+      const currentPoints = pointsInRange(points, start, end);
+      const previousPoints = pointsInRange(points, prevStart, isoAddDays(start, -1));
+      const startPrice = lastPriceOnOrBefore(points, start) ?? currentPoints.find((point) => point.marketPrice != null)?.marketPrice ?? null;
+      const endPrice = [...currentPoints].reverse().find((point) => point.marketPrice != null)?.marketPrice ?? null;
+      const priceChangeAbs = startPrice != null && endPrice != null ? endPrice - startPrice : null;
+      const priceChangePct = startPrice ? (priceChangeAbs / startPrice) * 100 : null;
+      const volumeNow = currentPoints.reduce((sum, point) => sum + (point.quantitySold || 0), 0);
+      const volumePrev = previousPoints.reduce((sum, point) => sum + (point.quantitySold || 0), 0);
+      const volumeChangePct = volumePrev > 0 ? ((volumeNow - volumePrev) / volumePrev) * 100 : (volumeNow > 0 ? 100 : null);
+      const chartSalesCount = currentPoints.reduce((sum, point) => sum + (point.transactionCount != null ? point.transactionCount : (point.quantitySold || 0)), 0);
+
+      const sales = filteredSalesForMovers(product.productId).filter((row) => {
+        const key = saleDayKey(row);
+        return key >= start && key <= end;
+      });
+      const lastSaleRow = [...filteredSalesForMovers(product.productId)].sort((a, b) => String(b.orderDate || "").localeCompare(String(a.orderDate || "")))[0] || null;
+      const salePrices = sales.map((row) => row.purchasePrice).filter((value) => value != null);
+      const salesCount = sales.length ? sales.reduce((sum, row) => sum + (row.quantity || 1), 0) : chartSalesCount;
+      const salesTotal = sales.length
+        ? sales.reduce((sum, row) => sum + (row.purchasePrice || 0) * (row.quantity || 1), 0)
+        : currentPoints.reduce((sum, point) => sum + (point.marketPrice || 0) * (point.quantitySold || 0), 0);
+      const avgPrice = salePrices.length
+        ? salePrices.reduce((sum, value) => sum + value, 0) / salePrices.length
+        : (currentPoints.filter((point) => point.marketPrice != null).reduce((sum, point) => sum + point.marketPrice, 0) / Math.max(currentPoints.filter((point) => point.marketPrice != null).length, 1) || null);
+      const lowSale = salePrices.length
+        ? Math.min(...salePrices)
+        : currentPoints.reduce((min, point) => {
+            const value = point.lowSalePrice || point.marketPrice;
+            if (value == null || value === 0) return min;
+            return min == null ? value : Math.min(min, value);
+          }, null);
+      const highSale = salePrices.length
+        ? Math.max(...salePrices)
+        : currentPoints.reduce((max, point) => {
+            const value = point.highSalePrice || point.marketPrice;
+            if (value == null || value === 0) return max;
+            return max == null ? value : Math.max(max, value);
+          }, null);
+
+      const languages = new Set(filteredSalesForMovers(product.productId).map(saleLanguageBucket));
+      const grades = new Set(filteredSalesForMovers(product.productId).map(saleGrade));
+      if (!grades.size) grades.add("raw");
+      if (!languages.size) languages.add("english");
+
+      return {
+        productId: String(product.productId),
+        name: listed.name || product.productName || "Unknown product",
+        setName: listed.setName || product.setName || "",
+        imageUrl: listed.imageUrl || product.imageUrl,
+        url: listed.url || product.url,
+        kind: listed.kind || product.productKind || "",
+        gameId: productGameId(product),
+        languages: [...languages],
+        grades: [...grades],
+        priceChangePct,
+        priceChangeAbs,
+        lastSale: lastSaleRow ? lastSaleRow.purchasePrice : null,
+        lastSaleAt: lastSaleRow ? lastSaleRow.orderDate : "",
+        avgPrice: Number.isFinite(avgPrice) ? avgPrice : null,
+        startPrice,
+        lowSale,
+        highSale,
+        volumeChangePct,
+        salesCount,
+        salesTotal,
+        spark: currentPoints.map((point) => point.marketPrice),
+        href: catalogHrefForSet(listed.setName || product.setName),
+      };
+    }
+
+    function allMoverRows() {
+      const byId = new Map();
+      (chartHistory.products || []).forEach((row) => {
+        if (row.productId) byId.set(String(row.productId), row);
+      });
+      (catalogProducts.products || []).forEach((row) => {
+        const id = String(row.productId || "");
+        if (!id) return;
+        if (!byId.has(id)) {
+          byId.set(id, {
+            productId: id,
+            productName: row.name,
+            setName: row.setName,
+            productKind: row.kind,
+            imageUrl: row.imageUrl,
+            url: row.url,
+            ranges: {},
+          });
+        }
+      });
+      return [...byId.values()].map(buildMoverRow);
+    }
+
+    function visibleMoverRows() {
+      const query = moversQuery.trim().toLowerCase();
+      const rows = allMoverRows().filter((row) => {
+        if (moversCategory !== "all" && row.gameId !== moversCategory) return false;
+        if (moversLanguage !== "all" && !row.languages.includes(moversLanguage)) return false;
+        if (moversGrade !== "all" && !row.grades.includes(moversGrade)) return false;
+        if (query) {
+          const haystack = `${row.name} ${row.setName}`.toLowerCase();
+          if (!haystack.includes(query)) return false;
+        }
+        return true;
+      });
+      rows.sort((a, b) => {
+        const av = a[moversSortKey];
+        const bv = b[moversSortKey];
+        const aMissing = av == null || Number.isNaN(av);
+        const bMissing = bv == null || Number.isNaN(bv);
+        if (aMissing && bMissing) return (a.name || "").localeCompare(b.name || "");
+        if (aMissing) return 1;
+        if (bMissing) return -1;
+        if (av === bv) return (a.name || "").localeCompare(b.name || "");
+        return moversSortDir === "asc" ? av - bv : bv - av;
+      });
+      return rows;
+    }
+
+    function renderMoversRange() {
+      const host = document.getElementById("movers-range");
+      host.innerHTML = MOVERS_RANGES.map((days) => `
+        <button type="button" data-days="${days}" class="rounded-full border px-2.5 py-1 text-xs font-medium transition ${moversRangeDays === days ? "border-transparent bg-gold-500 text-ink-950" : "border-white/10 bg-[#12161d] text-zinc-300 hover:border-gold-500"}">${days} Days</button>
+      `).join("");
+      host.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          moversRangeDays = Number(button.dataset.days);
+          renderMovers();
+        });
+      });
+    }
+
+    function renderMoversSortState() {
+      document.querySelectorAll("#view-movers .sort-btn").forEach((button) => {
+        const key = button.dataset.sort;
+        const active = key === moversSortKey;
+        button.setAttribute("aria-sort", active ? (moversSortDir === "asc" ? "ascending" : "descending") : "none");
+        const caret = button.querySelector(".sort-caret");
+        if (caret) caret.textContent = active && moversSortDir === "asc" ? "▴" : "▾";
+      });
+    }
+
+    function renderMovers() {
+      renderMoversRange();
+      renderMoversSortState();
+      const rows = visibleMoverRows();
+      const body = document.getElementById("movers-body");
+      const empty = document.getElementById("movers-empty");
+      const meta = document.getElementById("movers-meta");
+      meta.textContent = `${integer.format(rows.length)} listings · ${moversRangeDays} day window ending ${moversAsOf()}`;
+      if (!rows.length) {
+        body.innerHTML = "";
+        empty.classList.remove("hidden");
+        return;
+      }
+      empty.classList.add("hidden");
+      body.innerHTML = rows.map((row) => `
+        <tr>
+          <td class="sticky-col px-3 py-2">
+            <div class="flex items-center gap-2.5">
+              ${imageMarkup(row, "h-10 w-10")}
+              <div class="min-w-0">
+                <a href="${escapeHtml(row.href || "#/")}" class="block truncate font-medium text-zinc-100 hover:text-gold-400">${escapeHtml(row.name)}</a>
+                <div class="truncate text-[11px] text-zinc-500">${escapeHtml(row.setName || "—")}${row.kind ? ` · ${escapeHtml(KIND_LABEL[row.kind] || row.kind)}` : ""}</div>
+              </div>
+            </div>
+          </td>
+          <td class="px-3 py-2 tabular font-semibold ${changeClass(row.priceChangePct)}">${formatPct(row.priceChangePct)}</td>
+          <td class="px-3 py-2 tabular ${changeClass(row.priceChangeAbs)}">${row.priceChangeAbs == null ? "—" : `${row.priceChangeAbs > 0 ? "+" : ""}${formatMoney(row.priceChangeAbs)}`}</td>
+          <td class="px-3 py-2 tabular">
+            <div>${formatMoney(row.lastSale)}</div>
+            <div class="text-[11px] text-zinc-500">${escapeHtml(daysAgoLabel(row.lastSaleAt))}</div>
+          </td>
+          <td class="px-3 py-2 tabular">${formatMoney(row.avgPrice)}</td>
+          <td class="px-3 py-2 tabular">${formatMoney(row.startPrice)}</td>
+          <td class="px-3 py-2 tabular">${formatMoney(row.lowSale)}</td>
+          <td class="px-3 py-2 tabular">${formatMoney(row.highSale)}</td>
+          <td class="px-3 py-2 tabular font-medium ${changeClass(row.volumeChangePct)}">${formatPct(row.volumeChangePct)}</td>
+          <td class="px-3 py-2 tabular">${formatInt(row.salesCount)}</td>
+          <td class="px-3 py-2 tabular">${formatMoney(row.salesTotal)}</td>
+          <td class="px-3 py-2">${sparklineSvg(row.spark)}</td>
+        </tr>
+      `).join("");
+      lucide.createIcons();
     }
 
     function updateDashboardChrome(game, family, set) {
@@ -755,6 +1227,13 @@
 
     function applyRoute() {
       const route = parseRoute();
+      if (route.view === "movers") {
+        currentCatalogSet = null;
+        showView("movers");
+        renderMovers();
+        lucide.createIcons();
+        return;
+      }
       const game = findGame(route.gameId);
       const family = findFamily(game, route.familyId);
       const set = findSet(family, route.setSlug);
@@ -1300,6 +1779,35 @@
       document.getElementById("sales-product").addEventListener("change", renderSalesTable);
       document.querySelectorAll(".tab-btn").forEach((button) => {
         button.addEventListener("click", () => setActiveTab(button.dataset.tab));
+      });
+      document.getElementById("movers-category").addEventListener("change", (event) => {
+        moversCategory = event.target.value;
+        renderMovers();
+      });
+      document.getElementById("movers-language").addEventListener("change", (event) => {
+        moversLanguage = event.target.value;
+        renderMovers();
+      });
+      document.getElementById("movers-grade").addEventListener("change", (event) => {
+        moversGrade = event.target.value;
+        renderMovers();
+      });
+      document.getElementById("movers-search").addEventListener("input", (event) => {
+        moversQuery = event.target.value;
+        renderMovers();
+      });
+      document.getElementById("view-movers").addEventListener("click", (event) => {
+        const button = event.target.closest(".sort-btn");
+        if (!button) return;
+        const key = button.dataset.sort;
+        if (!key) return;
+        if (moversSortKey === key) {
+          moversSortDir = moversSortDir === "desc" ? "asc" : "desc";
+        } else {
+          moversSortKey = key;
+          moversSortDir = key === "priceChangePct" ? "desc" : "desc";
+        }
+        renderMovers();
       });
       window.addEventListener("hashchange", applyRoute);
       window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
