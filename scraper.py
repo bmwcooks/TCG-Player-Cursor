@@ -16,12 +16,16 @@ PRODUCTS_FILES = [
     os.path.join(DATA_DIR, "one_piece_products.json"),
 ]
 IMAGE_OVERRIDES_FILE = os.path.join(DATA_DIR, "product_image_overrides.json")
+CATALOG_FILE = os.path.join(DATA_DIR, "catalog.json")
 LATEST_SALES_LIMIT = 100
 DISCORD_MESSAGE_LIMIT = 2000
 # Discord counts some emoji as two units; keep a small buffer under the hard cap.
 DISCORD_SAFETY_MARGIN = 40
 DISCORD_PACK_LIMIT = DISCORD_MESSAGE_LIMIT - DISCORD_SAFETY_MARGIN
-DISCORD_HEADER = "**TCGPlayer Daily Update** 📊"
+DISCORD_HEADER = ""
+FAMILY_DISCORD_NAMES = {
+    "xy": "XY",
+}
 
 CHART_RANGES = {
     "month": {"key": "1M", "interval": "day", "label": "1M · daily"},
@@ -425,15 +429,153 @@ def capture_latest_sales_action(product_id, sink):
     return page_action
 
 
+def scrape_succeeded(product_name, market_price):
+    """A listing counts as scraped when the product page yielded a name and market price."""
+    if not product_name or product_name == "Unknown Product":
+        return False
+    if market_price in (None, "", "N/A"):
+        return False
+    return True
+
+
+def load_set_catalog():
+    """Catalog order plus setName -> game/family labels for Discord scrape status."""
+    games = []
+    set_index = {}
+    family_index = {}
+    if not os.path.exists(CATALOG_FILE):
+        return games, set_index, family_index
+    try:
+        catalog = json.load(open(CATALOG_FILE, encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return games, set_index, family_index
+    for game in catalog.get("games") or []:
+        game_id = game.get("id") or "other"
+        game_name = "Pokemon" if game_id == "pokemon" else (game.get("name") or "Other")
+        families = []
+        for family in game.get("families") or []:
+            family_id = family.get("id") or "other"
+            family_name = FAMILY_DISCORD_NAMES.get(family_id) or family.get("name") or family_id
+            families.append({"id": family_id, "name": family_name})
+            family_index[family_id] = {
+                "game_id": game_id,
+                "game_name": game_name,
+                "family_id": family_id,
+                "family_name": family_name,
+            }
+            for item in family.get("sets") or []:
+                set_name = item.get("setName")
+                if not set_name:
+                    continue
+                set_index[set_name] = {
+                    "game_id": game_id,
+                    "game_name": game_name,
+                    "family_id": family_id,
+                    "family_name": family_name,
+                }
+        games.append({"id": game_id, "name": game_name, "families": families})
+    return games, set_index, family_index
+
+
+def product_lookups():
+    """Name/set/family from sealed-product JSON, keyed by productId and URL."""
+    by_id = {}
+    by_url = {}
+    for row in load_catalog_products():
+        meta = {
+            "name": row.get("name"),
+            "setName": row.get("setName"),
+            "familyId": row.get("familyId"),
+        }
+        product_id = str(row.get("productId") or "")
+        if product_id:
+            by_id[product_id] = meta
+        url = row.get("url") or ""
+        if url:
+            by_url[url.split("?")[0]] = meta
+    return by_id, by_url
+
+
+def resolve_scrape_placement(set_name, family_id, set_index, family_index):
+    if set_name and set_name in set_index:
+        return set_index[set_name]
+    if family_id and family_id in family_index:
+        return family_index[family_id]
+    return {
+        "game_id": "other",
+        "game_name": "Other",
+        "family_id": "other",
+        "family_name": "Other",
+    }
+
+
+def format_scrape_status(results, games, set_index, family_index):
+    """Discord body: per-era success, or set name plus the listings that failed."""
+    grouped = {}
+    for row in results:
+        place = resolve_scrape_placement(row.get("setName"), row.get("familyId"), set_index, family_index)
+        key = (place["game_id"], place["family_id"])
+        bucket = grouped.setdefault(key, {
+            "game_id": place["game_id"],
+            "game_name": place["game_name"],
+            "family_name": place["family_name"],
+            "ok": True,
+            "failures": {},
+        })
+        if row.get("ok"):
+            continue
+        bucket["ok"] = False
+        set_name = row.get("setName") or "Unknown set"
+        item = row.get("productName") or "Unknown product"
+        bucket["failures"].setdefault(set_name, [])
+        if item not in bucket["failures"][set_name]:
+            bucket["failures"][set_name].append(item)
+
+    preferred = ["pokemon", "one-piece"]
+    seen = {game["id"] for game in games}
+    game_order = [game_id for game_id in preferred if game_id in seen]
+    game_order.extend(game["id"] for game in games if game["id"] not in game_order)
+    if any(row.get("game_id") == "other" for row in grouped.values()):
+        game_order.append("other")
+    game_meta = {game["id"]: game for game in games}
+    game_meta.setdefault("other", {"id": "other", "name": "Other", "families": [{"id": "other", "name": "Other"}]})
+
+    blocks = []
+    for game_id in game_order:
+        game = game_meta[game_id]
+        family_ids = [family["id"] for family in game.get("families") or []]
+        if game_id == "other" and "other" not in family_ids:
+            family_ids.append("other")
+        lines = []
+        for family_id in family_ids:
+            bucket = grouped.get((game_id, family_id))
+            if not bucket:
+                continue
+            if bucket["ok"]:
+                lines.append(f"{bucket['family_name']} - Successfully Scraped")
+                continue
+            lines.append(f"{bucket['family_name']} - Failed")
+            for set_name, items in bucket["failures"].items():
+                lines.append(f"- {set_name}: {', '.join(items)}")
+        if lines:
+            blocks.append(f"**{game['name']}:**\n" + "\n".join(lines))
+    return blocks
+
+
 def discord_header(part, total):
-    return f"{DISCORD_HEADER} ({part}/{total})\n\n"
+    if total <= 1:
+        return ""
+    prefix = DISCORD_HEADER.strip()
+    if prefix:
+        return f"{prefix} ({part}/{total})\n\n"
+    return f"({part}/{total})\n\n"
 
 
 def pack_discord_messages(blocks, limit=DISCORD_PACK_LIMIT):
-    """Pack product recaps into Discord messages without exceeding the character cap."""
+    """Pack scrape-status blocks into Discord messages without exceeding the character cap."""
     items = [str(block).strip() for block in blocks if str(block).strip()]
     if not items:
-        return [f"{DISCORD_HEADER}\nNo products scraped."]
+        return ["No products scraped."]
 
     # Reserve room for the longest " (999/999)" part tag we might add after packing.
     header_budget = len(discord_header(999, 999))
@@ -512,7 +654,7 @@ def main():
 
     # --- 2. Scrape Data ---
     all_data_rows = []
-    discord_blocks = []
+    scrape_results = []
     chart_products = []
     latest_sales_rows = []
     today_date = datetime.datetime.now().strftime("%Y-%m-%d")
@@ -523,13 +665,19 @@ def main():
     print(f"Initializing Scrapling StealthySession to scrape {len(entries)} URLs...")
     image_lookup = load_image_lookup()
     kind_lookup = catalog_kind_lookup()
+    games_order, set_index, family_index = load_set_catalog()
+    products_by_id, products_by_url = product_lookups()
     with StealthySession(headless=True, solve_cloudflare=True) as session:
         for entry in entries:
             url = entry["url"]
             print(f"\n======================================")
             print(f"Scraping: {url}")
+            product_id = extract_product_id(url)
+            listed = products_by_id.get(str(product_id or "")) or products_by_url.get(url.split("?")[0]) or {}
+            fallback_name = listed.get("name") or url
+            fallback_set = entry.get("setName") or listed.get("setName")
+            fallback_family = listed.get("familyId")
             try:
-                product_id = extract_product_id(url)
                 captured_sales = []
                 fetch_kwargs = {}
                 if product_id:
@@ -622,29 +770,32 @@ def main():
                         product_id, product_name, url, daily_buckets, today_date, set_name, image_url, product_kind
                     )
                 )
-
-                # Build text block for Discord
-                block = (
-                    f"**{product_name}**\n"
-                    f"Market: {market_price} | Recent Sale: {recent_sale} | Median: {listed_median}\n"
-                    f"Sellers: {current_sellers} | Qty: {current_quantity} | Last Day Sales: {last_day_sales}\n"
-                    f"[View Listing](<{url}>)"
-                )
-                discord_blocks.append(block)
+                ok = scrape_succeeded(product_name, market_price)
+                item_name = product_name if product_name and product_name != "Unknown Product" else fallback_name
+                scrape_results.append({
+                    "ok": ok,
+                    "setName": set_name or fallback_set or "Other",
+                    "productName": item_name,
+                    "familyId": fallback_family,
+                })
 
             except Exception as e:
                 print(f"Failed to scrape {url}: {e}")
+                scrape_results.append({
+                    "ok": False,
+                    "setName": fallback_set or "Other",
+                    "productName": fallback_name,
+                    "familyId": fallback_family,
+                })
 
-    if not all_data_rows:
-        print("\nNo data was successfully scraped. Exiting.")
-        return
-
-    # --- 3. Local JSON storage ---
-    print("\nWriting tracker data to local JSON...")
-    existing_records = load_records()
-    merged_records = upsert_records(existing_records, all_data_rows)
-    save_records(merged_records)
-    print(f"Saved {len(all_data_rows)} snapshot(s). Archive now has {len(merged_records)} record(s) in {DATA_FILE}.")
+    if all_data_rows:
+        print("\nWriting tracker data to local JSON...")
+        existing_records = load_records()
+        merged_records = upsert_records(existing_records, all_data_rows)
+        save_records(merged_records)
+        print(f"Saved {len(all_data_rows)} snapshot(s). Archive now has {len(merged_records)} record(s) in {DATA_FILE}.")
+    else:
+        print("\nNo data was successfully scraped.")
 
     if chart_products:
         save_json(CHART_HISTORY_FILE, {"updatedAt": today_date, "products": chart_products})
@@ -660,9 +811,10 @@ def main():
         print("DISCORD_WEBHOOK_URL environment variable is missing; skipping Discord notification.")
         return
 
-    messages_to_send = pack_discord_messages(discord_blocks)
+    status_blocks = format_scrape_status(scrape_results, games_order, set_index, family_index)
+    messages_to_send = pack_discord_messages(status_blocks)
     print(
-        f"Packed {len(discord_blocks)} product recap(s) into {len(messages_to_send)} "
+        f"Packed scrape status into {len(messages_to_send)} "
         f"Discord message(s) (max {DISCORD_PACK_LIMIT} chars each, hard cap {DISCORD_MESSAGE_LIMIT})."
     )
     send_discord_messages(discord_url, messages_to_send)
