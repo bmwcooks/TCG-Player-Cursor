@@ -474,7 +474,7 @@
                 <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="lowSale">Low Sale <span class="sort-caret opacity-40">▾</span></button></th>
                 <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="highSale">High Sale <span class="sort-caret opacity-40">▾</span></button></th>
                 <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="volumeChangePct">Volume Change % <span class="sort-caret opacity-40">▾</span></button></th>
-                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="salesCount"># of Sales <span class="sort-caret opacity-40">▾</span></button></th>
+                <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="salesCount" title="Items sold on TCGPlayer over this window, from the daily sales chart. Same source as Last Day Sales."># of Sales <span class="sort-caret opacity-40">▾</span></button></th>
                 <th class="px-3 py-2.5 font-medium"><button type="button" class="sort-btn inline-flex items-center gap-1" data-sort="salesTotal">Total Sales ($) <span class="sort-caret opacity-40">▾</span></button></th>
                 <th class="px-3 py-2.5 font-medium">Trend</th>
               </tr>
@@ -513,7 +513,7 @@
     let moversExcludeOpen = false;
     let moversExcludeQuery = "";
     let moversExclusions = { families: [], sets: [], products: [] };
-    const MOVERS_RANGES = [7, 14, 30, 60, 90, 180, 365];
+    const MOVERS_RANGES = [1, 3, 7, 14, 30, 60, 90, 180, 365];
     const MOVERS_EXCLUDE_KEY = "moversExclusions";
     const FAMILY_SHORT_NAMES = {
       xy: "XY",
@@ -942,6 +942,38 @@
       return chartHistory.updatedAt || latestSalesDate(records) || new Date().toISOString().slice(0, 10);
     }
 
+    function usablePrice(value) {
+      const number = Number(value);
+      return Number.isFinite(number) && number > 0 ? number : null;
+    }
+
+    function pointVolume(point) {
+      const volume = Number(point && point.quantitySold);
+      return Number.isFinite(volume) && volume > 0 ? volume : 0;
+    }
+
+    function moversVolumeEnd() {
+      const asOf = moversAsOf();
+      if (!asOf) return asOf;
+      return isoAddDays(asOf, -1);
+    }
+
+    function moversWindow(days) {
+      const count = Math.max(1, Number(days) || 1);
+      const end = moversVolumeEnd();
+      const start = isoAddDays(end, -(count - 1));
+      const prevEnd = isoAddDays(start, -1);
+      const prevStart = isoAddDays(prevEnd, -(count - 1));
+      return { start, end, prevStart, prevEnd, asOf: moversAsOf(), days: count };
+    }
+
+    function moversWindowLabel() {
+      const { start, end, days } = moversWindow(moversRangeDays);
+      const unit = days === 1 ? "1 day" : `${days} days`;
+      if (start === end) return `${unit} · ${end}`;
+      return `${unit} · ${start} to ${end}`;
+    }
+
     function productGameId(row) {
       const listed = productById(row && row.productId) || row || {};
       const familyId = listed.familyId || "";
@@ -1152,8 +1184,12 @@
     }
 
     function lastPriceOnOrBefore(points, date) {
+      if (!date) return null;
       for (let index = points.length - 1; index >= 0; index -= 1) {
-        if (points[index].date <= date && points[index].marketPrice != null) return points[index].marketPrice;
+        if (points[index].date <= date) {
+          const price = usablePrice(points[index].marketPrice);
+          if (price != null) return price;
+        }
       }
       return null;
     }
@@ -1211,49 +1247,38 @@
 
     function buildMoverRow(product) {
       const days = moversRangeDays;
-      const end = moversAsOf();
-      const start = isoAddDays(end, -days);
-      const prevStart = isoAddDays(start, -days);
+      const { start, end, prevStart, prevEnd } = moversWindow(days);
       const listed = productById(product.productId) || {};
       const points = chartPointsForWindow(product, days);
       const currentPoints = pointsInRange(points, start, end);
-      const previousPoints = pointsInRange(points, prevStart, isoAddDays(start, -1));
-      const startPrice = lastPriceOnOrBefore(points, start) ?? currentPoints.find((point) => point.marketPrice != null)?.marketPrice ?? null;
-      const endPrice = [...currentPoints].reverse().find((point) => point.marketPrice != null)?.marketPrice ?? null;
+      const previousPoints = pointsInRange(points, prevStart, prevEnd);
+      const startPrice = lastPriceOnOrBefore(points, isoAddDays(start, -1))
+        ?? currentPoints.map((point) => usablePrice(point.marketPrice)).find((value) => value != null)
+        ?? null;
+      const endPrice = lastPriceOnOrBefore(points, end);
       const priceChangeAbs = startPrice != null && endPrice != null ? endPrice - startPrice : null;
       const priceChangePct = startPrice ? (priceChangeAbs / startPrice) * 100 : null;
-      const volumeNow = currentPoints.reduce((sum, point) => sum + (point.quantitySold || 0), 0);
-      const volumePrev = previousPoints.reduce((sum, point) => sum + (point.quantitySold || 0), 0);
+      const volumeNow = currentPoints.reduce((sum, point) => sum + pointVolume(point), 0);
+      const volumePrev = previousPoints.reduce((sum, point) => sum + pointVolume(point), 0);
       const volumeChangePct = volumePrev > 0 ? ((volumeNow - volumePrev) / volumePrev) * 100 : (volumeNow > 0 ? 100 : null);
-      const chartSalesCount = currentPoints.reduce((sum, point) => sum + (point.transactionCount != null ? point.transactionCount : (point.quantitySold || 0)), 0);
 
-      const sales = filteredSalesForMovers(product.productId).filter((row) => {
-        const key = saleDayKey(row);
-        return key >= start && key <= end;
-      });
       const lastSaleRow = [...filteredSalesForMovers(product.productId)].sort((a, b) => String(b.orderDate || "").localeCompare(String(a.orderDate || "")))[0] || null;
-      const salePrices = sales.map((row) => row.purchasePrice).filter((value) => value != null);
-      const salesCount = sales.length ? sales.reduce((sum, row) => sum + (row.quantity || 1), 0) : chartSalesCount;
-      const salesTotal = sales.length
-        ? sales.reduce((sum, row) => sum + (row.purchasePrice || 0) * (row.quantity || 1), 0)
-        : currentPoints.reduce((sum, point) => sum + (point.marketPrice || 0) * (point.quantitySold || 0), 0);
-      const avgPrice = salePrices.length
-        ? salePrices.reduce((sum, value) => sum + value, 0) / salePrices.length
-        : (currentPoints.filter((point) => point.marketPrice != null).reduce((sum, point) => sum + point.marketPrice, 0) / Math.max(currentPoints.filter((point) => point.marketPrice != null).length, 1) || null);
-      const lowSale = salePrices.length
-        ? Math.min(...salePrices)
-        : currentPoints.reduce((min, point) => {
-            const value = point.lowSalePrice || point.marketPrice;
-            if (value == null || value === 0) return min;
-            return min == null ? value : Math.min(min, value);
-          }, null);
-      const highSale = salePrices.length
-        ? Math.max(...salePrices)
-        : currentPoints.reduce((max, point) => {
-            const value = point.highSalePrice || point.marketPrice;
-            if (value == null || value === 0) return max;
-            return max == null ? value : Math.max(max, value);
-          }, null);
+      const salesCount = volumeNow;
+      const salesTotal = currentPoints.reduce((sum, point) => {
+        const price = usablePrice(point.marketPrice);
+        return price != null ? sum + price * pointVolume(point) : sum;
+      }, 0);
+      const avgPrice = salesCount ? salesTotal / salesCount : null;
+      const lowSale = currentPoints.reduce((min, point) => {
+        const value = usablePrice(point.lowSalePrice) ?? usablePrice(point.marketPrice);
+        if (value == null) return min;
+        return min == null ? value : Math.min(min, value);
+      }, null);
+      const highSale = currentPoints.reduce((max, point) => {
+        const value = usablePrice(point.highSalePrice) ?? usablePrice(point.marketPrice);
+        if (value == null) return max;
+        return max == null ? value : Math.max(max, value);
+      }, null);
 
       const setName = listed.setName || product.setName || "";
       const familyId = listed.familyId || familyIdForProduct(product) || catalogEntryForSet(setName)?.family?.id || "";
@@ -1278,7 +1303,7 @@
         volumeChangePct,
         salesCount,
         salesTotal,
-        spark: currentPoints.map((point) => point.marketPrice),
+        spark: currentPoints.map((point) => usablePrice(point.marketPrice)),
         href: catalogHrefForSet(listed.setName || product.setName),
       };
     }
@@ -1528,7 +1553,7 @@
     function renderMoversRange() {
       const host = document.getElementById("movers-range");
       host.innerHTML = MOVERS_RANGES.map((days) => `
-        <button type="button" data-days="${days}" class="rounded-full border px-2.5 py-1 text-xs font-medium transition ${moversRangeDays === days ? "border-transparent bg-gold-500 text-ink-950" : "border-white/10 bg-[#12161d] text-zinc-300 hover:border-gold-500"}">${days} Days</button>
+        <button type="button" data-days="${days}" class="rounded-full border px-2.5 py-1 text-xs font-medium transition ${moversRangeDays === days ? "border-transparent bg-gold-500 text-ink-950" : "border-white/10 bg-[#12161d] text-zinc-300 hover:border-gold-500"}">${days} Day${days === 1 ? "" : "s"}</button>
       `).join("");
       host.querySelectorAll("button").forEach((button) => {
         button.addEventListener("click", () => {
@@ -1557,7 +1582,7 @@
       const empty = document.getElementById("movers-empty");
       const meta = document.getElementById("movers-meta");
       const hiddenNote = hidden ? ` · ${integer.format(hidden)} hidden by exclusions` : "";
-      meta.textContent = `${integer.format(rows.length)} of ${integer.format(total)} listings${hiddenNote} · ${moversRangeDays} day window ending ${moversAsOf()}`;
+      meta.textContent = `${integer.format(rows.length)} of ${integer.format(total)} listings${hiddenNote} · ${moversWindowLabel()}`;
       if (!rows.length) {
         body.innerHTML = "";
         empty.classList.remove("hidden");
