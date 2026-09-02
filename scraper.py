@@ -32,6 +32,7 @@ PAGE_FETCH_TIMEOUT_MS = 20000
 EMPTY_PAGE_RETRIES = 1
 DEFAULT_SCRAPE_CONCURRENCY = 3
 MAX_SCRAPE_CONCURRENCY = 8
+DEFAULT_CHART_FETCH_CONCURRENCY = 1
 BLOCKED_PAGE_MARKERS = (
     "just a moment",
     "attention required",
@@ -141,11 +142,18 @@ def extract_metric(soup, label):
 
 
 def extract_html_market_price(soup):
-    labeled = extract_metric(soup, "Market Price")
-    if labeled != "N/A":
-        return labeled
+    """First compact Market Price on the product header, not the history widget blob."""
     _, json_price = json_ld_name_price(soup)
-    if json_price is not None:
+    if soup is not None:
+        text = soup.get_text(" ", strip=True)
+        header = re.split(r"(?i)foil market price|past \d|we're still gathering", text, maxsplit=1)[0]
+        match = re.search(r"(?<![A-Za-z])Market Price\s*\$([0-9][0-9,]*(?:\.\d{2})?)", header)
+        if match and usable_price(match.group(1)) is not None:
+            return match.group(1)
+        labeled = extract_metric(soup, "Market Price")
+        if labeled != "N/A" and len(str(labeled)) < 40 and usable_price(labeled) is not None:
+            return labeled
+    if json_price is not None and usable_price(json_price) is not None:
         return json_price
     return "N/A"
 
@@ -224,7 +232,9 @@ def select_chart_sku(result_list):
         condition = str(sku.get("condition") or "").lower()
         language = str(sku.get("language") or "").lower()
         variant = str(sku.get("variant") or "").lower()
+        buckets = sku.get("buckets") or []
         return (
+            1 if buckets else 0,
             1 if language == "english" else 0,
             1 if condition == "unopened" else 0,
             1 if variant == "normal" else 0,
@@ -455,7 +465,19 @@ def request_headers(referer=None):
     return headers
 
 
-def fetch_price_history(product_id, range_name, referer, attempts=2):
+def chart_fetch_concurrency(raw=None):
+    """How many Infinite chart HTTP calls may run at once. Keep this low; empty replies wipe Movers."""
+    value = os.environ.get("CHART_FETCH_CONCURRENCY") if raw is None else raw
+    if value is None or str(value).strip() == "":
+        return DEFAULT_CHART_FETCH_CONCURRENCY
+    try:
+        count = int(value)
+    except (TypeError, ValueError):
+        return DEFAULT_CHART_FETCH_CONCURRENCY
+    return max(1, min(count, 4))
+
+
+def fetch_price_history(product_id, range_name, referer, attempts=4):
     api_url = f"https://infinite-api.tcgplayer.com/price/history/{product_id}/detailed?range={range_name}"
     print(f"DEBUG: Requesting {range_name} chart data from {api_url}")
     last_error = None
@@ -475,10 +497,47 @@ def fetch_price_history(product_id, range_name, referer, attempts=2):
             last_error = shorten_error(exc)
             print(f"DEBUG: {range_name} chart request error: {exc} (attempt {attempt}/{attempts})")
         if attempt < attempts:
-            time.sleep(0.8)
+            time.sleep(0.8 * attempt)
     if last_error:
         print(f"DEBUG: {range_name} chart gave up ({last_error})")
     return []
+
+
+def merge_chart_product(previous, incoming):
+    """Keep prior range points when this scrape got an empty Infinite reply."""
+    merged = dict(incoming or {})
+    prev_ranges = (previous or {}).get("ranges") or {}
+    new_ranges = dict((incoming or {}).get("ranges") or {})
+    for key in ("1M", "3M", "1Y"):
+        new_pts = (new_ranges.get(key) or {}).get("points") or []
+        old_block = prev_ranges.get(key) or {}
+        old_pts = old_block.get("points") or []
+        if new_pts:
+            continue
+        if old_pts:
+            new_ranges[key] = old_block
+            print(f"DEBUG: kept previous {key} chart for {merged.get('productId')} ({len(old_pts)} points)")
+    merged["ranges"] = new_ranges
+    if not merged.get("productName") and previous:
+        merged["productName"] = previous.get("productName")
+    if not merged.get("imageUrl") and previous:
+        merged["imageUrl"] = previous.get("imageUrl")
+    return merged
+
+
+def merge_chart_history(existing_payload, incoming_products, updated_at):
+    by_id = {}
+    for row in (existing_payload or {}).get("products") or []:
+        product_id = str(row.get("productId") or "")
+        if product_id:
+            by_id[product_id] = row
+    for row in incoming_products or []:
+        product_id = str(row.get("productId") or "")
+        if not product_id:
+            continue
+        previous = by_id.get(product_id)
+        by_id[product_id] = merge_chart_product(previous, row) if previous else row
+    return {"updatedAt": updated_at, "products": list(by_id.values())}
 
 
 def normalize_sale(row, product_id, product_name, url, set_name=None):
@@ -954,9 +1013,16 @@ async def scrape_one_entry(session, entry, ctx):
         chart_product = None
 
         if product_id:
-            range_payload, daily_buckets, last_day_sales = await asyncio.to_thread(
-                fetch_chart_ranges, product_id, url, today_date
-            )
+            chart_sema = ctx.get("chart_sema")
+            if chart_sema is not None:
+                async with chart_sema:
+                    range_payload, daily_buckets, last_day_sales = await asyncio.to_thread(
+                        fetch_chart_ranges, product_id, url, today_date
+                    )
+            else:
+                range_payload, daily_buckets, last_day_sales = await asyncio.to_thread(
+                    fetch_chart_ranges, product_id, url, today_date
+                )
             chart_price = latest_chart_price(range_payload)
             if usable_price(html_price) is None and chart_price is not None:
                 market_price = chart_price
@@ -1051,9 +1117,13 @@ async def scrape_all_entries(session, entries, ctx, concurrency):
 async def scrape_with_session(entries, ctx, concurrency):
     from scrapling.fetchers import AsyncStealthySession
 
+    ctx = dict(ctx)
+    ctx["chart_concurrency"] = ctx.get("chart_concurrency") or chart_fetch_concurrency()
+    ctx["chart_sema"] = asyncio.Semaphore(ctx["chart_concurrency"])
     print(
         f"Initializing Scrapling AsyncStealthySession with {concurrency} "
-        f"headless Chrome tab(s) for {len(entries)} URLs..."
+        f"headless Chrome tab(s) for {len(entries)} URLs "
+        f"(chart HTTP concurrency {ctx['chart_concurrency']})..."
     )
     async with AsyncStealthySession(
         headless=True,
@@ -1084,6 +1154,7 @@ def main():
         "kind_lookup": catalog_kind_lookup(),
         "products_by_id": None,
         "products_by_url": None,
+        "chart_concurrency": chart_fetch_concurrency(),
     }
     games_order, set_index, family_index = load_set_catalog()
     ctx["products_by_id"], ctx["products_by_url"] = product_lookups()
@@ -1111,8 +1182,15 @@ def main():
         print("\nNo data was successfully scraped.")
 
     if chart_products:
-        save_json(CHART_HISTORY_FILE, {"updatedAt": today_date, "products": chart_products})
-        print(f"Wrote chart history for {len(chart_products)} product(s) to {CHART_HISTORY_FILE}.")
+        existing_charts = {}
+        if os.path.exists(CHART_HISTORY_FILE):
+            try:
+                existing_charts = json.load(open(CHART_HISTORY_FILE, encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                existing_charts = {}
+        merged_charts = merge_chart_history(existing_charts, chart_products, today_date)
+        save_json(CHART_HISTORY_FILE, merged_charts)
+        print(f"Wrote chart history for {len(merged_charts.get('products') or [])} product(s) to {CHART_HISTORY_FILE}.")
     if latest_sales_rows:
         save_json(LATEST_SALES_FILE, {"updatedAt": today_date, "sales": latest_sales_rows})
         print(f"Wrote {len(latest_sales_rows)} latest transaction(s) to {LATEST_SALES_FILE}.")
