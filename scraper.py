@@ -26,6 +26,17 @@ DISCORD_HEADER = ""
 FAMILY_DISCORD_NAMES = {
     "xy": "XY",
 }
+PAGE_FETCH_TIMEOUT_MS = 20000
+EMPTY_PAGE_RETRIES = 1
+BLOCKED_PAGE_MARKERS = (
+    "just a moment",
+    "attention required",
+    "cf-browser-verification",
+    "checking your browser",
+    "enable javascript and cookies",
+    "access denied",
+    "verify you are human",
+)
 
 CHART_RANGES = {
     "month": {"key": "1M", "interval": "day", "label": "1M · daily"},
@@ -40,19 +51,74 @@ API_HEADERS = {
 }
 
 
+def clean_product_title(text):
+    text = re.sub(r'(?i)Shop with Affiliates.*', '', text or "").strip()
+    text = re.sub(r'\s+', ' ', text)
+    return text
+
+
+def iter_json_ld(soup):
+    if soup is None:
+        return
+    for script in soup.find_all("script", attrs={"type": "application/ld+json"}):
+        raw = script.string or script.get_text() or ""
+        if not raw.strip():
+            continue
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+        stack = [data]
+        while stack:
+            item = stack.pop()
+            if isinstance(item, list):
+                stack.extend(item)
+            elif isinstance(item, dict):
+                yield item
+                stack.extend(item.values())
+
+
+def json_ld_name_price(soup):
+    name = None
+    price = None
+    for item in iter_json_ld(soup):
+        types = item.get("@type") or ""
+        if isinstance(types, list):
+            types = " ".join(str(part) for part in types)
+        offers = item.get("offers")
+        if isinstance(offers, list) and offers:
+            offers = offers[0]
+        if isinstance(offers, dict):
+            price = price or offers.get("price") or offers.get("lowPrice")
+        if "Product" in str(types) or offers:
+            name = name or item.get("name")
+    return clean_product_title(name) if name else None, price
+
+
 def get_product_name(soup):
     """Finds the product title and cleans up appended affiliate/tracking text."""
+    if soup is None:
+        return "Unknown Product"
     h1s = soup.find_all('h1')
     for h1 in h1s:
-        text = h1.get_text(separator=" ", strip=True)
+        text = clean_product_title(h1.get_text(separator=" ", strip=True))
         if text:
-            text = re.sub(r'(?i)Shop with Affiliates.*', '', text).strip()
             return text
+    og = soup.find("meta", property="og:title")
+    if og and og.get("content"):
+        text = clean_product_title(og["content"])
+        if text and text.lower() != "tcgplayer":
+            return text
+    json_name, _ = json_ld_name_price(soup)
+    if json_name:
+        return json_name
     return "Unknown Product"
 
 
 def extract_metric(soup, label):
     """Robustly searches for a text label and extracts the closest number/price."""
+    if soup is None:
+        return "N/A"
     nodes = soup.find_all(string=re.compile(label, re.IGNORECASE))
     for node in nodes:
         parent = node.parent
@@ -68,6 +134,80 @@ def extract_metric(soup, label):
             if match:
                 return match.group(1)
     return "N/A"
+
+
+def extract_html_market_price(soup):
+    labeled = extract_metric(soup, "Market Price")
+    if labeled != "N/A":
+        return labeled
+    _, json_price = json_ld_name_price(soup)
+    if json_price is not None:
+        return json_price
+    return "N/A"
+
+
+def page_looks_empty(soup, body):
+    """True when TCGPlayer returned a shell, bot check, or HTML without a product."""
+    text = body.decode("utf-8", "ignore") if isinstance(body, (bytes, bytearray)) else (body or "")
+    lowered = text.lower()
+    if len(text) < 500:
+        return True
+    name = get_product_name(soup)
+    price = extract_html_market_price(soup)
+    has_product = name != "Unknown Product" or price != "N/A"
+    if any(marker in lowered for marker in BLOCKED_PAGE_MARKERS) and not has_product:
+        return True
+    return not has_product
+
+
+def usable_price(value):
+    number = parse_numeric(value, as_float=True)
+    if number is None or number <= 0:
+        return None
+    return number
+
+
+def latest_chart_price(range_payload):
+    for key in ("1M", "3M", "1Y"):
+        points = ((range_payload or {}).get(key) or {}).get("points") or []
+        for point in reversed(points):
+            price = usable_price(point.get("marketPrice"))
+            if price is not None:
+                return price
+    return None
+
+
+def shorten_error(exc, limit=80):
+    text = re.sub(r"\s+", " ", str(exc).strip()) or exc.__class__.__name__
+    if len(text) > limit:
+        return text[: limit - 1] + "…"
+    return text
+
+
+def classify_scrape(html_name, html_price, chart_price=None, empty_page=False, error=None):
+    """Return (ok, reason). Reason is set for partial and failed listings."""
+    if error:
+        return False, f"request error: {shorten_error(error)}"
+    name_ok = bool(html_name) and html_name != "Unknown Product"
+    page_price = usable_price(html_price)
+    chart_ok = usable_price(chart_price) is not None
+    if name_ok and page_price is not None:
+        return True, None
+    if empty_page and not name_ok:
+        if chart_ok:
+            return True, "empty product page; used chart price"
+        return False, "empty or blocked product page"
+    if not name_ok and page_price is None:
+        if chart_ok:
+            return True, "no title or market price on page; used chart price"
+        return False, "no title or market price on page"
+    if not name_ok:
+        return True, "no product title on page"
+    if page_price is None:
+        if chart_ok:
+            return True, "no market price on page; used chart price"
+        return False, "no market price on page"
+    return True, None
 
 
 def select_chart_sku(result_list):
@@ -311,14 +451,30 @@ def request_headers(referer=None):
     return headers
 
 
-def fetch_price_history(product_id, range_name, referer):
+def fetch_price_history(product_id, range_name, referer, attempts=2):
     api_url = f"https://infinite-api.tcgplayer.com/price/history/{product_id}/detailed?range={range_name}"
     print(f"DEBUG: Requesting {range_name} chart data from {api_url}")
-    response = requests.get(api_url, headers=request_headers(referer), timeout=15)
-    if response.status_code != 200:
-        print(f"DEBUG: {range_name} chart request failed with status {response.status_code}")
-        return []
-    return parse_history_buckets(response.json())
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        try:
+            response = requests.get(api_url, headers=request_headers(referer), timeout=15)
+            if response.status_code != 200:
+                last_error = f"status {response.status_code}"
+                print(f"DEBUG: {range_name} chart request failed with status {response.status_code} (attempt {attempt}/{attempts})")
+            else:
+                rows = parse_history_buckets(response.json())
+                if rows:
+                    return rows
+                last_error = "empty buckets"
+                print(f"DEBUG: {range_name} chart returned no buckets (attempt {attempt}/{attempts})")
+        except Exception as exc:
+            last_error = shorten_error(exc)
+            print(f"DEBUG: {range_name} chart request error: {exc} (attempt {attempt}/{attempts})")
+        if attempt < attempts:
+            time.sleep(0.8)
+    if last_error:
+        print(f"DEBUG: {range_name} chart gave up ({last_error})")
+    return []
 
 
 def normalize_sale(row, product_id, product_name, url, set_name=None):
@@ -430,12 +586,9 @@ def capture_latest_sales_action(product_id, sink):
 
 
 def scrape_succeeded(product_name, market_price):
-    """A listing counts as scraped when the product page yielded a name and market price."""
-    if not product_name or product_name == "Unknown Product":
-        return False
-    if market_price in (None, "", "N/A"):
-        return False
-    return True
+    """A listing counts as scraped when we have a real name and a usable market price."""
+    ok, _reason = classify_scrape(product_name, market_price)
+    return ok
 
 
 def load_set_catalog():
@@ -509,8 +662,23 @@ def resolve_scrape_placement(set_name, family_id, set_index, family_index):
     }
 
 
+def format_issue_lines(issues):
+    """Group Discord failure/partial lines by reason, then set."""
+    by_reason = {}
+    for set_name, item, reason in issues:
+        by_reason.setdefault(reason, {})
+        by_reason[reason].setdefault(set_name, [])
+        if item not in by_reason[reason][set_name]:
+            by_reason[reason][set_name].append(item)
+    lines = []
+    for reason, sets in by_reason.items():
+        parts = [f"{set_name}: {', '.join(items)}" for set_name, items in sets.items()]
+        lines.append(f"- {reason} — {'; '.join(parts)}")
+    return lines
+
+
 def format_scrape_status(results, games, set_index, family_index):
-    """Discord body: per-era success, or set name plus the listings that failed."""
+    """Discord body: per-era success, or set name plus why listings failed/were partial."""
     grouped = {}
     for row in results:
         place = resolve_scrape_placement(row.get("setName"), row.get("familyId"), set_index, family_index)
@@ -519,17 +687,16 @@ def format_scrape_status(results, games, set_index, family_index):
             "game_id": place["game_id"],
             "game_name": place["game_name"],
             "family_name": place["family_name"],
-            "ok": True,
-            "failures": {},
+            "failures": [],
+            "partials": [],
         })
-        if row.get("ok"):
-            continue
-        bucket["ok"] = False
         set_name = row.get("setName") or "Unknown set"
         item = row.get("productName") or "Unknown product"
-        bucket["failures"].setdefault(set_name, [])
-        if item not in bucket["failures"][set_name]:
-            bucket["failures"][set_name].append(item)
+        reason = row.get("reason") or "unknown error"
+        if not row.get("ok"):
+            bucket["failures"].append((set_name, item, reason))
+        elif row.get("reason"):
+            bucket["partials"].append((set_name, item, reason))
 
     preferred = ["pokemon", "one-piece"]
     seen = {game["id"] for game in games}
@@ -551,12 +718,16 @@ def format_scrape_status(results, games, set_index, family_index):
             bucket = grouped.get((game_id, family_id))
             if not bucket:
                 continue
-            if bucket["ok"]:
+            if bucket["failures"]:
+                lines.append(f"{bucket['family_name']} - Failed")
+                lines.extend(format_issue_lines(bucket["failures"]))
+                if bucket["partials"]:
+                    lines.extend(format_issue_lines(bucket["partials"]))
+            elif bucket["partials"]:
+                lines.append(f"{bucket['family_name']} - Partial")
+                lines.extend(format_issue_lines(bucket["partials"]))
+            else:
                 lines.append(f"{bucket['family_name']} - Successfully Scraped")
-                continue
-            lines.append(f"{bucket['family_name']} - Failed")
-            for set_name, items in bucket["failures"].items():
-                lines.append(f"- {set_name}: {', '.join(items)}")
         if lines:
             blocks.append(f"**{game['name']}:**\n" + "\n".join(lines))
     return blocks
@@ -670,8 +841,8 @@ def main():
     with StealthySession(headless=True, solve_cloudflare=True) as session:
         for entry in entries:
             url = entry["url"]
-            print(f"\n======================================")
-            print(f"Scraping: {url}")
+            print(f"\n======================================", flush=True)
+            print(f"Scraping: {url}", flush=True)
             product_id = extract_product_id(url)
             listed = products_by_id.get(str(product_id or "")) or products_by_url.get(url.split("?")[0]) or {}
             fallback_name = listed.get("name") or url
@@ -679,18 +850,36 @@ def main():
             fallback_family = listed.get("familyId")
             try:
                 captured_sales = []
-                fetch_kwargs = {}
-                if product_id:
-                    fetch_kwargs["page_action"] = capture_latest_sales_action(product_id, captured_sales)
-
-                page = session.fetch(url, **fetch_kwargs)
-                soup = BeautifulSoup(page.body, 'html.parser')
+                soup = None
+                page_body = ""
+                empty_page = False
+                last_page = None
+                for attempt in range(1, EMPTY_PAGE_RETRIES + 2):
+                    captured_sales.clear()
+                    fetch_kwargs = {
+                        "timeout": PAGE_FETCH_TIMEOUT_MS,
+                        "wait_selector": "h1",
+                        "wait_selector_state": "visible",
+                    }
+                    if product_id:
+                        fetch_kwargs["page_action"] = capture_latest_sales_action(product_id, captured_sales)
+                    last_page = session.fetch(url, **fetch_kwargs)
+                    page_body = getattr(last_page, "body", "") or ""
+                    soup = BeautifulSoup(page_body, "html.parser")
+                    empty_page = page_looks_empty(soup, page_body)
+                    if not empty_page:
+                        break
+                    print(f"DEBUG: empty/blocked product page (attempt {attempt}/{EMPTY_PAGE_RETRIES + 1})", flush=True)
+                    if attempt <= EMPTY_PAGE_RETRIES:
+                        time.sleep(1.5 * attempt)
 
                 product_name = get_product_name(soup)
-                set_name = infer_set_name(url, product_name, entry.get("setName"))
+                html_name = product_name
+                set_name = infer_set_name(url, product_name if html_name != "Unknown Product" else "", entry.get("setName")) or fallback_set
                 product_kind = kind_lookup.get(str(product_id or ""))
                 image_url = extract_image_url(soup, product_id, image_lookup.get(str(product_id or "")))
-                market_price = extract_metric(soup, "Market Price")
+                html_price = extract_html_market_price(soup)
+                market_price = html_price
                 recent_sale = extract_metric(soup, "Most Recent Sale")
                 listed_median = extract_metric(soup, "Listed Median")
                 current_sellers = extract_metric(soup, "Current Sellers")
@@ -699,6 +888,8 @@ def main():
                 last_day_sales = "N/A"
                 daily_buckets = []
                 range_payload = {}
+                chart_price = None
+                display_name = fallback_name
 
                 if product_id:
                     try:
@@ -723,6 +914,14 @@ def main():
                             print(f">>> SUCCESS: Found Sales Data: {last_day_sales} across {len(daily_buckets)} daily buckets")
                     except Exception as e:
                         print(f"DEBUG: Chart history request error: {e}")
+
+                    chart_price = latest_chart_price(range_payload)
+                    if usable_price(html_price) is None and chart_price is not None:
+                        market_price = chart_price
+                        print(f"DEBUG: Using chart market price {chart_price} (page had {html_price!r})")
+                    if html_name == "Unknown Product" and fallback_name:
+                        product_name = fallback_name
+                    display_name = product_name if product_name and product_name != "Unknown Product" else fallback_name
 
                     if len(captured_sales) < LATEST_SALES_LIMIT:
                         fallback_sales = fetch_latest_sales_http(product_id, url)
@@ -749,14 +948,15 @@ def main():
                         "ranges": range_payload,
                     })
 
+                parsed_market = usable_price(market_price)
                 record = {
                     "date": today_date,
                     "productId": product_id,
-                    "productName": product_name,
-                    "setName": set_name,
+                    "productName": display_name,
+                    "setName": set_name or fallback_set,
                     "productKind": product_kind,
                     "imageUrl": image_url,
-                    "marketPrice": parse_numeric(market_price, as_float=True),
+                    "marketPrice": parsed_market,
                     "recentSale": parse_numeric(recent_sale, as_float=True),
                     "listedMedian": parse_numeric(listed_median, as_float=True),
                     "currentSellers": parse_numeric(current_sellers),
@@ -767,15 +967,22 @@ def main():
                 all_data_rows.append(record)
                 all_data_rows.extend(
                     history_records_for_product(
-                        product_id, product_name, url, daily_buckets, today_date, set_name, image_url, product_kind
+                        product_id, display_name, url, daily_buckets, today_date, set_name or fallback_set, image_url, product_kind
                     )
                 )
-                ok = scrape_succeeded(product_name, market_price)
-                item_name = product_name if product_name and product_name != "Unknown Product" else fallback_name
+                ok, reason = classify_scrape(
+                    html_name,
+                    html_price,
+                    chart_price=chart_price,
+                    empty_page=empty_page,
+                )
+                if reason:
+                    print(f">>> Scrape status: {'partial' if ok else 'failed'} — {reason}")
                 scrape_results.append({
                     "ok": ok,
+                    "reason": reason,
                     "setName": set_name or fallback_set or "Other",
-                    "productName": item_name,
+                    "productName": display_name,
                     "familyId": fallback_family,
                 })
 
@@ -783,6 +990,7 @@ def main():
                 print(f"Failed to scrape {url}: {e}")
                 scrape_results.append({
                     "ok": False,
+                    "reason": f"request error: {shorten_error(e)}",
                     "setName": fallback_set or "Other",
                     "productName": fallback_name,
                     "familyId": fallback_family,
