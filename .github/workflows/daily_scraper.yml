@@ -36,6 +36,7 @@ jobs:
       - name: Run Scraper
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          SCRAPE_CONCURRENCY: "3"
         run: python -u scraper.py
 
       - name: Commit tracker data
