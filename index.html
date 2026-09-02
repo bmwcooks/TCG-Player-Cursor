@@ -1303,7 +1303,7 @@
         volumeChangePct,
         salesCount,
         salesTotal,
-        spark: currentPoints.map((point) => usablePrice(point.marketPrice)),
+        spark: points.filter((point) => point.date <= end).slice(-Math.max(days, 7)).map((point) => usablePrice(point.marketPrice)),
         href: catalogHrefForSet(listed.setName || product.setName),
       };
     }

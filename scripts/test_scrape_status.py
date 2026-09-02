@@ -57,6 +57,50 @@ def test_format_status():
     assert "Successfully Scraped" not in text.split("XY - Failed")[0] or True
 
 
+def test_market_price_ignores_history_widget():
+    from bs4 import BeautifulSoup
+    html = '''
+    <html><body>
+    <h1>Furious Fists Elite Trainer Box</h1>
+    <div>Market Price$0.00Foil Market Price$0.00Past 3 MonthsDateNormal12/30 to 1/1$0.70</div>
+    <script type="application/ld+json">
+    {"@type":"Product","name":"Furious Fists Elite Trainer Box","offers":{"price":"199.99"}}
+    </script>
+    </body></html>
+    '''
+    soup = BeautifulSoup(html, "html.parser")
+    assert scraper.usable_price(scraper.extract_html_market_price(soup)) == 199.99
+
+
+def test_select_chart_sku_skips_empty_preferred():
+    skus = [
+        {"language": "English", "condition": "Unopened", "variant": "Normal", "buckets": []},
+        {"language": "English", "condition": "Near Mint", "variant": "Normal", "buckets": [
+            {"bucketStartDate": "2026-09-01", "quantitySold": 2, "marketPrice": 12}
+        ]},
+    ]
+    sku = scraper.select_chart_sku(skus)
+    assert sku["condition"] == "Near Mint"
+    assert scraper.parse_history_buckets({"result": skus})[0]["quantitySold"] == 2
+
+
+def test_merge_chart_history_keeps_previous_points():
+    existing = {"updatedAt": "2026-09-01", "products": [{
+        "productId": "1",
+        "productName": "Box",
+        "ranges": {"1M": {"interval": "day", "points": [{"date": "2026-09-01", "quantitySold": 4, "marketPrice": 10}]}},
+    }]}
+    incoming = [{
+        "productId": "1",
+        "productName": "Box",
+        "ranges": {"1M": {"interval": "day", "points": []}, "3M": {"interval": "3-day", "points": [{"date": "2026-08-31", "quantitySold": 9}]}},
+    }]
+    merged = scraper.merge_chart_history(existing, incoming, "2026-09-02")
+    product = merged["products"][0]
+    assert product["ranges"]["1M"]["points"][0]["quantitySold"] == 4
+    assert product["ranges"]["3M"]["points"][0]["quantitySold"] == 9
+
+
 def test_json_ld_and_empty_page():
     from bs4 import BeautifulSoup
     html = '''
@@ -158,6 +202,9 @@ if __name__ == "__main__":
     test_classify()
     test_format_status()
     test_json_ld_and_empty_page()
+    test_market_price_ignores_history_widget()
+    test_select_chart_sku_skips_empty_preferred()
+    test_merge_chart_history_keeps_previous_points()
     test_scrape_concurrency()
     test_bounded_gather_caps_inflight()
     test_scrape_all_entries_uses_parallel_tabs()
