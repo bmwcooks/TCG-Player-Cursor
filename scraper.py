@@ -1,3 +1,5 @@
+import asyncio
+import inspect
 import json
 import os
 import time
@@ -28,6 +30,8 @@ FAMILY_DISCORD_NAMES = {
 }
 PAGE_FETCH_TIMEOUT_MS = 20000
 EMPTY_PAGE_RETRIES = 1
+DEFAULT_SCRAPE_CONCURRENCY = 3
+MAX_SCRAPE_CONCURRENCY = 8
 BLOCKED_PAGE_MARKERS = (
     "just a moment",
     "attention required",
@@ -535,6 +539,7 @@ async ([productId, limit]) => {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
+        signal: AbortSignal.timeout(15000),
         body: JSON.stringify({
           conditions: [],
           languages: [],
@@ -568,14 +573,47 @@ async ([productId, limit]) => {
 """
 
 
+async def maybe_await(value):
+    if inspect.isawaitable(value):
+        return await value
+    return value
+
+
+def scrape_concurrency(raw=None):
+    """How many headless Chrome tabs to keep busy at once (1–8)."""
+    value = os.environ.get("SCRAPE_CONCURRENCY") if raw is None else raw
+    if value is None or str(value).strip() == "":
+        return DEFAULT_SCRAPE_CONCURRENCY
+    try:
+        count = int(value)
+    except (TypeError, ValueError):
+        return DEFAULT_SCRAPE_CONCURRENCY
+    return max(1, min(count, MAX_SCRAPE_CONCURRENCY))
+
+
+async def bounded_gather(items, concurrency, func):
+    """Run async work with a hard cap so Scrapling's tab pool is never oversubscribed."""
+    semaphore = asyncio.Semaphore(max(1, concurrency))
+
+    async def run(index, item):
+        async with semaphore:
+            return index, await func(index, item)
+
+    pairs = await asyncio.gather(*(run(index, item) for index, item in enumerate(items)))
+    pairs.sort(key=lambda row: row[0])
+    return [item for _index, item in pairs]
+
+
 def capture_latest_sales_action(product_id, sink):
-    def page_action(page):
+    """Async page_action for AsyncStealthySession (it awaits this callback)."""
+    async def page_action(page):
         try:
             evaluate = getattr(page, "evaluate")
             try:
                 result = evaluate(LATEST_SALES_JS, [str(product_id), LATEST_SALES_LIMIT], isolated_context=False)
             except TypeError:
                 result = evaluate(LATEST_SALES_JS, [str(product_id), LATEST_SALES_LIMIT])
+            result = await maybe_await(result)
             sales = result.get("sales") if isinstance(result, dict) else result
             if isinstance(sales, list):
                 sink.extend(sales)
@@ -812,6 +850,220 @@ def upsert_records(existing, new_records):
     return existing
 
 
+def empty_scrape_result(entry, listed, error=None):
+    url = entry["url"]
+    product_id = extract_product_id(url)
+    fallback_name = listed.get("name") or url
+    fallback_set = entry.get("setName") or listed.get("setName")
+    return {
+        "records": [],
+        "chart_product": None,
+        "latest_sales": [],
+        "scrape_result": {
+            "ok": False,
+            "reason": f"request error: {shorten_error(error)}" if error else "unknown error",
+            "setName": fallback_set or "Other",
+            "productName": fallback_name,
+            "familyId": listed.get("familyId"),
+        },
+    }
+
+
+def fetch_chart_ranges(product_id, url, today_date):
+    range_payload = {}
+    daily_buckets = []
+    last_day_sales = "N/A"
+    try:
+        for range_name, meta in CHART_RANGES.items():
+            points = fetch_price_history(product_id, range_name, url)
+            range_payload[meta["key"]] = {
+                "interval": meta["interval"],
+                "label": meta["label"],
+                "points": points,
+            }
+            print(f">>> {meta['key']}: {len(points)} {meta['interval']} buckets")
+        daily_buckets = [
+            {
+                "date": point["date"],
+                "quantitySold": point["quantitySold"],
+                "marketPrice": point["marketPrice"],
+            }
+            for point in (range_payload.get("1M") or {}).get("points") or []
+        ]
+        last_day_sales = latest_completed_sales(daily_buckets, today_date)
+        if last_day_sales != "N/A":
+            print(f">>> SUCCESS: Found Sales Data: {last_day_sales} across {len(daily_buckets)} daily buckets")
+    except Exception as exc:
+        print(f"DEBUG: Chart history request error: {exc}")
+    return range_payload, daily_buckets, last_day_sales
+
+
+async def scrape_one_entry(session, entry, ctx):
+    """Fetch one product page in a pooled Chrome tab, then pull Infinite chart/sales APIs."""
+    from bs4 import BeautifulSoup
+
+    url = entry["url"]
+    product_id = extract_product_id(url)
+    listed = ctx["products_by_id"].get(str(product_id or "")) or ctx["products_by_url"].get(url.split("?")[0]) or {}
+    fallback_name = listed.get("name") or url
+    fallback_set = entry.get("setName") or listed.get("setName")
+    fallback_family = listed.get("familyId")
+    today_date = ctx["today_date"]
+
+    try:
+        captured_sales = []
+        soup = None
+        page_body = ""
+        empty_page = False
+        for attempt in range(1, EMPTY_PAGE_RETRIES + 2):
+            captured_sales.clear()
+            fetch_kwargs = {
+                "timeout": PAGE_FETCH_TIMEOUT_MS,
+                "wait_selector": "h1",
+                "wait_selector_state": "visible",
+            }
+            if product_id:
+                fetch_kwargs["page_action"] = capture_latest_sales_action(product_id, captured_sales)
+            last_page = await maybe_await(session.fetch(url, **fetch_kwargs))
+            page_body = getattr(last_page, "body", "") or ""
+            soup = BeautifulSoup(page_body, "html.parser")
+            empty_page = page_looks_empty(soup, page_body)
+            if not empty_page:
+                break
+            print(f"DEBUG: empty/blocked product page (attempt {attempt}/{EMPTY_PAGE_RETRIES + 1})", flush=True)
+            if attempt <= EMPTY_PAGE_RETRIES:
+                await asyncio.sleep(1.5 * attempt)
+
+        product_name = get_product_name(soup)
+        html_name = product_name
+        set_name = infer_set_name(url, product_name if html_name != "Unknown Product" else "", entry.get("setName")) or fallback_set
+        product_kind = ctx["kind_lookup"].get(str(product_id or ""))
+        image_url = extract_image_url(soup, product_id, ctx["image_lookup"].get(str(product_id or "")))
+        html_price = extract_html_market_price(soup)
+        market_price = html_price
+        recent_sale = extract_metric(soup, "Most Recent Sale")
+        listed_median = extract_metric(soup, "Listed Median")
+        current_sellers = extract_metric(soup, "Current Sellers")
+        current_quantity = extract_metric(soup, "Current Quantity")
+
+        daily_buckets = []
+        range_payload = {}
+        chart_price = None
+        display_name = fallback_name
+        latest_sales = []
+        chart_product = None
+
+        if product_id:
+            range_payload, daily_buckets, last_day_sales = await asyncio.to_thread(
+                fetch_chart_ranges, product_id, url, today_date
+            )
+            chart_price = latest_chart_price(range_payload)
+            if usable_price(html_price) is None and chart_price is not None:
+                market_price = chart_price
+                print(f"DEBUG: Using chart market price {chart_price} (page had {html_price!r})")
+            if html_name == "Unknown Product" and fallback_name:
+                product_name = fallback_name
+            display_name = product_name if product_name and product_name != "Unknown Product" else fallback_name
+
+            if len(captured_sales) < LATEST_SALES_LIMIT:
+                fallback_sales = await asyncio.to_thread(fetch_latest_sales_http, product_id, url)
+                if len(fallback_sales) > len(captured_sales):
+                    captured_sales = fallback_sales
+            normalized = [
+                sale for sale in (
+                    normalize_sale(row, product_id, product_name, url, set_name)
+                    for row in captured_sales
+                )
+                if sale and sale.get("orderDate")
+            ]
+            normalized.sort(key=lambda row: row.get("orderDate") or "", reverse=True)
+            latest_sales = normalized[:LATEST_SALES_LIMIT]
+            print(f">>> Latest transactions captured: {len(latest_sales)}")
+
+            chart_product = {
+                "productId": product_id,
+                "productName": product_name,
+                "setName": set_name,
+                "productKind": product_kind,
+                "imageUrl": image_url,
+                "url": url,
+                "ranges": range_payload,
+            }
+
+        parsed_market = usable_price(market_price)
+        record = {
+            "date": today_date,
+            "productId": product_id,
+            "productName": display_name,
+            "setName": set_name or fallback_set,
+            "productKind": product_kind,
+            "imageUrl": image_url,
+            "marketPrice": parsed_market,
+            "recentSale": parse_numeric(recent_sale, as_float=True),
+            "listedMedian": parse_numeric(listed_median, as_float=True),
+            "currentSellers": parse_numeric(current_sellers),
+            "currentQuantity": parse_numeric(current_quantity),
+            "lastDaySales": None,
+            "url": url,
+        }
+        records = [record]
+        records.extend(
+            history_records_for_product(
+                product_id, display_name, url, daily_buckets, today_date, set_name or fallback_set, image_url, product_kind
+            )
+        )
+        ok, reason = classify_scrape(
+            html_name,
+            html_price,
+            chart_price=chart_price,
+            empty_page=empty_page,
+        )
+        if reason:
+            print(f">>> Scrape status: {'partial' if ok else 'failed'} — {reason}")
+        return {
+            "records": records,
+            "chart_product": chart_product,
+            "latest_sales": latest_sales,
+            "scrape_result": {
+                "ok": ok,
+                "reason": reason,
+                "setName": set_name or fallback_set or "Other",
+                "productName": display_name,
+                "familyId": fallback_family,
+            },
+        }
+    except Exception as exc:
+        print(f"Failed to scrape {url}: {exc}")
+        return empty_scrape_result(entry, listed, error=exc)
+
+
+async def scrape_all_entries(session, entries, ctx, concurrency):
+    total = len(entries)
+
+    async def run_one(index, entry):
+        print(f"\n======================================", flush=True)
+        print(f"Scraping [{index + 1}/{total}]: {entry['url']}", flush=True)
+        return await scrape_one_entry(session, entry, ctx)
+
+    return await bounded_gather(entries, concurrency, run_one)
+
+
+async def scrape_with_session(entries, ctx, concurrency):
+    from scrapling.fetchers import AsyncStealthySession
+
+    print(
+        f"Initializing Scrapling AsyncStealthySession with {concurrency} "
+        f"headless Chrome tab(s) for {len(entries)} URLs..."
+    )
+    async with AsyncStealthySession(
+        headless=True,
+        solve_cloudflare=True,
+        max_pages=concurrency,
+        timeout=PAGE_FETCH_TIMEOUT_MS,
+    ) as session:
+        return await scrape_all_entries(session, entries, ctx, concurrency)
+
+
 def main():
     # --- 1. Read URLs ---
     if not os.path.exists(URLS_FILE):
@@ -824,177 +1076,30 @@ def main():
         return
 
     # --- 2. Scrape Data ---
+    today_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    concurrency = scrape_concurrency()
+    ctx = {
+        "today_date": today_date,
+        "image_lookup": load_image_lookup(),
+        "kind_lookup": catalog_kind_lookup(),
+        "products_by_id": None,
+        "products_by_url": None,
+    }
+    games_order, set_index, family_index = load_set_catalog()
+    ctx["products_by_id"], ctx["products_by_url"] = product_lookups()
+
+    results = asyncio.run(scrape_with_session(entries, ctx, concurrency))
+
     all_data_rows = []
     scrape_results = []
     chart_products = []
     latest_sales_rows = []
-    today_date = datetime.datetime.now().strftime("%Y-%m-%d")
-
-    from bs4 import BeautifulSoup
-    from scrapling.fetchers import StealthySession
-
-    print(f"Initializing Scrapling StealthySession to scrape {len(entries)} URLs...")
-    image_lookup = load_image_lookup()
-    kind_lookup = catalog_kind_lookup()
-    games_order, set_index, family_index = load_set_catalog()
-    products_by_id, products_by_url = product_lookups()
-    with StealthySession(headless=True, solve_cloudflare=True) as session:
-        for entry in entries:
-            url = entry["url"]
-            print(f"\n======================================", flush=True)
-            print(f"Scraping: {url}", flush=True)
-            product_id = extract_product_id(url)
-            listed = products_by_id.get(str(product_id or "")) or products_by_url.get(url.split("?")[0]) or {}
-            fallback_name = listed.get("name") or url
-            fallback_set = entry.get("setName") or listed.get("setName")
-            fallback_family = listed.get("familyId")
-            try:
-                captured_sales = []
-                soup = None
-                page_body = ""
-                empty_page = False
-                last_page = None
-                for attempt in range(1, EMPTY_PAGE_RETRIES + 2):
-                    captured_sales.clear()
-                    fetch_kwargs = {
-                        "timeout": PAGE_FETCH_TIMEOUT_MS,
-                        "wait_selector": "h1",
-                        "wait_selector_state": "visible",
-                    }
-                    if product_id:
-                        fetch_kwargs["page_action"] = capture_latest_sales_action(product_id, captured_sales)
-                    last_page = session.fetch(url, **fetch_kwargs)
-                    page_body = getattr(last_page, "body", "") or ""
-                    soup = BeautifulSoup(page_body, "html.parser")
-                    empty_page = page_looks_empty(soup, page_body)
-                    if not empty_page:
-                        break
-                    print(f"DEBUG: empty/blocked product page (attempt {attempt}/{EMPTY_PAGE_RETRIES + 1})", flush=True)
-                    if attempt <= EMPTY_PAGE_RETRIES:
-                        time.sleep(1.5 * attempt)
-
-                product_name = get_product_name(soup)
-                html_name = product_name
-                set_name = infer_set_name(url, product_name if html_name != "Unknown Product" else "", entry.get("setName")) or fallback_set
-                product_kind = kind_lookup.get(str(product_id or ""))
-                image_url = extract_image_url(soup, product_id, image_lookup.get(str(product_id or "")))
-                html_price = extract_html_market_price(soup)
-                market_price = html_price
-                recent_sale = extract_metric(soup, "Most Recent Sale")
-                listed_median = extract_metric(soup, "Listed Median")
-                current_sellers = extract_metric(soup, "Current Sellers")
-                current_quantity = extract_metric(soup, "Current Quantity")
-
-                last_day_sales = "N/A"
-                daily_buckets = []
-                range_payload = {}
-                chart_price = None
-                display_name = fallback_name
-
-                if product_id:
-                    try:
-                        for range_name, meta in CHART_RANGES.items():
-                            points = fetch_price_history(product_id, range_name, url)
-                            range_payload[meta["key"]] = {
-                                "interval": meta["interval"],
-                                "label": meta["label"],
-                                "points": points,
-                            }
-                            print(f">>> {meta['key']}: {len(points)} {meta['interval']} buckets")
-                        daily_buckets = [
-                            {
-                                "date": point["date"],
-                                "quantitySold": point["quantitySold"],
-                                "marketPrice": point["marketPrice"],
-                            }
-                            for point in (range_payload.get("1M") or {}).get("points") or []
-                        ]
-                        last_day_sales = latest_completed_sales(daily_buckets, today_date)
-                        if last_day_sales != "N/A":
-                            print(f">>> SUCCESS: Found Sales Data: {last_day_sales} across {len(daily_buckets)} daily buckets")
-                    except Exception as e:
-                        print(f"DEBUG: Chart history request error: {e}")
-
-                    chart_price = latest_chart_price(range_payload)
-                    if usable_price(html_price) is None and chart_price is not None:
-                        market_price = chart_price
-                        print(f"DEBUG: Using chart market price {chart_price} (page had {html_price!r})")
-                    if html_name == "Unknown Product" and fallback_name:
-                        product_name = fallback_name
-                    display_name = product_name if product_name and product_name != "Unknown Product" else fallback_name
-
-                    if len(captured_sales) < LATEST_SALES_LIMIT:
-                        fallback_sales = fetch_latest_sales_http(product_id, url)
-                        if len(fallback_sales) > len(captured_sales):
-                            captured_sales = fallback_sales
-                    normalized = [
-                        sale for sale in (
-                            normalize_sale(row, product_id, product_name, url, set_name)
-                            for row in captured_sales
-                        )
-                        if sale and sale.get("orderDate")
-                    ]
-                    normalized.sort(key=lambda row: row.get("orderDate") or "", reverse=True)
-                    latest_sales_rows.extend(normalized[:LATEST_SALES_LIMIT])
-                    print(f">>> Latest transactions captured: {min(len(normalized), LATEST_SALES_LIMIT)}")
-
-                    chart_products.append({
-                        "productId": product_id,
-                        "productName": product_name,
-                        "setName": set_name,
-                        "productKind": product_kind,
-                        "imageUrl": image_url,
-                        "url": url,
-                        "ranges": range_payload,
-                    })
-
-                parsed_market = usable_price(market_price)
-                record = {
-                    "date": today_date,
-                    "productId": product_id,
-                    "productName": display_name,
-                    "setName": set_name or fallback_set,
-                    "productKind": product_kind,
-                    "imageUrl": image_url,
-                    "marketPrice": parsed_market,
-                    "recentSale": parse_numeric(recent_sale, as_float=True),
-                    "listedMedian": parse_numeric(listed_median, as_float=True),
-                    "currentSellers": parse_numeric(current_sellers),
-                    "currentQuantity": parse_numeric(current_quantity),
-                    "lastDaySales": None,
-                    "url": url,
-                }
-                all_data_rows.append(record)
-                all_data_rows.extend(
-                    history_records_for_product(
-                        product_id, display_name, url, daily_buckets, today_date, set_name or fallback_set, image_url, product_kind
-                    )
-                )
-                ok, reason = classify_scrape(
-                    html_name,
-                    html_price,
-                    chart_price=chart_price,
-                    empty_page=empty_page,
-                )
-                if reason:
-                    print(f">>> Scrape status: {'partial' if ok else 'failed'} — {reason}")
-                scrape_results.append({
-                    "ok": ok,
-                    "reason": reason,
-                    "setName": set_name or fallback_set or "Other",
-                    "productName": display_name,
-                    "familyId": fallback_family,
-                })
-
-            except Exception as e:
-                print(f"Failed to scrape {url}: {e}")
-                scrape_results.append({
-                    "ok": False,
-                    "reason": f"request error: {shorten_error(e)}",
-                    "setName": fallback_set or "Other",
-                    "productName": fallback_name,
-                    "familyId": fallback_family,
-                })
+    for item in results:
+        all_data_rows.extend(item.get("records") or [])
+        scrape_results.append(item["scrape_result"])
+        if item.get("chart_product"):
+            chart_products.append(item["chart_product"])
+        latest_sales_rows.extend(item.get("latest_sales") or [])
 
     if all_data_rows:
         print("\nWriting tracker data to local JSON...")

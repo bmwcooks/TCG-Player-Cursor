@@ -73,8 +73,37 @@ def test_json_ld_and_empty_page():
     assert scraper.page_looks_empty(blocked, "Just a moment...") is True
 
 
+def test_scrape_concurrency():
+    assert scraper.scrape_concurrency("") == scraper.DEFAULT_SCRAPE_CONCURRENCY
+    assert scraper.scrape_concurrency("4") == 4
+    assert scraper.scrape_concurrency("99") == scraper.MAX_SCRAPE_CONCURRENCY
+    assert scraper.scrape_concurrency("0") == 1
+    assert scraper.scrape_concurrency("nope") == scraper.DEFAULT_SCRAPE_CONCURRENCY
+
+
+def test_bounded_gather_caps_inflight():
+    import asyncio
+
+    inflight = 0
+    peak = 0
+
+    async def work(_index, item):
+        nonlocal inflight, peak
+        inflight += 1
+        peak = max(peak, inflight)
+        await asyncio.sleep(0.02)
+        inflight -= 1
+        return item * 2
+
+    results = asyncio.run(scraper.bounded_gather(range(8), 3, work))
+    assert results == [0, 2, 4, 6, 8, 10, 12, 14]
+    assert peak == 3
+
+
 if __name__ == "__main__":
     test_classify()
     test_format_status()
     test_json_ld_and_empty_page()
+    test_scrape_concurrency()
+    test_bounded_gather_caps_inflight()
     print("scrape status tests passed")
