@@ -1675,13 +1675,11 @@
     function applyCustomMoversDates() {
       const from = document.getElementById("movers-from");
       const to = document.getElementById("movers-to");
-      moversCustomStart = from && from.value ? from.value : "";
-      moversCustomEnd = to && to.value ? to.value : "";
-      if (!moversCustomStart && !moversCustomEnd) {
-        moversRangeMode = "preset";
-        renderMovers();
-        return;
-      }
+      const nextStart = from && from.value ? from.value : moversCustomStart;
+      const nextEnd = to && to.value ? to.value : moversCustomEnd;
+      if (!nextStart && !nextEnd) return;
+      moversCustomStart = nextStart;
+      moversCustomEnd = nextEnd || nextStart;
       moversRangeMode = "custom";
       renderMovers();
     }
@@ -2381,8 +2379,12 @@
       });
       document.getElementById("movers-custom-apply").addEventListener("click", applyCustomMoversDates);
       document.getElementById("movers-custom-clear").addEventListener("click", clearCustomMoversDates);
-      document.getElementById("movers-from").addEventListener("change", applyCustomMoversDates);
-      document.getElementById("movers-to").addEventListener("change", applyCustomMoversDates);
+      const onDateFieldChange = (event) => {
+        if (!event.target.value) return;
+        applyCustomMoversDates();
+      };
+      document.getElementById("movers-from").addEventListener("change", onDateFieldChange);
+      document.getElementById("movers-to").addEventListener("change", onDateFieldChange);
       document.getElementById("movers-exclude-toggle").addEventListener("click", (event) => {
         event.stopPropagation();
         moversExcludeOpen = !moversExcludeOpen;
