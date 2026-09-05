@@ -1704,6 +1704,7 @@
         <button type="button" data-days="${days}" class="${rangeChipClass(presetActive && moversRangeDays === days)}">${days} Day${days === 1 ? "" : "s"}</button>
       `);
       chips.push(`<button type="button" data-range="all" class="${rangeChipClass(moversRangeMode === "all")}">All Time</button>`);
+      chips.push(`<button type="button" data-range="custom" class="${rangeChipClass(moversRangeMode === "custom")}">Custom</button>`);
       host.innerHTML = chips.join("");
       host.querySelectorAll("button[data-days]").forEach((button) => {
         button.addEventListener("click", () => {
@@ -1719,6 +1720,15 @@
         moversCustomStart = "";
         moversCustomEnd = "";
         renderMovers();
+      });
+      host.querySelector("[data-range='custom']").addEventListener("click", () => {
+        const bounds = moversDateBounds();
+        if (!moversCustomStart) moversCustomStart = isoAddDays(bounds.max, -6);
+        if (!moversCustomEnd) moversCustomEnd = bounds.max;
+        moversRangeMode = "custom";
+        renderMovers();
+        const from = document.getElementById("movers-from");
+        if (from) from.focus();
       });
       syncMoversDateInputs();
     }
@@ -1769,7 +1779,7 @@
           <td class="px-3 py-2 tabular ${changeClass(row.priceChangeAbs, row.soldInWindow)}">${row.priceChangeAbs == null ? "—" : `${row.priceChangeAbs > 0 ? "+" : ""}${formatMoney(row.priceChangeAbs)}`}</td>
           <td class="px-3 py-2 tabular ${row.lastSaleInWindow ? "" : "text-zinc-500"}">
             <div>${formatMoney(row.lastSale)}</div>
-            <div class="text-[11px] text-zinc-500">${escapeHtml(daysAgoLabel(row.lastSaleAt))}${row.lastSaleAt && !row.lastSaleInWindow ? " · outside window" : ""}</div>
+            <div class="text-[11px] text-zinc-500">${escapeHtml(daysAgoLabel(row.lastSaleAt))}${row.lastSaleAt && !row.soldInWindow ? " · no sales in window" : ""}</div>
           </td>
           <td class="px-3 py-2 tabular">${formatMoney(row.avgPrice)}</td>
           <td class="px-3 py-2 tabular">${formatMoney(row.startPrice)}</td>
