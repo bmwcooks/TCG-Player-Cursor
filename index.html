@@ -127,6 +127,18 @@
     .movers-up { color: #34d399; }
     .movers-down { color: #fb7185; }
     .movers-flat { color: #94a3b8; }
+    .movers-idle td {
+      color: #71717a;
+    }
+    .movers-idle td.sticky-col {
+      color: #71717a;
+    }
+    .movers-idle a {
+      color: #a1a1aa;
+    }
+    .movers-date {
+      color-scheme: dark;
+    }
     .sort-btn[aria-sort="descending"] .sort-caret,
     .sort-btn[aria-sort="ascending"] .sort-caret {
       opacity: 1;
@@ -422,8 +434,20 @@
 
       <div class="mx-auto max-w-[1600px] px-4 py-4 sm:px-6">
         <div class="mb-4 flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-          <div>
+          <div class="min-w-0">
             <div id="movers-range" class="flex flex-wrap gap-1.5" role="group" aria-label="Date range"></div>
+            <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-zinc-400">
+              <label class="flex items-center gap-1.5">
+                <span>From</span>
+                <input id="movers-from" type="date" class="movers-date rounded-lg border border-white/10 bg-[#12161d] px-2 py-1 text-xs text-zinc-100 outline-none ring-gold-400 focus:ring-2" />
+              </label>
+              <label class="flex items-center gap-1.5">
+                <span>To</span>
+                <input id="movers-to" type="date" class="movers-date rounded-lg border border-white/10 bg-[#12161d] px-2 py-1 text-xs text-zinc-100 outline-none ring-gold-400 focus:ring-2" />
+              </label>
+              <button type="button" id="movers-custom-apply" class="rounded-lg border border-white/10 bg-[#12161d] px-2.5 py-1 text-xs font-medium text-zinc-100 transition hover:border-gold-500">Apply dates</button>
+              <button type="button" id="movers-custom-clear" class="hidden rounded-lg px-2 py-1 text-xs font-medium text-zinc-400 hover:text-zinc-100">Clear dates</button>
+            </div>
           </div>
           <div class="flex flex-wrap items-center gap-2">
             <label class="flex items-center gap-2 text-xs text-zinc-400">
@@ -506,6 +530,9 @@
     let salesChart = null;
     let latestByProduct = [];
     let moversRangeDays = 30;
+    let moversRangeMode = "preset";
+    let moversCustomStart = "";
+    let moversCustomEnd = "";
     let moversSortKey = "priceChangePct";
     let moversSortDir = "desc";
     let moversCategory = "all";
@@ -514,6 +541,7 @@
     let moversExcludeQuery = "";
     let moversExclusions = { families: [], sets: [], products: [] };
     const MOVERS_RANGES = [1, 3, 7, 14, 30, 60, 90, 180, 365];
+    const CHANGE_SORT_KEYS = new Set(["priceChangePct", "priceChangeAbs", "volumeChangePct"]);
     const MOVERS_EXCLUDE_KEY = "moversExclusions";
     const FAMILY_SHORT_NAMES = {
       xy: "XY",
@@ -958,18 +986,81 @@
       return isoAddDays(asOf, -1);
     }
 
-    function moversWindow(days) {
-      const count = Math.max(1, Number(days) || 1);
-      const end = moversVolumeEnd();
-      const start = isoAddDays(end, -(count - 1));
+    function isoDateOnly(value) {
+      return String(value || "").slice(0, 10);
+    }
+
+    function dateInRange(iso, start, end) {
+      const day = isoDateOnly(iso);
+      return Boolean(day && start && end && day >= start && day <= end);
+    }
+
+    function moversSpanDays(start, end) {
+      if (!start || !end) return 1;
+      const first = new Date(`${start}T00:00:00Z`).getTime();
+      const last = new Date(`${end}T00:00:00Z`).getTime();
+      if (Number.isNaN(first) || Number.isNaN(last)) return 1;
+      return Math.max(1, Math.round(Math.abs(last - first) / DAY_MS) + 1);
+    }
+
+    function moversDateBounds() {
+      let min = null;
+      (chartHistory.products || []).forEach((product) => {
+        ["1M", "3M", "1Y"].forEach((key) => {
+          ((product.ranges || {})[key]?.points || []).forEach((point) => {
+            if (point && point.date && (!min || point.date < min)) min = point.date;
+          });
+        });
+      });
+      return {
+        min: min || "2016-01-01",
+        max: moversVolumeEnd() || moversAsOf() || new Date().toISOString().slice(0, 10),
+      };
+    }
+
+    function moversWindow() {
+      const asOf = moversAsOf();
+      const completed = moversVolumeEnd() || asOf;
+      if (moversRangeMode === "custom" && (moversCustomStart || moversCustomEnd)) {
+        let start = moversCustomStart || moversCustomEnd;
+        let end = moversCustomEnd || moversCustomStart;
+        if (start > end) {
+          const swap = start;
+          start = end;
+          end = swap;
+        }
+        if (completed && end > completed) end = completed;
+        const days = moversSpanDays(start, end);
+        const prevEnd = isoAddDays(start, -1);
+        const prevStart = isoAddDays(prevEnd, -(days - 1));
+        return { start, end, prevStart, prevEnd, asOf, days, mode: "custom" };
+      }
+      if (moversRangeMode === "all") {
+        const bounds = moversDateBounds();
+        return {
+          start: bounds.min,
+          end: completed,
+          prevStart: null,
+          prevEnd: null,
+          asOf,
+          days: moversSpanDays(bounds.min, completed),
+          mode: "all",
+        };
+      }
+      const days = Math.max(1, Number(moversRangeDays) || 1);
+      const end = completed;
+      const start = isoAddDays(end, -(days - 1));
       const prevEnd = isoAddDays(start, -1);
-      const prevStart = isoAddDays(prevEnd, -(count - 1));
-      return { start, end, prevStart, prevEnd, asOf: moversAsOf(), days: count };
+      const prevStart = isoAddDays(prevEnd, -(days - 1));
+      return { start, end, prevStart, prevEnd, asOf, days, mode: "preset" };
     }
 
     function moversWindowLabel() {
-      const { start, end, days } = moversWindow(moversRangeDays);
-      const unit = days === 1 ? "1 day" : `${days} days`;
+      const { start, end, days, mode } = moversWindow();
+      if (mode === "all") return `all time · through ${end}`;
+      const unit = mode === "custom"
+        ? (start === end ? "custom · 1 day" : `custom · ${days} days`)
+        : (days === 1 ? "1 day" : `${days} days`);
       if (start === end) return `${unit} · ${end}`;
       return `${unit} · ${start} to ${end}`;
     }
@@ -1160,21 +1251,21 @@
       renderMovers();
     }
 
-    function chartPointsForWindow(product, days) {
-      const end = moversAsOf();
-      const start = isoAddDays(end, -days);
+    function chartPointsForWindow(product) {
+      const { days, mode } = moversWindow();
+      const span = mode === "all" ? 400 : days;
       const ranges = product.ranges || {};
       let points = [];
-      if (days <= 35) points = ranges["1M"]?.points || [];
-      if ((days > 35 && days <= 100) || points.length < 2) {
+      if (span <= 35) points = ranges["1M"]?.points || [];
+      if ((span > 35 && span <= 100) || points.length < 2) {
         const quarterly = ranges["3M"]?.points || [];
         if (quarterly.length > points.length) points = quarterly;
       }
-      if (days > 100 || points.length < 2) {
+      if (span > 100 || points.length < 2) {
         const annual = ranges["1Y"]?.points || [];
         if (annual.length) points = annual;
       }
-      return protectPriceSeries(points, days <= 35 ? "1M" : days <= 100 ? "3M" : "1Y")
+      return protectPriceSeries(points, span <= 35 ? "1M" : span <= 100 ? "3M" : "1Y")
         .filter((point) => point && point.date)
         .sort((a, b) => a.date.localeCompare(b.date));
     }
@@ -1194,7 +1285,7 @@
       return null;
     }
 
-    function sparklineSvg(values) {
+    function sparklineSvg(values, active = true) {
       const nums = values.filter((value) => value != null);
       if (nums.length < 2) return `<span class="text-zinc-600">—</span>`;
       const width = 96;
@@ -1211,12 +1302,12 @@
         coords.push(`${x.toFixed(1)},${y.toFixed(1)}`);
       });
       const up = nums[nums.length - 1] >= nums[0];
-      const color = up ? "#34d399" : "#fb7185";
+      const color = active ? (up ? "#34d399" : "#fb7185") : "#71717a";
       return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" aria-hidden="true"><polyline fill="none" stroke="${color}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" points="${coords.join(" ")}"/></svg>`;
     }
 
-    function changeClass(value) {
-      if (value == null || Number.isNaN(value) || value === 0) return "movers-flat";
+    function changeClass(value, active = true) {
+      if (!active || value == null || Number.isNaN(value) || value === 0) return "movers-flat";
       return value > 0 ? "movers-up" : "movers-down";
     }
 
@@ -1246,24 +1337,30 @@
     }
 
     function buildMoverRow(product) {
-      const days = moversRangeDays;
-      const { start, end, prevStart, prevEnd } = moversWindow(days);
+      const { start, end, prevStart, prevEnd, days, mode } = moversWindow();
       const listed = productById(product.productId) || {};
-      const points = chartPointsForWindow(product, days);
+      const points = chartPointsForWindow(product);
       const currentPoints = pointsInRange(points, start, end);
-      const previousPoints = pointsInRange(points, prevStart, prevEnd);
-      const startPrice = lastPriceOnOrBefore(points, isoAddDays(start, -1))
-        ?? currentPoints.map((point) => usablePrice(point.marketPrice)).find((value) => value != null)
-        ?? null;
+      const previousPoints = prevStart && prevEnd ? pointsInRange(points, prevStart, prevEnd) : [];
+      const startPrice = mode === "all"
+        ? points.map((point) => usablePrice(point.marketPrice)).find((value) => value != null) ?? null
+        : lastPriceOnOrBefore(points, isoAddDays(start, -1))
+          ?? currentPoints.map((point) => usablePrice(point.marketPrice)).find((value) => value != null)
+          ?? null;
       const endPrice = lastPriceOnOrBefore(points, end);
       const priceChangeAbs = startPrice != null && endPrice != null ? endPrice - startPrice : null;
       const priceChangePct = startPrice ? (priceChangeAbs / startPrice) * 100 : null;
       const volumeNow = currentPoints.reduce((sum, point) => sum + pointVolume(point), 0);
       const volumePrev = previousPoints.reduce((sum, point) => sum + pointVolume(point), 0);
-      const volumeChangePct = volumePrev > 0 ? ((volumeNow - volumePrev) / volumePrev) * 100 : (volumeNow > 0 ? 100 : null);
+      const volumeChangePct = mode === "all"
+        ? null
+        : (volumePrev > 0 ? ((volumeNow - volumePrev) / volumePrev) * 100 : (volumeNow > 0 ? 100 : null));
 
       const lastSaleRow = [...filteredSalesForMovers(product.productId)].sort((a, b) => String(b.orderDate || "").localeCompare(String(a.orderDate || "")))[0] || null;
+      const lastSaleAt = lastSaleRow ? lastSaleRow.orderDate : "";
+      const lastSaleInWindow = dateInRange(lastSaleAt, start, end);
       const salesCount = volumeNow;
+      const soldInWindow = salesCount > 0 || lastSaleInWindow;
       const salesTotal = currentPoints.reduce((sum, point) => {
         const price = usablePrice(point.marketPrice);
         return price != null ? sum + price * pointVolume(point) : sum;
@@ -1282,6 +1379,7 @@
 
       const setName = listed.setName || product.setName || "";
       const familyId = listed.familyId || familyIdForProduct(product) || catalogEntryForSet(setName)?.family?.id || "";
+      const sparkCount = mode === "all" ? 52 : Math.max(days, 7);
 
       return {
         productId: String(product.productId),
@@ -1295,7 +1393,9 @@
         priceChangePct,
         priceChangeAbs,
         lastSale: lastSaleRow ? lastSaleRow.purchasePrice : null,
-        lastSaleAt: lastSaleRow ? lastSaleRow.orderDate : "",
+        lastSaleAt,
+        lastSaleInWindow,
+        soldInWindow,
         avgPrice: Number.isFinite(avgPrice) ? avgPrice : null,
         startPrice,
         lowSale,
@@ -1303,7 +1403,7 @@
         volumeChangePct,
         salesCount,
         salesTotal,
-        spark: points.filter((point) => point.date <= end).slice(-Math.max(days, 7)).map((point) => usablePrice(point.marketPrice)),
+        spark: points.filter((point) => point.date <= end).slice(-sparkCount).map((point) => usablePrice(point.marketPrice)),
         href: catalogHrefForSet(listed.setName || product.setName),
       };
     }
@@ -1343,6 +1443,9 @@
       const afterExclusions = inCategory.filter((row) => !productIsExcluded(row.productId, row.setName, row.familyId));
       const rows = afterExclusions.filter((row) => rowMatchesMoversQuery(row, query));
       rows.sort((a, b) => {
+        if (CHANGE_SORT_KEYS.has(moversSortKey) && a.soldInWindow !== b.soldInWindow) {
+          return a.soldInWindow ? -1 : 1;
+        }
         const av = a[moversSortKey];
         const bv = b[moversSortKey];
         const aMissing = av == null || Number.isNaN(av);
@@ -1550,17 +1653,82 @@
       renderMoversExcludePanel();
     }
 
+    function rangeChipClass(active) {
+      return `rounded-full border px-2.5 py-1 text-xs font-medium transition ${active ? "border-transparent bg-gold-500 text-ink-950" : "border-white/10 bg-[#12161d] text-zinc-300 hover:border-gold-500"}`;
+    }
+
+    function syncMoversDateInputs() {
+      const bounds = moversDateBounds();
+      const from = document.getElementById("movers-from");
+      const to = document.getElementById("movers-to");
+      const clear = document.getElementById("movers-custom-clear");
+      if (!from || !to) return;
+      from.min = bounds.min;
+      from.max = bounds.max;
+      to.min = bounds.min;
+      to.max = bounds.max;
+      if (document.activeElement !== from) from.value = moversCustomStart;
+      if (document.activeElement !== to) to.value = moversCustomEnd;
+      if (clear) clear.classList.toggle("hidden", moversRangeMode !== "custom");
+    }
+
+    function applyCustomMoversDates() {
+      const from = document.getElementById("movers-from");
+      const to = document.getElementById("movers-to");
+      const nextStart = from && from.value ? from.value : moversCustomStart;
+      const nextEnd = to && to.value ? to.value : moversCustomEnd;
+      if (!nextStart && !nextEnd) return;
+      moversCustomStart = nextStart;
+      moversCustomEnd = nextEnd || nextStart;
+      moversRangeMode = "custom";
+      renderMovers();
+    }
+
+    function clearCustomMoversDates() {
+      moversCustomStart = "";
+      moversCustomEnd = "";
+      moversRangeMode = "preset";
+      const from = document.getElementById("movers-from");
+      const to = document.getElementById("movers-to");
+      if (from) from.value = "";
+      if (to) to.value = "";
+      renderMovers();
+    }
+
     function renderMoversRange() {
       const host = document.getElementById("movers-range");
-      host.innerHTML = MOVERS_RANGES.map((days) => `
-        <button type="button" data-days="${days}" class="rounded-full border px-2.5 py-1 text-xs font-medium transition ${moversRangeDays === days ? "border-transparent bg-gold-500 text-ink-950" : "border-white/10 bg-[#12161d] text-zinc-300 hover:border-gold-500"}">${days} Day${days === 1 ? "" : "s"}</button>
-      `).join("");
-      host.querySelectorAll("button").forEach((button) => {
+      const presetActive = moversRangeMode === "preset";
+      const chips = MOVERS_RANGES.map((days) => `
+        <button type="button" data-days="${days}" class="${rangeChipClass(presetActive && moversRangeDays === days)}">${days} Day${days === 1 ? "" : "s"}</button>
+      `);
+      chips.push(`<button type="button" data-range="all" class="${rangeChipClass(moversRangeMode === "all")}">All Time</button>`);
+      chips.push(`<button type="button" data-range="custom" class="${rangeChipClass(moversRangeMode === "custom")}">Custom</button>`);
+      host.innerHTML = chips.join("");
+      host.querySelectorAll("button[data-days]").forEach((button) => {
         button.addEventListener("click", () => {
           moversRangeDays = Number(button.dataset.days);
+          moversRangeMode = "preset";
+          moversCustomStart = "";
+          moversCustomEnd = "";
           renderMovers();
         });
       });
+      host.querySelector("[data-range='all']").addEventListener("click", () => {
+        moversRangeMode = "all";
+        moversCustomStart = "";
+        moversCustomEnd = "";
+        renderMovers();
+      });
+      host.querySelector("[data-range='custom']").addEventListener("click", () => {
+        const bounds = moversDateBounds();
+        if (!moversCustomStart) moversCustomStart = isoAddDays(bounds.max, -6);
+        if (!moversCustomEnd) moversCustomEnd = bounds.max;
+        moversRangeMode = "custom";
+        renderMovers();
+        const from = document.getElementById("movers-from");
+        if (from) from.focus();
+      });
+      syncMoversDateInputs();
     }
 
     function renderMoversSortState() {
@@ -1582,7 +1750,8 @@
       const empty = document.getElementById("movers-empty");
       const meta = document.getElementById("movers-meta");
       const hiddenNote = hidden ? ` · ${integer.format(hidden)} hidden by exclusions` : "";
-      meta.textContent = `${integer.format(rows.length)} of ${integer.format(total)} listings${hiddenNote} · ${moversWindowLabel()}`;
+      const soldCount = rows.filter((row) => row.soldInWindow).length;
+      meta.textContent = `${integer.format(rows.length)} of ${integer.format(total)} listings${hiddenNote} · ${integer.format(soldCount)} with sales in window · ${moversWindowLabel()}`;
       if (!rows.length) {
         body.innerHTML = "";
         empty.classList.remove("hidden");
@@ -1591,12 +1760,12 @@
       }
       empty.classList.add("hidden");
       body.innerHTML = rows.map((row) => `
-        <tr>
+        <tr class="${row.soldInWindow ? "" : "movers-idle"}">
           <td class="sticky-col px-3 py-2">
             <div class="flex items-center gap-2.5">
               ${imageMarkup(row, "h-10 w-10")}
               <div class="min-w-0 flex-1">
-                <a href="${escapeHtml(row.href || "#/")}" class="block truncate font-medium text-zinc-100 hover:text-gold-400">${escapeHtml(row.name)}</a>
+                <a href="${escapeHtml(row.href || "#/")}" class="block truncate font-medium ${row.soldInWindow ? "text-zinc-100 hover:text-gold-400" : "text-zinc-500 hover:text-zinc-300"}">${escapeHtml(row.name)}</a>
                 <div class="truncate text-[11px] text-zinc-500">${escapeHtml(row.setName === "XY" ? "XY Base" : (row.setName || "—"))}${row.kind ? ` · ${escapeHtml(KIND_LABEL[row.kind] || row.kind)}` : ""}</div>
               </div>
               <button type="button" class="movers-hide-btn shrink-0 rounded-md p-1 text-zinc-400 hover:bg-white/10 hover:text-rose-400" data-exclude-product="${escapeHtml(row.productId)}" title="Hide this listing" aria-label="Hide ${escapeHtml(row.name)}">
@@ -1604,20 +1773,20 @@
               </button>
             </div>
           </td>
-          <td class="px-3 py-2 tabular font-semibold ${changeClass(row.priceChangePct)}">${formatPct(row.priceChangePct)}</td>
-          <td class="px-3 py-2 tabular ${changeClass(row.priceChangeAbs)}">${row.priceChangeAbs == null ? "—" : `${row.priceChangeAbs > 0 ? "+" : ""}${formatMoney(row.priceChangeAbs)}`}</td>
-          <td class="px-3 py-2 tabular">
+          <td class="px-3 py-2 tabular font-semibold ${changeClass(row.priceChangePct, row.soldInWindow)}">${formatPct(row.priceChangePct)}</td>
+          <td class="px-3 py-2 tabular ${changeClass(row.priceChangeAbs, row.soldInWindow)}">${row.priceChangeAbs == null ? "—" : `${row.priceChangeAbs > 0 ? "+" : ""}${formatMoney(row.priceChangeAbs)}`}</td>
+          <td class="px-3 py-2 tabular ${row.lastSaleInWindow ? "" : "text-zinc-500"}">
             <div>${formatMoney(row.lastSale)}</div>
-            <div class="text-[11px] text-zinc-500">${escapeHtml(daysAgoLabel(row.lastSaleAt))}</div>
+            <div class="text-[11px] text-zinc-500">${escapeHtml(daysAgoLabel(row.lastSaleAt))}${row.lastSaleAt && !row.soldInWindow ? " · no sales in window" : ""}</div>
           </td>
           <td class="px-3 py-2 tabular">${formatMoney(row.avgPrice)}</td>
           <td class="px-3 py-2 tabular">${formatMoney(row.startPrice)}</td>
           <td class="px-3 py-2 tabular">${formatMoney(row.lowSale)}</td>
           <td class="px-3 py-2 tabular">${formatMoney(row.highSale)}</td>
-          <td class="px-3 py-2 tabular font-medium ${changeClass(row.volumeChangePct)}">${formatPct(row.volumeChangePct)}</td>
+          <td class="px-3 py-2 tabular font-medium ${changeClass(row.volumeChangePct, row.soldInWindow)}">${formatPct(row.volumeChangePct)}</td>
           <td class="px-3 py-2 tabular">${formatInt(row.salesCount)}</td>
           <td class="px-3 py-2 tabular">${formatMoney(row.salesTotal)}</td>
-          <td class="px-3 py-2">${sparklineSvg(row.spark)}</td>
+          <td class="px-3 py-2">${sparklineSvg(row.spark, row.soldInWindow)}</td>
         </tr>
       `).join("");
       lucide.createIcons();
@@ -2208,6 +2377,14 @@
         moversQuery = event.target.value;
         renderMovers();
       });
+      document.getElementById("movers-custom-apply").addEventListener("click", applyCustomMoversDates);
+      document.getElementById("movers-custom-clear").addEventListener("click", clearCustomMoversDates);
+      const onDateFieldChange = (event) => {
+        if (!event.target.value) return;
+        applyCustomMoversDates();
+      };
+      document.getElementById("movers-from").addEventListener("change", onDateFieldChange);
+      document.getElementById("movers-to").addEventListener("change", onDateFieldChange);
       document.getElementById("movers-exclude-toggle").addEventListener("click", (event) => {
         event.stopPropagation();
         moversExcludeOpen = !moversExcludeOpen;
