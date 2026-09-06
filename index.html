@@ -176,6 +176,28 @@
     .movers-check {
       accent-color: #d4a054;
     }
+    .kind-switch {
+      display: inline-flex;
+      border-radius: 0.6rem;
+      border: 1px solid rgb(226 232 240);
+      background: #fff;
+      padding: 0.15rem;
+    }
+    .dark .kind-switch {
+      border-color: rgba(255,255,255,0.1);
+      background: #12161d;
+    }
+    .kind-switch button {
+      border-radius: 0.45rem;
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .kind-switch button[aria-pressed="true"] {
+      background: #e8b86d;
+      color: #1c232d;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-ink-50 text-ink-900 font-sans antialiased dark:bg-ink-950 dark:text-ink-50">
@@ -193,6 +215,7 @@
             </div>
           </a>
           <div class="flex items-center gap-2 sm:gap-3">
+            <div id="landing-kind-wrap" class="hidden items-center"></div>
             <a href="#/movers" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200">
               <i data-lucide="trending-up" class="h-4 w-4"></i>
               <span class="hidden sm:inline">Market Movers</span>
@@ -222,6 +245,12 @@
           </div>
         </div>
         <div class="flex items-center gap-2 sm:gap-3">
+          <div id="dashboard-kind-wrap"></div>
+          <button type="button" id="show-all-from-set" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200">
+            <i data-lucide="list" class="h-4 w-4"></i>
+            <span class="hidden sm:inline">Show all from this set</span>
+            <span class="sm:hidden">All in set</span>
+          </button>
           <a id="change-set" href="#/" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-gold-500 dark:border-white/10 dark:bg-ink-900 dark:text-slate-200">
             <i data-lucide="layout-grid" class="h-4 w-4"></i>
             <span class="hidden sm:inline">Change set</span>
@@ -525,6 +554,7 @@
     let latestSales = [];
     let selectedProductId = "all";
     let selectedSet = "";
+    let catalogKind = "sealed";
     let selectedRange = "1M";
     let activeTab = "overview";
     let salesChart = null;
@@ -721,15 +751,83 @@
       const hash = (location.hash || "#/").replace(/^#/, "");
       const parts = hash.split("/").filter(Boolean);
       if (parts[0] === "movers") {
-        return { view: "movers", gameId: null, familyId: null, setSlug: null, tab: "overview" };
+        return { view: "movers", gameId: null, familyId: null, setSlug: null, tab: "overview", catalogKind: "sealed" };
+      }
+      const extra = parts.slice(3);
+      let kind = "sealed";
+      let tab = "overview";
+      if (extra[0] === "singles") {
+        kind = "singles";
+        tab = extra[1] === "sales" ? "sales" : "overview";
+      } else if (extra[0] === "sales") {
+        tab = "sales";
       }
       return {
         view: "page",
         gameId: parts[0] || null,
         familyId: parts[1] || null,
         setSlug: parts[2] || null,
-        tab: parts[3] === "sales" ? "sales" : "overview",
+        tab,
+        catalogKind: kind,
       };
+    }
+
+    function isSingles() {
+      return catalogKind === "singles";
+    }
+
+    function setPageHref(gameId, familyId, setSlug, tab) {
+      return routeHref([
+        gameId,
+        familyId,
+        setSlug,
+        isSingles() ? "singles" : null,
+        tab === "sales" ? "sales" : null,
+      ]);
+    }
+
+    function kindToggleMarkup() {
+      return `
+        <div class="kind-switch" role="group" aria-label="Sealed or singles">
+          <button type="button" data-catalog-kind="sealed" aria-pressed="${catalogKind === "sealed" ? "true" : "false"}">Sealed</button>
+          <button type="button" data-catalog-kind="singles" aria-pressed="${catalogKind === "singles" ? "true" : "false"}">Singles</button>
+        </div>
+      `;
+    }
+
+    function syncKindToggles() {
+      const landingWrap = document.getElementById("landing-kind-wrap");
+      const dashWrap = document.getElementById("dashboard-kind-wrap");
+      const route = parseRoute();
+      const showLanding = route.view !== "movers" && !route.setSlug;
+      if (landingWrap) {
+        landingWrap.innerHTML = kindToggleMarkup();
+        landingWrap.classList.toggle("hidden", !showLanding);
+        landingWrap.classList.toggle("flex", showLanding);
+      }
+      if (dashWrap) dashWrap.innerHTML = kindToggleMarkup();
+      const showAll = document.getElementById("show-all-from-set");
+      if (showAll) showAll.classList.toggle("hidden", !isSingles() || !currentCatalogSet);
+    }
+
+    function setCatalogKind(kind) {
+      const next = kind === "singles" ? "singles" : "sealed";
+      if (catalogKind === next) return;
+      catalogKind = next;
+      try { localStorage.setItem("catalogKind", catalogKind); } catch (error) { /* ignore */ }
+      const route = parseRoute();
+      if (route.view === "movers") {
+        syncKindToggles();
+        return;
+      }
+      if (route.setSlug && route.gameId && route.familyId) {
+        const nextHash = setPageHref(route.gameId, route.familyId, route.setSlug, route.tab);
+        if (location.hash !== nextHash) {
+          location.hash = nextHash;
+          return;
+        }
+      }
+      applyRoute();
     }
 
     function routeHref(parts) {
@@ -853,7 +951,7 @@
               <span>/</span>
               <span class="text-ink-900 dark:text-ink-50">${escapeHtml(family.name)}</span>
             </nav>
-            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-gold-500">${escapeHtml(game.name)}</p>
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-gold-500">${escapeHtml(game.name)} · ${isSingles() ? "Singles" : "Sealed"}</p>
             <h2 class="mt-2 font-display text-3xl font-semibold sm:text-4xl">${escapeHtml(family.fullName || family.name)}</h2>
             <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">${escapeHtml(family.description || "")}</p>
             <p class="mt-2 text-sm text-slate-500">${integer.format(family.sets.length)} sets · newest first</p>
@@ -864,7 +962,7 @@
               const tracking = tracked.has(set.setName);
               const thumb = setThumb(set);
               return `
-                <a href="${escapeHtml(routeHref([game.id, family.id, set.slug]))}" class="choice-card rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
+                <a href="${escapeHtml(routeHref([game.id, family.id, set.slug, isSingles() ? "singles" : null]))}" class="choice-card rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
                   <div class="flex items-start justify-between gap-3">
                     ${thumb ? `<img src="${escapeHtml(thumb)}" alt="" class="h-16 w-16 rounded-xl object-contain bg-ink-50 dark:bg-ink-950" onerror="this.style.display='none'">` : `<span class="rounded-full bg-ink-50 px-2.5 py-1 text-xs font-semibold tabular text-slate-600 dark:bg-ink-950 dark:text-slate-300">${escapeHtml(set.code || "")}</span>`}
                     <div class="flex flex-wrap justify-end gap-1">
@@ -883,6 +981,7 @@
           </div>
         `;
         lucide.createIcons();
+        syncKindToggles();
         return;
       }
 
@@ -896,7 +995,7 @@
             </nav>
             <p class="text-sm font-semibold uppercase tracking-[0.2em] text-gold-500">${escapeHtml(game.tagline || "Choose a product line")}</p>
             <h2 class="mt-2 font-display text-3xl font-semibold sm:text-4xl">${escapeHtml(game.name)}</h2>
-            <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">${escapeHtml(game.description || "")}</p>
+            <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">${escapeHtml(isSingles() ? `Browse ${game.name} sets, then open singles for that set. Card links are not populated yet.` : (game.description || ""))}</p>
           </div>
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2 ${game.families.length > 3 ? "xl:grid-cols-3" : game.families.length === 3 ? "lg:grid-cols-3" : ""}">
             ${game.families.map((family) => `
@@ -913,6 +1012,7 @@
           </div>
         `;
         lucide.createIcons();
+        syncKindToggles();
         return;
       }
 
@@ -952,6 +1052,7 @@
         </div>
       `;
       lucide.createIcons();
+      syncKindToggles();
     }
 
     function showView(name) {
@@ -1794,7 +1895,7 @@
 
     function updateDashboardChrome(game, family, set) {
       currentCatalogSet = set;
-      document.getElementById("dashboard-title").textContent = set.name;
+      document.getElementById("dashboard-title").textContent = isSingles() ? `${set.name} · Singles` : set.name;
       document.getElementById("dashboard-crumb").innerHTML = [
         crumbLink("#/", "Games"),
         `<span>/</span>`,
@@ -1802,15 +1903,22 @@
         `<span>/</span>`,
         crumbLink(routeHref([game.id, family.id]), family.name),
         `<span>/</span>`,
-        `<span class="text-ink-900 dark:text-ink-50">${escapeHtml(set.code ? `${set.code} · ${set.name}` : set.name)}</span>`,
+        `<span class="text-ink-900 dark:text-ink-50">${escapeHtml(set.code ? `${set.code} · ${set.name}` : set.name)}${isSingles() ? " · Singles" : ""}</span>`,
       ].join("");
       document.getElementById("change-set").href = routeHref([game.id, family.id]);
       const emptyCopy = document.getElementById("empty-set-copy");
-      if (set.status === "japan-only") {
+      const emptyTitle = document.querySelector("#empty-set h2");
+      if (isSingles()) {
+        if (emptyTitle) emptyTitle.textContent = "No singles tracked yet";
+        emptyCopy.innerHTML = `Singles for <strong>${escapeHtml(set.name)}</strong> are not populated yet. The Sealed / Singles switch stays in the header. Use <strong>Show all from this set</strong> once card pages exist to return to every single in this set.`;
+      } else if (set.status === "japan-only") {
+        if (emptyTitle) emptyTitle.textContent = "No products tracked yet";
         emptyCopy.innerHTML = `<strong>${escapeHtml(set.name)}</strong> had no standalone English booster box. ${escapeHtml(set.note || "Those cards shipped inside later English sets.")}`;
       } else {
+        if (emptyTitle) emptyTitle.textContent = "No products tracked yet";
         emptyCopy.innerHTML = `Nothing from <strong>${escapeHtml(set.name)}</strong> is being scraped yet. Add TCGPlayer URLs under <code class="rounded bg-ink-50 px-1.5 py-0.5 text-ink-900 dark:bg-ink-950 dark:text-ink-50"># Set: ${escapeHtml(set.setName)}</code> in <code class="rounded bg-ink-50 px-1.5 py-0.5 text-ink-900 dark:bg-ink-950 dark:text-ink-50">urls.txt</code> to start collecting snapshots.`;
       }
+      syncKindToggles();
     }
 
     function applyRoute() {
@@ -1827,6 +1935,7 @@
       const set = findSet(family, route.setSlug);
 
       if (set && game && family) {
+        catalogKind = route.catalogKind || "sealed";
         selectedSet = set.setName;
         selectedProductId = "all";
         showView("dashboard");
@@ -1967,6 +2076,17 @@
     }
 
     function refreshSetView() {
+      if (isSingles()) {
+        latestByProduct = [];
+        document.getElementById("empty-set").classList.toggle("hidden", activeTab !== "overview");
+        document.getElementById("overview-data").classList.add("hidden");
+        const badge = document.getElementById("updated-badge");
+        badge.classList.add("hidden");
+        badge.classList.remove("inline-flex");
+        populateSalesProductFilter();
+        renderSalesTable();
+        return;
+      }
       const scoped = recordsInSet();
       latestByProduct = latestSnapshots(scoped).map((row) => ({
         ...row,
@@ -2033,7 +2153,7 @@
       });
       if (!options.skipHash && currentCatalogSet) {
         const route = parseRoute();
-        const next = routeHref([route.gameId, route.familyId, route.setSlug, tab === "sales" ? "sales" : null]);
+        const next = setPageHref(route.gameId, route.familyId, route.setSlug, tab);
         if (location.hash !== next) history.replaceState(null, "", next);
       }
     }
@@ -2354,6 +2474,12 @@
 
     async function init() {
       lucide.createIcons();
+      try {
+        const stored = localStorage.getItem("catalogKind");
+        if (stored === "singles" || stored === "sealed") catalogKind = stored;
+      } catch (error) {
+        catalogKind = "sealed";
+      }
       moversExclusions = loadExclusions();
       renderOutlierToggle();
       document.querySelectorAll(".theme-toggle").forEach((button) => {
@@ -2368,6 +2494,23 @@
       document.getElementById("sales-product").addEventListener("change", renderSalesTable);
       document.querySelectorAll(".tab-btn").forEach((button) => {
         button.addEventListener("click", () => setActiveTab(button.dataset.tab));
+      });
+      document.addEventListener("click", (event) => {
+        const kindBtn = event.target.closest("[data-catalog-kind]");
+        if (!kindBtn) return;
+        event.preventDefault();
+        setCatalogKind(kindBtn.dataset.catalogKind);
+      });
+      document.getElementById("show-all-from-set").addEventListener("click", () => {
+        selectedProductId = "all";
+        if (!currentCatalogSet) return;
+        const route = parseRoute();
+        const next = setPageHref(route.gameId, route.familyId, route.setSlug, "overview");
+        if (location.hash !== next) location.hash = next;
+        else {
+          setActiveTab("overview", { skipHash: true });
+          refreshSetView();
+        }
       });
       document.getElementById("movers-category").addEventListener("change", (event) => {
         moversCategory = event.target.value;
