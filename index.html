@@ -329,7 +329,7 @@
         </article>
       </section>
 
-      <section class="mb-8 rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80 sm:p-6">
+      <section id="chart-section" class="mb-8 rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80 sm:p-6">
         <div class="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h2 id="chart-title" class="font-display text-xl font-semibold">Market Price History</h2>
@@ -348,8 +348,8 @@
       <section class="rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80 sm:p-6">
         <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 class="font-display text-xl font-semibold">Tracked Listings</h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400">Latest snapshot for each product in this set</p>
+            <h2 id="listings-title" class="font-display text-xl font-semibold">Tracked Listings</h2>
+            <p id="listings-subtitle" class="text-sm text-slate-500 dark:text-slate-400">Latest snapshot for each product in this set</p>
           </div>
           <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
             <label class="relative block">
@@ -587,6 +587,7 @@
     let catalog = { games: [] };
     let currentCatalogSet = null;
     let catalogProducts = { products: [] };
+    let catalogSingles = { products: [] };
     let imageOverrides = {};
 
     const KIND_LABEL = {
@@ -595,6 +596,14 @@
       "premium-booster-box": "Premium Booster Box",
       "etb": "Elite Trainer Box",
       "booster-bundle": "Booster Bundle",
+      single: "Single",
+    };
+
+    const SUBSET_LABEL = {
+      "radiant-collection": "Radiant Collection",
+      "trainer-gallery": "Trainer Gallery",
+      "galarian-gallery": "Galarian Gallery",
+      "shiny-vault": "Shiny Vault",
     };
 
     const RANGE_COPY = {
@@ -874,8 +883,23 @@
       return (catalogProducts.products || []).filter((row) => row.setName === selectedSet);
     }
 
+    function singlesInSet() {
+      return (catalogSingles.products || []).filter((row) => row.setName === selectedSet);
+    }
+
+    function catalogRowsInSet() {
+      return isSingles() ? singlesInSet() : catalogProductsInSet();
+    }
+
+    function singlesCountForSet(setName) {
+      return (catalogSingles.products || []).filter((row) => row.setName === setName).length;
+    }
+
     function productById(productId) {
-      return (catalogProducts.products || []).find((row) => String(row.productId) === String(productId)) || null;
+      const id = String(productId);
+      return (catalogProducts.products || []).find((row) => String(row.productId) === id)
+        || (catalogSingles.products || []).find((row) => String(row.productId) === id)
+        || null;
     }
 
     function productImageUrl(row) {
@@ -892,6 +916,16 @@
       if (row && row.productKind) return row.productKind;
       const listed = productById(row && row.productId);
       return (listed && listed.kind) || "";
+    }
+
+    function listingKindLabel(row) {
+      const listed = productById(row && row.productId) || {};
+      const rarity = row.rarity || listed.rarity;
+      if (rarity) {
+        const bits = [rarity, row.number || listed.number, SUBSET_LABEL[row.subset || listed.subset] || ""].filter(Boolean);
+        return bits.join(" · ");
+      }
+      return KIND_LABEL[productKindOf(row)] || "Sealed";
     }
 
     function setThumb(set) {
@@ -959,7 +993,8 @@
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
             ${sets.map((set) => {
               const status = setStatus(set);
-              const tracking = tracked.has(set.setName);
+              const singlesCount = singlesCountForSet(set.setName);
+              const tracking = isSingles() ? singlesCount > 0 : tracked.has(set.setName);
               const thumb = setThumb(set);
               return `
                 <a href="${escapeHtml(routeHref([game.id, family.id, set.slug, isSingles() ? "singles" : null]))}" class="choice-card rounded-2xl border border-slate-200 bg-white/90 p-5 dark:border-white/10 dark:bg-ink-900/80">
@@ -973,7 +1008,7 @@
                     </div>
                   </div>
                   <h3 class="mt-4 font-display text-xl font-semibold">${escapeHtml(set.name)}</h3>
-                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">${escapeHtml(formatReleased(set.released) || "Release date TBA")}</p>
+                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">${escapeHtml(formatReleased(set.released) || "Release date TBA")}${isSingles() ? ` · ${integer.format(singlesCount)} cards` : ""}</p>
                   ${set.note ? `<p class="mt-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">${escapeHtml(set.note)}</p>` : ""}
                 </a>
               `;
@@ -995,7 +1030,7 @@
             </nav>
             <p class="text-sm font-semibold uppercase tracking-[0.2em] text-gold-500">${escapeHtml(game.tagline || "Choose a product line")}</p>
             <h2 class="mt-2 font-display text-3xl font-semibold sm:text-4xl">${escapeHtml(game.name)}</h2>
-            <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">${escapeHtml(isSingles() ? `Browse ${game.name} sets, then open singles for that set. Card links are not populated yet.` : (game.description || ""))}</p>
+            <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">${escapeHtml(isSingles() ? (game.id === "pokemon" ? `Browse ${game.name} sets, then open singles for that set.` : `Browse ${game.name} sets, then open singles for that set. Card links are not populated yet.`) : (game.description || ""))}</p>
           </div>
           <div class="grid grid-cols-1 gap-4 md:grid-cols-2 ${game.families.length > 3 ? "xl:grid-cols-3" : game.families.length === 3 ? "lg:grid-cols-3" : ""}">
             ${game.families.map((family) => `
@@ -1910,7 +1945,7 @@
       const emptyTitle = document.querySelector("#empty-set h2");
       if (isSingles()) {
         if (emptyTitle) emptyTitle.textContent = "No singles tracked yet";
-        emptyCopy.innerHTML = `Singles for <strong>${escapeHtml(set.name)}</strong> are not populated yet. The Sealed / Singles switch stays in the header. Use <strong>Show all from this set</strong> once card pages exist to return to every single in this set.`;
+        emptyCopy.innerHTML = `No matching singles for <strong>${escapeHtml(set.name)}</strong> yet. The Sealed / Singles switch stays in the header.`;
       } else if (set.status === "japan-only") {
         if (emptyTitle) emptyTitle.textContent = "No products tracked yet";
         emptyCopy.innerHTML = `<strong>${escapeHtml(set.name)}</strong> had no standalone English booster box. ${escapeHtml(set.note || "Those cards shipped inside later English sets.")}`;
@@ -1981,14 +2016,17 @@
     }
 
     function recordsInSet() {
+      if (isSingles()) return [];
       return records.filter((row) => setNameOf(row) === selectedSet);
     }
 
     function chartProductsInSet() {
+      if (isSingles()) return [];
       return (chartHistory.products || []).filter((row) => setNameOf(row) === selectedSet);
     }
 
     function salesInSet() {
+      if (isSingles()) return [];
       return latestSales.filter((row) => setNameOf(row) === selectedSet);
     }
 
@@ -2076,16 +2114,26 @@
     }
 
     function refreshSetView() {
+      const sort = document.getElementById("table-sort");
+      const listingsTitle = document.getElementById("listings-title");
+      const listingsSubtitle = document.getElementById("listings-subtitle");
+      const chartSection = document.getElementById("chart-section");
       if (isSingles()) {
-        latestByProduct = [];
-        document.getElementById("empty-set").classList.toggle("hidden", activeTab !== "overview");
-        document.getElementById("overview-data").classList.add("hidden");
-        const badge = document.getElementById("updated-badge");
-        badge.classList.add("hidden");
-        badge.classList.remove("inline-flex");
-        populateSalesProductFilter();
-        renderSalesTable();
-        return;
+        if (sort && sort.dataset.mode !== "singles") {
+          sort.value = "name-asc";
+          sort.dataset.mode = "singles";
+        }
+        if (listingsTitle) listingsTitle.textContent = "Singles";
+        if (listingsSubtitle) listingsSubtitle.textContent = "TCGPlayer card pages for this set. Market snapshots fill in after those URLs are added to the daily scrape.";
+        if (chartSection) chartSection.classList.add("hidden");
+      } else {
+        if (sort && sort.dataset.mode === "singles") {
+          sort.value = "sales-desc";
+          sort.dataset.mode = "sealed";
+        }
+        if (listingsTitle) listingsTitle.textContent = "Tracked Listings";
+        if (listingsSubtitle) listingsSubtitle.textContent = "Latest snapshot for each product in this set";
+        if (chartSection) chartSection.classList.remove("hidden");
       }
       const scoped = recordsInSet();
       latestByProduct = latestSnapshots(scoped).map((row) => ({
@@ -2094,13 +2142,16 @@
         productKind: productKindOf(row),
       }));
       const seen = new Set(latestByProduct.map((row) => String(row.productId || "")));
-      catalogProductsInSet().forEach((product) => {
+      catalogRowsInSet().forEach((product) => {
         if (seen.has(String(product.productId))) return;
         latestByProduct.push({
           productId: product.productId,
           productName: product.name,
           setName: product.setName,
           productKind: product.kind,
+          rarity: product.rarity,
+          number: product.number,
+          subset: product.subset,
           imageUrl: product.imageUrl,
           url: product.url,
           date: "",
@@ -2118,8 +2169,10 @@
         renderMetrics(latestSnapshots(scoped), scoped);
       } else if (hasListings) {
         document.getElementById("metric-tracked").textContent = integer.format(latestByProduct.length);
-        document.getElementById("metric-volume-name").textContent = "Awaiting first scrape";
-        document.getElementById("metric-volume-value").textContent = "Listings are linked; market snapshots fill in after the daily scraper runs";
+        document.getElementById("metric-volume-name").textContent = isSingles() ? "Links only" : "Awaiting first scrape";
+        document.getElementById("metric-volume-value").textContent = isSingles()
+          ? "Card pages are linked; they are not in the daily scrape yet"
+          : "Listings are linked; market snapshots fill in after the daily scraper runs";
         document.getElementById("metric-avg-price").textContent = "—";
         document.getElementById("metric-total-sales").textContent = "—";
         const badge = document.getElementById("updated-badge");
@@ -2131,8 +2184,9 @@
         badge.classList.remove("inline-flex");
       }
       if (hasListings) {
-        renderPills(uniqueProducts(latestByProduct));
-        renderChart();
+        if (!isSingles()) renderPills(uniqueProducts(latestByProduct));
+        else document.getElementById("product-pills").innerHTML = "";
+        if (!isSingles()) renderChart();
         renderTable();
       }
       populateSalesProductFilter();
@@ -2366,7 +2420,7 @@
               ${imageMarkup(row, "h-14 w-14")}
               <div>
                 <div class="font-medium">${escapeHtml(row.productName || "Unknown product")}</div>
-                <div class="text-xs text-slate-500">${escapeHtml(KIND_LABEL[productKindOf(row)] || "Sealed")} · ID ${escapeHtml(row.productId || "—")}${row.date ? ` · ${escapeHtml(row.date)}` : ""}</div>
+                <div class="text-xs text-slate-500">${escapeHtml(listingKindLabel(row))} · ID ${escapeHtml(row.productId || "—")}${row.date ? ` · ${escapeHtml(row.date)}` : ""}</div>
               </div>
             </div>
           </td>
@@ -2636,6 +2690,13 @@
         onePiecePayload = { products: [] };
       }
       catalogProducts = mergeCatalogProducts(pokemonPayload, onePiecePayload);
+
+      try {
+        catalogSingles = await loadJson("data/pokemon_singles.json");
+        if (!catalogSingles || !Array.isArray(catalogSingles.products)) catalogSingles = { products: [] };
+      } catch (error) {
+        catalogSingles = { products: [] };
+      }
 
       try {
         imageOverrides = await loadJson("data/product_image_overrides.json");
