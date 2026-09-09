@@ -101,8 +101,8 @@ def main() -> None:
         "updatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         "notes": (
             "English TCGPlayer singles for tracked Pokémon sets. "
-            "XY: EX / Full Art EX / BREAK / Radiant Collection. "
-            "SM: GX / FA GX / Tag Team / Rainbow-Secret / Prism Star. "
+            "XY: EX / Full Art EX / Full Art trainers / BREAK / Radiant Collection. "
+            "SM: GX / FA GX / Tag Team / Full Art trainers / Rainbow-Secret / Prism Star. "
             "SWSH: V / VMAX / VSTAR / FA-AA / Rainbow-Gold-Secret / Amazing Rare / Radiant / TG. "
             "SV-Mega: ex / FA / IR / SIR / Hyper-Gold / ACE SPEC. "
             "Links only — not added to urls.txt or the daily scrape."
