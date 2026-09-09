@@ -30,8 +30,6 @@ BREAK_RE = re.compile(r"\bBREAK\b")
 PRISM_RE = re.compile(r"prism star", re.I)
 SHINING_RE = re.compile(r"^Shining\b|\bShining\b", re.I)
 RADIANT_RE = re.compile(r"^Radiant\b", re.I)
-TAG_TEAM_RE = re.compile(r"tag team", re.I)
-
 SKIP_NAME = re.compile(
     r"code card|\bcase\b|booster box|booster pack|booster bundle|elite trainer|"
     r"theme deck|\btin\b|pin collection|poster collection|knock out collection|"
@@ -144,22 +142,17 @@ def include_card(family_id: str, name: str, rarity: str, number: str, subset: st
     if family in XY_FAMILIES:
         if rarity_key == "rare break" or BREAK_RE.search(name or ""):
             return True
-        if rarity_key in {"ultra rare", "secret rare"} and has_ex(name):
+        # Ultra Rare is EX, Full Art EX, and Full Art trainers; Secret Rare is mostly EX secrets.
+        if rarity_key in {"ultra rare", "secret rare"}:
             return True
         return False
 
     if family in SM_FAMILIES:
-        if rarity_key in SM_RARITIES or rarity_key == "prism rare":
+        if rarity_key in SM_RARITIES or rarity_key in {"prism rare", "ultra rare"}:
             return True
         if PRISM_RE.search(name or ""):
             return True
-        if rarity_key == "ultra rare" and (has_gx(name) or TAG_TEAM_RE.search(name or "")):
-            return True
-        if has_gx(name) and rarity_key in {"ultra rare", "secret rare", "rainbow rare", "shiny holo rare"}:
-            return True
         if rarity_key == "shiny holo rare" and (has_gx(name) or SHINING_RE.search(name or "")):
-            return True
-        if has_gx(name) and rarity_key in {"ultra rare", "secret rare", "rainbow rare", "shiny holo rare"}:
             return True
         return False
 
