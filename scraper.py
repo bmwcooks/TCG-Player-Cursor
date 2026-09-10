@@ -54,6 +54,15 @@ CHART_RANGES = {
     "annual": {"key": "1Y", "interval": "week", "label": "1Y · weekly totals"},
 }
 
+CARD_CONDITIONS = (
+    "Near Mint",
+    "Lightly Played",
+    "Moderately Played",
+    "Heavily Played",
+    "Damaged",
+)
+DEFAULT_CARD_CONDITION = "Near Mint"
+
 API_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Accept": "application/json, text/plain, */*",
@@ -227,20 +236,36 @@ def classify_scrape(html_name, html_price, chart_price=None, empty_page=False, e
     return True, None
 
 
-def select_chart_sku(result_list):
+def history_skus(history_data):
+    """Infinite detailed-history `result` list (one dict per SKU/condition)."""
+    if isinstance(history_data, list):
+        rows = history_data
+    elif isinstance(history_data, dict):
+        rows = history_data.get("result") or history_data.get("results") or []
+    else:
+        return []
+    if isinstance(rows, dict):
+        rows = [rows]
+    return [row for row in rows if isinstance(row, dict)]
+
+
+def select_chart_sku(result_list, condition=None):
     """Prefer the Unopened / English / Normal SKU that drives the Market Price History chart."""
-    if not result_list:
+    skus = history_skus(result_list)
+    if condition:
+        wanted = str(condition).strip().lower()
+        skus = [sku for sku in skus if str(sku.get("condition") or "").strip().lower() == wanted]
+    if not skus:
         return None
-    skus = result_list if isinstance(result_list, list) else [result_list]
 
     def score(sku):
-        condition = str(sku.get("condition") or "").lower()
+        sku_condition = str(sku.get("condition") or "").lower()
         language = str(sku.get("language") or "").lower()
         variant = str(sku.get("variant") or "").lower()
         buckets = sku.get("buckets") or []
-        if "unopened" in condition:
+        if "unopened" in sku_condition:
             condition_rank = 2
-        elif "near mint" in condition:
+        elif "near mint" in sku_condition:
             condition_rank = 1
         else:
             condition_rank = 0
@@ -260,16 +285,11 @@ def select_chart_sku(result_list):
     return max(skus, key=score)
 
 
-def parse_history_buckets(history_data):
-    """Parse Infinite API chart buckets (daily, 3-day, or weekly) into dated rows."""
-    if not isinstance(history_data, dict):
-        return []
-    result = history_data.get("result") or history_data.get("results") or []
-    sku = select_chart_sku(result)
-    if not sku:
-        return []
-
+def points_from_sku(sku):
+    """Dated chart rows from one Infinite SKU."""
     rows = []
+    if not isinstance(sku, dict):
+        return rows
     for bucket in sku.get("buckets") or []:
         if not isinstance(bucket, dict):
             continue
@@ -286,6 +306,33 @@ def parse_history_buckets(history_data):
         })
     rows.sort(key=lambda row: row["date"])
     return rows
+
+
+def parse_history_buckets(history_data, condition=None):
+    """Parse Infinite API chart buckets (daily, 3-day, or weekly) into dated rows."""
+    sku = select_chart_sku(history_data, condition=condition)
+    if not sku:
+        return []
+    return points_from_sku(sku)
+
+
+def latest_sku_price(points):
+    for point in reversed(points or []):
+        price = usable_price(point.get("marketPrice"))
+        if price is not None:
+            return price
+    return None
+
+
+def compact_condition_chart(sku):
+    """1M-only series compact enough to store every singles condition."""
+    points = points_from_sku(sku)
+    return {
+        "variant": sku.get("variant") or "",
+        "dates": [point["date"] for point in points],
+        "prices": [point.get("marketPrice") for point in points],
+        "sold": [point.get("quantitySold") for point in points],
+    }
 
 
 def parse_daily_buckets(history_data):
@@ -561,7 +608,8 @@ def chart_fetch_concurrency(raw=None):
     return max(1, min(count, 4))
 
 
-def fetch_price_history(product_id, range_name, referer, attempts=4, verbose=True):
+def fetch_price_history_json(product_id, range_name, referer, attempts=4, verbose=True):
+    """Raw Infinite detailed history (all SKUs/conditions) for one chart range."""
     api_url = f"https://infinite-api.tcgplayer.com/price/history/{product_id}/detailed?range={range_name}"
     if verbose:
         print(f"DEBUG: Requesting {range_name} chart data from {api_url}")
@@ -574,12 +622,12 @@ def fetch_price_history(product_id, range_name, referer, attempts=4, verbose=Tru
                 if verbose:
                     print(f"DEBUG: {range_name} chart request failed with status {response.status_code} (attempt {attempt}/{attempts})")
             else:
-                rows = parse_history_buckets(response.json())
-                if rows:
-                    return rows
-                last_error = "empty buckets"
+                payload = response.json()
+                if history_skus(payload):
+                    return payload
+                last_error = "empty SKUs"
                 if verbose:
-                    print(f"DEBUG: {range_name} chart returned no buckets (attempt {attempt}/{attempts})")
+                    print(f"DEBUG: {range_name} chart returned no SKUs (attempt {attempt}/{attempts})")
         except Exception as exc:
             last_error = shorten_error(exc)
             if verbose:
@@ -588,7 +636,128 @@ def fetch_price_history(product_id, range_name, referer, attempts=4, verbose=Tru
             time.sleep(0.8 * attempt)
     if last_error and verbose:
         print(f"DEBUG: {range_name} chart gave up ({last_error})")
+    return {}
+
+
+def fetch_price_history(product_id, range_name, referer, attempts=4, verbose=True):
+    payload = fetch_price_history_json(product_id, range_name, referer, attempts=attempts, verbose=verbose)
+    rows = parse_history_buckets(payload)
+    if rows:
+        return rows
+    if verbose and payload:
+        print(f"DEBUG: {range_name} chart returned no buckets")
     return []
+
+
+def listing_quantity_from_aggs(aggregations):
+    """Sum listing quantity buckets: value is copies on a listing, count is how many listings."""
+    total = 0
+    for bucket in (aggregations or {}).get("quantity") or []:
+        if not isinstance(bucket, dict):
+            continue
+        copies = parse_numeric(bucket.get("value"))
+        listings = parse_numeric(bucket.get("count"))
+        if copies is None or listings is None:
+            continue
+        total += copies * listings
+    return total
+
+
+def fetch_listings_snapshot(product_id, referer, condition=None, printing=None):
+    """size=0 marketplace search: seller count plus listed quantity for one filter."""
+    api_url = f"https://mp-search-api.tcgplayer.com/v1/product/{product_id}/listings"
+    term = {
+        "sellerStatus": "Live",
+        "channelId": 0,
+        "language": ["English"],
+    }
+    if condition:
+        term["condition"] = [condition]
+    if printing:
+        term["printing"] = [printing]
+    body = {
+        "filters": {
+            "term": term,
+            "range": {"quantity": {"gte": 1}},
+            "exclude": {"channelExclusion": 0},
+        },
+        "from": 0,
+        "size": 0,
+        "sort": {"field": "price+shipping", "order": "asc"},
+        "context": {"shippingCountry": "US", "cart": {}},
+        "aggregations": ["listingType"],
+    }
+    response = requests.post(api_url, headers=request_headers(referer), json=body, timeout=15)
+    if response.status_code != 200:
+        raise RuntimeError(f"listings status {response.status_code}")
+    block = ((response.json() or {}).get("results") or [{}])[0] or {}
+    aggregations = block.get("aggregations") or {}
+    sellers = parse_numeric(block.get("totalResults"))
+    if sellers is None:
+        sellers = 0
+    return {
+        "currentSellers": sellers,
+        "currentQuantity": listing_quantity_from_aggs(aggregations),
+    }
+
+
+def fetch_listing_stats(product_id, referer, printing=None, conditions=CARD_CONDITIONS):
+    """Per-condition listed quantity and seller counts. One cheap size=0 POST each."""
+    stats = {}
+    used_printing = printing
+    for attempt in range(2):
+        stats = {}
+        failures = 0
+        for condition in conditions:
+            try:
+                stats[condition] = fetch_listings_snapshot(
+                    product_id, referer, condition=condition, printing=used_printing
+                )
+            except Exception as exc:
+                failures += 1
+                print(f"DEBUG: listings {product_id} {condition}: {shorten_error(exc)}")
+        if used_printing and attempt == 0:
+            sellers = sum((row or {}).get("currentSellers") or 0 for row in stats.values())
+            if sellers == 0 and failures < len(list(conditions)):
+                used_printing = None
+                continue
+        break
+    return stats
+
+
+def build_condition_stats(month_json, listing_stats, today_date):
+    """Market price, last-day sales, and live listing counts for each TCGPlayer card condition."""
+    skus = history_skus(month_json)
+    listing_stats = listing_stats or {}
+    out = {}
+    for condition in CARD_CONDITIONS:
+        sku = select_chart_sku(skus, condition=condition)
+        points = points_from_sku(sku)
+        listing = listing_stats.get(condition) or {}
+        last_day = latest_completed_sales(
+            [{"date": row["date"], "quantitySold": row.get("quantitySold")} for row in points],
+            today_date,
+        )
+        out[condition] = {
+            "variant": (sku or {}).get("variant") or "",
+            "language": (sku or {}).get("language") or "English",
+            "marketPrice": latest_sku_price(points),
+            "lastDaySales": parse_numeric(last_day),
+            "currentQuantity": listing.get("currentQuantity"),
+            "currentSellers": listing.get("currentSellers"),
+        }
+    return out
+
+
+def condition_charts_from_month(month_json):
+    skus = history_skus(month_json)
+    charts = {}
+    for condition in CARD_CONDITIONS:
+        sku = select_chart_sku(skus, condition=condition)
+        if not sku:
+            continue
+        charts[condition] = compact_condition_chart(sku)
+    return charts
 
 
 def merge_chart_product(previous, incoming):
@@ -610,6 +779,17 @@ def merge_chart_product(previous, incoming):
         merged["productName"] = previous.get("productName")
     if not merged.get("imageUrl") and previous:
         merged["imageUrl"] = previous.get("imageUrl")
+    prev_charts = (previous or {}).get("conditionCharts") or {}
+    new_charts = dict((incoming or {}).get("conditionCharts") or {})
+    merged_charts = dict(prev_charts)
+    for condition, block in new_charts.items():
+        if block and (block.get("dates") or block.get("prices") or block.get("sold")):
+            merged_charts[condition] = block
+    if merged_charts:
+        merged["conditionCharts"] = merged_charts
+    preferred = (incoming or {}).get("preferredCondition") or (previous or {}).get("preferredCondition")
+    if preferred:
+        merged["preferredCondition"] = preferred
     return merged
 
 
@@ -1027,18 +1207,34 @@ def empty_scrape_result(entry, listed, error=None):
     }
 
 
+def fetch_history_payloads(product_id, url, verbose=True):
+    payloads = {}
+    for range_name in CHART_RANGES:
+        payloads[range_name] = fetch_price_history_json(product_id, range_name, url, verbose=verbose)
+    return payloads
+
+
+def range_payload_from_histories(payloads, condition=None):
+    range_payload = {}
+    for range_name, meta in CHART_RANGES.items():
+        points = parse_history_buckets(payloads.get(range_name), condition=condition)
+        range_payload[meta["key"]] = {
+            "interval": meta["interval"],
+            "label": meta["label"],
+            "points": points,
+        }
+    return range_payload
+
+
 def fetch_chart_ranges(product_id, url, today_date, verbose=True):
     range_payload = {}
     daily_buckets = []
     last_day_sales = "N/A"
     try:
-        for range_name, meta in CHART_RANGES.items():
-            points = fetch_price_history(product_id, range_name, url, verbose=verbose)
-            range_payload[meta["key"]] = {
-                "interval": meta["interval"],
-                "label": meta["label"],
-                "points": points,
-            }
+        payloads = fetch_history_payloads(product_id, url, verbose=verbose)
+        range_payload = range_payload_from_histories(payloads)
+        for meta in CHART_RANGES.values():
+            points = (range_payload.get(meta["key"]) or {}).get("points") or []
             if verbose:
                 print(f">>> {meta['key']}: {len(points)} {meta['interval']} buckets")
         daily_buckets = [
@@ -1216,7 +1412,7 @@ async def scrape_all_entries(session, entries, ctx, concurrency):
 
 
 def scrape_one_single(entry, ctx):
-    """Infinite chart + latest-sales HTTP for one singles card. No Chrome tab."""
+    """Infinite chart + listings + latest-sales HTTP for one singles card. No Chrome tab."""
     url = entry["url"]
     product_id = extract_product_id(url)
     listed = entry.get("listed") or ctx["products_by_id"].get(str(product_id or "")) or {}
@@ -1228,17 +1424,21 @@ def scrape_one_single(entry, ctx):
         return empty_scrape_result(entry, listed, error=RuntimeError("missing product id"))
 
     try:
-        range_payload, daily_buckets, last_day_sales = fetch_chart_ranges(
-            product_id, url, today_date, verbose=False
-        )
-        chart_price = latest_chart_price(range_payload)
+        payloads = fetch_history_payloads(product_id, url, verbose=False)
+        range_payload = range_payload_from_histories(payloads)
+        preferred_sku = select_chart_sku(payloads.get("month"))
+        preferred_condition = (preferred_sku or {}).get("condition") or DEFAULT_CARD_CONDITION
+        printing = (preferred_sku or {}).get("variant") or None
+        listing_stats = fetch_listing_stats(product_id, url, printing=printing)
+        conditions = build_condition_stats(payloads.get("month"), listing_stats, today_date)
+        preferred_stats = conditions.get(preferred_condition) or conditions.get(DEFAULT_CARD_CONDITION) or {}
+        chart_price = preferred_stats.get("marketPrice") or latest_chart_price(range_payload)
         captured_sales = fetch_latest_sales_http(product_id, url, limit=SINGLES_SALES_LIMIT)
         display_name = fallback_name
         set_name = fallback_set
         image_url = listed.get("imageUrl") or ctx["image_lookup"].get(str(product_id))
         product_kind = "single"
         market_price = chart_price
-        parsed_last_day = parse_numeric(last_day_sales)
 
         normalized = [
             sale for sale in (
@@ -1260,10 +1460,12 @@ def scrape_one_single(entry, ctx):
             "marketPrice": usable_price(market_price),
             "recentSale": None,
             "listedMedian": None,
-            "currentSellers": None,
-            "currentQuantity": None,
-            "lastDaySales": parsed_last_day,
+            "currentSellers": preferred_stats.get("currentSellers"),
+            "currentQuantity": preferred_stats.get("currentQuantity"),
+            "lastDaySales": preferred_stats.get("lastDaySales"),
             "url": url,
+            "preferredCondition": preferred_condition,
+            "conditions": conditions,
         }
         chart_product = {
             "productId": product_id,
@@ -1273,6 +1475,8 @@ def scrape_one_single(entry, ctx):
             "imageUrl": image_url,
             "url": url,
             "ranges": range_payload,
+            "preferredCondition": preferred_condition,
+            "conditionCharts": condition_charts_from_month(payloads.get("month")),
         }
         ok, reason = classify_scrape(
             display_name,
