@@ -12,14 +12,19 @@ URLS_FILE = "urls.txt"
 DATA_DIR = "data"
 DATA_FILE = os.path.join(DATA_DIR, "tracker_data.json")
 CHART_HISTORY_FILE = os.path.join(DATA_DIR, "chart_history.json")
+SINGLES_CHART_HISTORY_FILE = os.path.join(DATA_DIR, "singles_chart_history.json")
 LATEST_SALES_FILE = os.path.join(DATA_DIR, "latest_sales.json")
 PRODUCTS_FILES = [
     os.path.join(DATA_DIR, "pokemon_products.json"),
     os.path.join(DATA_DIR, "one_piece_products.json"),
 ]
+SINGLES_FILE = os.path.join(DATA_DIR, "pokemon_singles.json")
 IMAGE_OVERRIDES_FILE = os.path.join(DATA_DIR, "product_image_overrides.json")
 CATALOG_FILE = os.path.join(DATA_DIR, "catalog.json")
 LATEST_SALES_LIMIT = 100
+SINGLES_SALES_LIMIT = 25
+DEFAULT_SINGLES_FETCH_CONCURRENCY = 4
+MAX_SINGLES_FETCH_CONCURRENCY = 8
 DISCORD_MESSAGE_LIMIT = 2000
 # Discord counts some emoji as two units; keep a small buffer under the hard cap.
 DISCORD_SAFETY_MARGIN = 40
@@ -233,11 +238,23 @@ def select_chart_sku(result_list):
         language = str(sku.get("language") or "").lower()
         variant = str(sku.get("variant") or "").lower()
         buckets = sku.get("buckets") or []
+        if "unopened" in condition:
+            condition_rank = 2
+        elif "near mint" in condition:
+            condition_rank = 1
+        else:
+            condition_rank = 0
+        if variant in ("holofoil", "holo"):
+            variant_rank = 2
+        elif variant == "normal":
+            variant_rank = 1
+        else:
+            variant_rank = 0
         return (
             1 if buckets else 0,
             1 if language == "english" else 0,
-            1 if condition == "unopened" else 0,
-            1 if variant == "normal" else 0,
+            condition_rank,
+            variant_rank,
         )
 
     return max(skus, key=score)
@@ -341,24 +358,38 @@ def extract_product_id(url):
     return match.group(1) if match else None
 
 
+def load_json_products(path):
+    if not os.path.exists(path):
+        return []
+    try:
+        payload = json.load(open(path, encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return []
+    return list(payload.get("products") or [])
+
+
 def load_catalog_products():
     """Sealed product metadata from Pokémon and One Piece catalog JSON files."""
     products = []
     for path in PRODUCTS_FILES:
-        if not os.path.exists(path):
-            continue
-        try:
-            payload = json.load(open(path, encoding="utf-8"))
-        except (json.JSONDecodeError, OSError):
-            continue
-        products.extend(payload.get("products") or [])
+        products.extend(load_json_products(path))
     return products
+
+
+def load_singles_products():
+    """Pokémon singles catalog (EX/V+ rarity bands). Not written to urls.txt."""
+    return load_json_products(SINGLES_FILE)
+
+
+def load_listed_products():
+    """Sealed catalogs plus Pokémon singles, for images, kinds, and name lookup."""
+    return load_catalog_products() + load_singles_products()
 
 
 def load_image_lookup():
     """TCGPlayer catalog images plus optional local overrides in data/product_image_overrides.json."""
     lookup = {}
-    for row in load_catalog_products():
+    for row in load_listed_products():
         product_id = str(row.get("productId") or "")
         if product_id and row.get("imageUrl"):
             lookup[product_id] = row["imageUrl"]
@@ -376,7 +407,7 @@ def load_image_lookup():
 
 def catalog_kind_lookup():
     kinds = {}
-    for row in load_catalog_products():
+    for row in load_listed_products():
         product_id = str(row.get("productId") or "")
         if product_id and row.get("kind"):
             kinds[product_id] = row["kind"]
@@ -436,6 +467,56 @@ def read_tracked_urls():
     return entries
 
 
+def env_flag(name, default=True):
+    raw = os.environ.get(name)
+    if raw is None or str(raw).strip() == "":
+        return default
+    return str(raw).strip().lower() not in {"0", "false", "no", "off"}
+
+
+def singles_limit():
+    raw = os.environ.get("SCRAPE_SINGLES_LIMIT")
+    if raw is None or str(raw).strip() == "":
+        return None
+    try:
+        return max(0, int(raw))
+    except (TypeError, ValueError):
+        return None
+
+
+def read_singles_entries():
+    """Pokémon singles URLs from data/pokemon_singles.json. Optional SCRAPE_SINGLES_LIMIT for tests."""
+    if not env_flag("SCRAPE_SINGLES", True):
+        return []
+    entries = []
+    for row in load_singles_products():
+        url = row.get("url")
+        if not url:
+            continue
+        entries.append({
+            "url": url,
+            "setName": row.get("setName"),
+            "productKind": "single",
+            "listed": row,
+        })
+    limit = singles_limit()
+    if limit is not None:
+        entries = entries[:limit]
+    return entries
+
+
+def singles_fetch_concurrency(raw=None):
+    """How many singles Infinite/HTTP product jobs may run at once (1–8)."""
+    value = os.environ.get("SINGLES_FETCH_CONCURRENCY") if raw is None else raw
+    if value is None or str(value).strip() == "":
+        return DEFAULT_SINGLES_FETCH_CONCURRENCY
+    try:
+        count = int(value)
+    except (TypeError, ValueError):
+        return DEFAULT_SINGLES_FETCH_CONCURRENCY
+    return max(1, min(count, MAX_SINGLES_FETCH_CONCURRENCY))
+
+
 def load_records():
     if not os.path.exists(DATA_FILE):
         return []
@@ -447,11 +528,14 @@ def load_records():
         return []
 
 
-def save_json(path, payload):
+def save_json(path, payload, compact=False):
     os.makedirs(DATA_DIR, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, ensure_ascii=False)
-        f.write("\n")
+        if compact:
+            json.dump(payload, f, ensure_ascii=False, separators=(",", ":"))
+        else:
+            json.dump(payload, f, indent=2, ensure_ascii=False)
+            f.write("\n")
 
 
 def save_records(records):
@@ -477,28 +561,32 @@ def chart_fetch_concurrency(raw=None):
     return max(1, min(count, 4))
 
 
-def fetch_price_history(product_id, range_name, referer, attempts=4):
+def fetch_price_history(product_id, range_name, referer, attempts=4, verbose=True):
     api_url = f"https://infinite-api.tcgplayer.com/price/history/{product_id}/detailed?range={range_name}"
-    print(f"DEBUG: Requesting {range_name} chart data from {api_url}")
+    if verbose:
+        print(f"DEBUG: Requesting {range_name} chart data from {api_url}")
     last_error = None
     for attempt in range(1, attempts + 1):
         try:
             response = requests.get(api_url, headers=request_headers(referer), timeout=15)
             if response.status_code != 200:
                 last_error = f"status {response.status_code}"
-                print(f"DEBUG: {range_name} chart request failed with status {response.status_code} (attempt {attempt}/{attempts})")
+                if verbose:
+                    print(f"DEBUG: {range_name} chart request failed with status {response.status_code} (attempt {attempt}/{attempts})")
             else:
                 rows = parse_history_buckets(response.json())
                 if rows:
                     return rows
                 last_error = "empty buckets"
-                print(f"DEBUG: {range_name} chart returned no buckets (attempt {attempt}/{attempts})")
+                if verbose:
+                    print(f"DEBUG: {range_name} chart returned no buckets (attempt {attempt}/{attempts})")
         except Exception as exc:
             last_error = shorten_error(exc)
-            print(f"DEBUG: {range_name} chart request error: {exc} (attempt {attempt}/{attempts})")
+            if verbose:
+                print(f"DEBUG: {range_name} chart request error: {exc} (attempt {attempt}/{attempts})")
         if attempt < attempts:
             time.sleep(0.8 * attempt)
-    if last_error:
+    if last_error and verbose:
         print(f"DEBUG: {range_name} chart gave up ({last_error})")
     return []
 
@@ -559,27 +647,37 @@ def normalize_sale(row, product_id, product_name, url, set_name=None):
     }
 
 
-def fetch_latest_sales_http(product_id, referer, limit=LATEST_SALES_LIMIT):
+def fetch_latest_sales_http(product_id, referer, limit=LATEST_SALES_LIMIT, conditions=None):
     """Fallback POST used when the stealth browser capture is empty."""
     api_url = f"https://mpapi.tcgplayer.com/v2/product/{product_id}/latestsales?mpfev=5429"
-    body = {
-        "conditions": [],
-        "languages": [],
-        "variants": [],
-        "listingType": "All",
-        "limit": min(limit, 25),
-        "offset": 0,
-    }
-    try:
-        response = requests.post(api_url, headers=request_headers(referer), json=body, timeout=15)
-        if response.status_code != 200:
-            print(f"DEBUG: Latest sales HTTP request failed with status {response.status_code}")
-            return []
-        payload = response.json()
-        return payload.get("data") or []
-    except Exception as exc:
-        print(f"DEBUG: Latest sales HTTP request error: {exc}")
-        return []
+    page_size = 25
+    collected = []
+    offset = 0
+    while len(collected) < limit:
+        body = {
+            "conditions": list(conditions or []),
+            "languages": [],
+            "variants": [],
+            "listingType": "All",
+            "limit": min(page_size, limit - len(collected)),
+            "offset": offset,
+        }
+        try:
+            response = requests.post(api_url, headers=request_headers(referer), json=body, timeout=15)
+            if response.status_code != 200:
+                print(f"DEBUG: Latest sales HTTP request failed with status {response.status_code}")
+                break
+            batch = (response.json() or {}).get("data") or []
+            if not batch:
+                break
+            collected.extend(batch)
+            offset += len(batch)
+            if len(batch) < page_size:
+                break
+        except Exception as exc:
+            print(f"DEBUG: Latest sales HTTP request error: {exc}")
+            break
+    return collected[:limit]
 
 
 LATEST_SALES_JS = """
@@ -731,7 +829,7 @@ def product_lookups():
     """Name/set/family from sealed-product JSON, keyed by productId and URL."""
     by_id = {}
     by_url = {}
-    for row in load_catalog_products():
+    for row in load_listed_products():
         meta = {
             "name": row.get("name"),
             "setName": row.get("setName"),
@@ -924,23 +1022,25 @@ def empty_scrape_result(entry, listed, error=None):
             "setName": fallback_set or "Other",
             "productName": fallback_name,
             "familyId": listed.get("familyId"),
+            "productKind": entry.get("productKind") or listed.get("kind"),
         },
     }
 
 
-def fetch_chart_ranges(product_id, url, today_date):
+def fetch_chart_ranges(product_id, url, today_date, verbose=True):
     range_payload = {}
     daily_buckets = []
     last_day_sales = "N/A"
     try:
         for range_name, meta in CHART_RANGES.items():
-            points = fetch_price_history(product_id, range_name, url)
+            points = fetch_price_history(product_id, range_name, url, verbose=verbose)
             range_payload[meta["key"]] = {
                 "interval": meta["interval"],
                 "label": meta["label"],
                 "points": points,
             }
-            print(f">>> {meta['key']}: {len(points)} {meta['interval']} buckets")
+            if verbose:
+                print(f">>> {meta['key']}: {len(points)} {meta['interval']} buckets")
         daily_buckets = [
             {
                 "date": point["date"],
@@ -950,7 +1050,7 @@ def fetch_chart_ranges(product_id, url, today_date):
             for point in (range_payload.get("1M") or {}).get("points") or []
         ]
         last_day_sales = latest_completed_sales(daily_buckets, today_date)
-        if last_day_sales != "N/A":
+        if last_day_sales != "N/A" and verbose:
             print(f">>> SUCCESS: Found Sales Data: {last_day_sales} across {len(daily_buckets)} daily buckets")
     except Exception as exc:
         print(f"DEBUG: Chart history request error: {exc}")
@@ -1096,6 +1196,7 @@ async def scrape_one_entry(session, entry, ctx):
                 "setName": set_name or fallback_set or "Other",
                 "productName": display_name,
                 "familyId": fallback_family,
+                "productKind": product_kind,
             },
         }
     except Exception as exc:
@@ -1110,6 +1211,99 @@ async def scrape_all_entries(session, entries, ctx, concurrency):
         print(f"\n======================================", flush=True)
         print(f"Scraping [{index + 1}/{total}]: {entry['url']}", flush=True)
         return await scrape_one_entry(session, entry, ctx)
+
+    return await bounded_gather(entries, concurrency, run_one)
+
+
+def scrape_one_single(entry, ctx):
+    """Infinite chart + latest-sales HTTP for one singles card. No Chrome tab."""
+    url = entry["url"]
+    product_id = extract_product_id(url)
+    listed = entry.get("listed") or ctx["products_by_id"].get(str(product_id or "")) or {}
+    fallback_name = listed.get("name") or url
+    fallback_set = entry.get("setName") or listed.get("setName")
+    fallback_family = listed.get("familyId")
+    today_date = ctx["today_date"]
+    if not product_id:
+        return empty_scrape_result(entry, listed, error=RuntimeError("missing product id"))
+
+    try:
+        range_payload, daily_buckets, last_day_sales = fetch_chart_ranges(
+            product_id, url, today_date, verbose=False
+        )
+        chart_price = latest_chart_price(range_payload)
+        captured_sales = fetch_latest_sales_http(product_id, url, limit=SINGLES_SALES_LIMIT)
+        display_name = fallback_name
+        set_name = fallback_set
+        image_url = listed.get("imageUrl") or ctx["image_lookup"].get(str(product_id))
+        product_kind = "single"
+        market_price = chart_price
+        parsed_last_day = parse_numeric(last_day_sales)
+
+        normalized = [
+            sale for sale in (
+                normalize_sale(row, product_id, display_name, url, set_name)
+                for row in captured_sales
+            )
+            if sale and sale.get("orderDate")
+        ]
+        normalized.sort(key=lambda row: row.get("orderDate") or "", reverse=True)
+        latest_sales = normalized[:SINGLES_SALES_LIMIT]
+
+        record = {
+            "date": today_date,
+            "productId": product_id,
+            "productName": display_name,
+            "setName": set_name,
+            "productKind": product_kind,
+            "imageUrl": image_url,
+            "marketPrice": usable_price(market_price),
+            "recentSale": None,
+            "listedMedian": None,
+            "currentSellers": None,
+            "currentQuantity": None,
+            "lastDaySales": parsed_last_day,
+            "url": url,
+        }
+        chart_product = {
+            "productId": product_id,
+            "productName": display_name,
+            "setName": set_name,
+            "productKind": product_kind,
+            "imageUrl": image_url,
+            "url": url,
+            "ranges": range_payload,
+        }
+        ok, reason = classify_scrape(
+            display_name,
+            market_price if market_price is not None else "N/A",
+            chart_price=chart_price,
+        )
+        return {
+            "records": [record],
+            "chart_product": chart_product,
+            "latest_sales": latest_sales,
+            "scrape_result": {
+                "ok": ok,
+                "reason": reason,
+                "setName": set_name or "Other",
+                "productName": display_name,
+                "familyId": fallback_family,
+                "productKind": product_kind,
+            },
+        }
+    except Exception as exc:
+        print(f"Failed to scrape single {url}: {exc}")
+        return empty_scrape_result(entry, listed, error=exc)
+
+
+async def scrape_all_singles(entries, ctx, concurrency):
+    total = len(entries)
+
+    async def run_one(index, entry):
+        if index == 0 or (index + 1) % 50 == 0 or index + 1 == total:
+            print(f"Singles [{index + 1}/{total}]: {entry.get('listed', {}).get('name') or entry['url']}", flush=True)
+        return await asyncio.to_thread(scrape_one_single, entry, ctx)
 
     return await bounded_gather(entries, concurrency, run_one)
 
@@ -1135,19 +1329,15 @@ async def scrape_with_session(entries, ctx, concurrency):
 
 
 def main():
-    # --- 1. Read URLs ---
-    if not os.path.exists(URLS_FILE):
-        print(f"Error: {URLS_FILE} not found. Please create it and add some URLs.")
+    sealed_entries = read_tracked_urls() if env_flag("SCRAPE_SEALED", True) else []
+    singles_entries = read_singles_entries()
+    if not sealed_entries and not singles_entries:
+        print("No sealed URLs or Pokémon singles to scrape.")
         return
 
-    entries = read_tracked_urls()
-    if not entries:
-        print(f"No valid URLs found in {URLS_FILE}.")
-        return
-
-    # --- 2. Scrape Data ---
     today_date = datetime.datetime.now().strftime("%Y-%m-%d")
     concurrency = scrape_concurrency()
+    singles_concurrency = singles_fetch_concurrency()
     ctx = {
         "today_date": today_date,
         "image_lookup": load_image_lookup(),
@@ -1159,7 +1349,19 @@ def main():
     games_order, set_index, family_index = load_set_catalog()
     ctx["products_by_id"], ctx["products_by_url"] = product_lookups()
 
-    results = asyncio.run(scrape_with_session(entries, ctx, concurrency))
+    results = []
+    if sealed_entries:
+        print(f"Scraping {len(sealed_entries)} sealed listing(s) with {concurrency} Chrome tab(s).")
+        results.extend(asyncio.run(scrape_with_session(sealed_entries, ctx, concurrency)))
+    else:
+        print("Skipping sealed listings.")
+
+    if singles_entries:
+        print(
+            f"Scraping {len(singles_entries)} Pokémon single(s) via Infinite/HTTP "
+            f"(concurrency {singles_concurrency}, no Chrome tabs)."
+        )
+        results.extend(asyncio.run(scrape_all_singles(singles_entries, ctx, singles_concurrency)))
 
     all_data_rows = []
     scrape_results = []
@@ -1182,33 +1384,68 @@ def main():
         print("\nNo data was successfully scraped.")
 
     if chart_products:
-        existing_charts = {}
-        if os.path.exists(CHART_HISTORY_FILE):
-            try:
-                existing_charts = json.load(open(CHART_HISTORY_FILE, encoding="utf-8"))
-            except (json.JSONDecodeError, OSError):
-                existing_charts = {}
-        merged_charts = merge_chart_history(existing_charts, chart_products, today_date)
-        save_json(CHART_HISTORY_FILE, merged_charts)
-        print(f"Wrote chart history for {len(merged_charts.get('products') or [])} product(s) to {CHART_HISTORY_FILE}.")
+        sealed_charts = [row for row in chart_products if row.get("productKind") != "single"]
+        singles_charts = [row for row in chart_products if row.get("productKind") == "single"]
+        if sealed_charts:
+            existing_charts = {}
+            if os.path.exists(CHART_HISTORY_FILE):
+                try:
+                    existing_charts = json.load(open(CHART_HISTORY_FILE, encoding="utf-8"))
+                except (json.JSONDecodeError, OSError):
+                    existing_charts = {}
+            sealed_existing = {
+                "updatedAt": existing_charts.get("updatedAt"),
+                "products": [row for row in (existing_charts.get("products") or []) if row.get("productKind") != "single"],
+            }
+            merged_charts = merge_chart_history(sealed_existing, sealed_charts, today_date)
+            save_json(CHART_HISTORY_FILE, merged_charts)
+            print(f"Wrote chart history for {len(merged_charts.get('products') or [])} sealed product(s) to {CHART_HISTORY_FILE}.")
+        if singles_charts:
+            existing_singles = {}
+            if os.path.exists(SINGLES_CHART_HISTORY_FILE):
+                try:
+                    existing_singles = json.load(open(SINGLES_CHART_HISTORY_FILE, encoding="utf-8"))
+                except (json.JSONDecodeError, OSError):
+                    existing_singles = {}
+            merged_singles = merge_chart_history(existing_singles, singles_charts, today_date)
+            save_json(SINGLES_CHART_HISTORY_FILE, merged_singles, compact=True)
+            print(f"Wrote chart history for {len(merged_singles.get('products') or [])} single(s) to {SINGLES_CHART_HISTORY_FILE}.")
     if latest_sales_rows:
-        save_json(LATEST_SALES_FILE, {"updatedAt": today_date, "sales": latest_sales_rows})
+        existing_sales = {}
+        if os.path.exists(LATEST_SALES_FILE):
+            try:
+                existing_sales = json.load(open(LATEST_SALES_FILE, encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                existing_sales = {}
+        scraped_ids = {str(row.get("productId") or "") for row in latest_sales_rows}
+        kept = [
+            row for row in (existing_sales.get("sales") or [])
+            if str(row.get("productId") or "") not in scraped_ids
+        ]
+        save_json(LATEST_SALES_FILE, {"updatedAt": today_date, "sales": latest_sales_rows + kept})
         print(f"Wrote {len(latest_sales_rows)} latest transaction(s) to {LATEST_SALES_FILE}.")
 
-    # --- 4. Discord Integration ---
     print("Sending Discord notification...")
     discord_url = os.environ.get("DISCORD_WEBHOOK_URL")
     if not discord_url:
         print("DISCORD_WEBHOOK_URL environment variable is missing; skipping Discord notification.")
         return
 
-    status_blocks = format_scrape_status(scrape_results, games_order, set_index, family_index)
+    sealed_status = [row for row in scrape_results if row.get("productKind") != "single"]
+    singles_status = [row for row in scrape_results if row.get("productKind") == "single"]
+    status_blocks = format_scrape_status(sealed_status, games_order, set_index, family_index)
+    if singles_status:
+        ok = sum(1 for row in singles_status if row.get("ok"))
+        status_blocks.append(
+            f"**Pokémon singles:** {ok}/{len(singles_status)} cards updated (Infinite API, not Chrome)."
+        )
     messages_to_send = pack_discord_messages(status_blocks)
     print(
         f"Packed scrape status into {len(messages_to_send)} "
         f"Discord message(s) (max {DISCORD_PACK_LIMIT} chars each, hard cap {DISCORD_MESSAGE_LIMIT})."
     )
     send_discord_messages(discord_url, messages_to_send)
+
 
 if __name__ == "__main__":
     main()
