@@ -551,6 +551,7 @@
 
     let records = [];
     let chartHistory = { products: [] };
+    let singlesChartHistory = { products: [] };
     let latestSales = [];
     let selectedProductId = "all";
     let selectedSet = "";
@@ -1547,6 +1548,7 @@
     function allMoverRows() {
       const byId = new Map();
       (chartHistory.products || []).forEach((row) => {
+        if (isSinglesProduct(row)) return;
         if (row.productId) byId.set(String(row.productId), row);
       });
       (catalogProducts.products || []).forEach((row) => {
@@ -2015,19 +2017,31 @@
       return list;
     }
 
+    function singlesIdSet() {
+      return new Set((catalogSingles.products || []).map((row) => String(row.productId)));
+    }
+
+    function isSinglesProduct(row) {
+      if (!row) return false;
+      if ((row.productKind || row.kind) === "single") return true;
+      return singlesIdSet().has(String(row.productId || ""));
+    }
+
     function recordsInSet() {
-      if (isSingles()) return [];
-      return records.filter((row) => setNameOf(row) === selectedSet);
+      const rows = records.filter((row) => setNameOf(row) === selectedSet);
+      if (isSingles()) return rows.filter((row) => isSinglesProduct(row));
+      return rows.filter((row) => !isSinglesProduct(row));
     }
 
     function chartProductsInSet() {
-      if (isSingles()) return [];
-      return (chartHistory.products || []).filter((row) => setNameOf(row) === selectedSet);
+      const source = isSingles() ? singlesChartHistory : chartHistory;
+      return (source.products || []).filter((row) => setNameOf(row) === selectedSet);
     }
 
     function salesInSet() {
-      if (isSingles()) return [];
-      return latestSales.filter((row) => setNameOf(row) === selectedSet);
+      const rows = latestSales.filter((row) => setNameOf(row) === selectedSet);
+      if (isSingles()) return rows.filter((row) => isSinglesProduct(row));
+      return rows.filter((row) => !isSinglesProduct(row));
     }
 
     function latestSnapshots(data) {
@@ -2124,8 +2138,7 @@
           sort.dataset.mode = "singles";
         }
         if (listingsTitle) listingsTitle.textContent = "Singles";
-        if (listingsSubtitle) listingsSubtitle.textContent = "TCGPlayer card pages for this set. Market snapshots fill in after those URLs are added to the daily scrape.";
-        if (chartSection) chartSection.classList.add("hidden");
+        if (listingsSubtitle) listingsSubtitle.textContent = "TCGPlayer card pages for this set, with market snapshots from the daily scrape";
       } else {
         if (sort && sort.dataset.mode === "singles") {
           sort.value = "sales-desc";
@@ -2169,10 +2182,8 @@
         renderMetrics(latestSnapshots(scoped), scoped);
       } else if (hasListings) {
         document.getElementById("metric-tracked").textContent = integer.format(latestByProduct.length);
-        document.getElementById("metric-volume-name").textContent = isSingles() ? "Links only" : "Awaiting first scrape";
-        document.getElementById("metric-volume-value").textContent = isSingles()
-          ? "Card pages are linked; they are not in the daily scrape yet"
-          : "Listings are linked; market snapshots fill in after the daily scraper runs";
+        document.getElementById("metric-volume-name").textContent = "Awaiting first scrape";
+        document.getElementById("metric-volume-value").textContent = "Listings are linked; market snapshots fill in after the daily scraper runs";
         document.getElementById("metric-avg-price").textContent = "—";
         document.getElementById("metric-total-sales").textContent = "—";
         const badge = document.getElementById("updated-badge");
@@ -2184,9 +2195,9 @@
         badge.classList.remove("inline-flex");
       }
       if (hasListings) {
-        if (!isSingles()) renderPills(uniqueProducts(latestByProduct));
-        else document.getElementById("product-pills").innerHTML = "";
-        if (!isSingles()) renderChart();
+        renderPills(uniqueProducts(latestByProduct));
+        if (chartSection) chartSection.classList.remove("hidden");
+        renderChart();
         renderTable();
       }
       populateSalesProductFilter();
@@ -2230,7 +2241,27 @@
 
     function renderPills(products) {
       const host = document.getElementById("product-pills");
-      const options = [{ id: "all", name: "All products" }, ...products];
+      const options = [{ id: "all", name: isSingles() ? "All cards" : "All products" }, ...products];
+      if (isSingles() && products.length > 24) {
+        host.innerHTML = `
+          <label class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+            Card
+            <select id="singles-chart-product" class="max-w-xs rounded-lg border border-slate-200 bg-ink-50 px-3 py-2 text-sm text-ink-900 outline-none ring-gold-400 focus:ring-2 dark:border-white/10 dark:bg-ink-950 dark:text-ink-50">
+              ${options.map((product) => `
+                <option value="${escapeHtml(product.id)}" ${selectedProductId === product.id ? "selected" : ""}>${escapeHtml(product.name)}</option>
+              `).join("")}
+            </select>
+          </label>
+        `;
+        const select = document.getElementById("singles-chart-product");
+        if (select) {
+          select.addEventListener("change", () => {
+            selectedProductId = select.value;
+            renderChart();
+          });
+        }
+        return;
+      }
       host.innerHTML = options.map((product) => `
         <button type="button" data-product-id="${escapeHtml(product.id)}" class="pill inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-gold-500 dark:border-white/10 dark:text-slate-300 ${selectedProductId === product.id ? "pill-active" : "bg-ink-50 dark:bg-ink-950"}">
           ${product.id !== "all" ? imageMarkup({ productId: product.id }, "h-6 w-6") : ""}
@@ -2717,6 +2748,13 @@
         if (!chartHistory || !Array.isArray(chartHistory.products)) chartHistory = { products: [] };
       } catch (error) {
         chartHistory = { products: [] };
+      }
+
+      try {
+        singlesChartHistory = await loadJson("data/singles_chart_history.json");
+        if (!singlesChartHistory || !Array.isArray(singlesChartHistory.products)) singlesChartHistory = { products: [] };
+      } catch (error) {
+        singlesChartHistory = { products: [] };
       }
 
       try {
