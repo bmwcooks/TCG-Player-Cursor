@@ -2464,7 +2464,7 @@
     function renderChart() {
       const copy = RANGE_COPY[selectedRange] || RANGE_COPY["1M"];
       const conditionNote = isSingles() ? ` · ${selectedCondition}` : "";
-      document.getElementById("chart-title").textContent = copy.title + conditionNote;
+      document.getElementById("chart-title").textContent = copy.title;
       document.getElementById("chart-subtitle").textContent = `${copy.subtitle}${conditionNote}${outlierProtectionOn() ? " · outlier protection on" : ""}`;
 
       const ctx = document.getElementById("sales-chart");
