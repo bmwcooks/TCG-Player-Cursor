@@ -1,8 +1,10 @@
-.git/
-.github/
-__pycache__/
+# Cloudflare Workers uploads this directory as static assets.
+# Keep Python/source out of the Worker; the dashboard only needs HTML + data JSON.
+.git
+.github
+scripts
+__pycache__
 *.py
-*.pyc
 urls.txt
 README.md
 wrangler.toml

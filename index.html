@@ -860,12 +860,19 @@
 
     function expandConditionChart(block) {
       if (!block) return [];
-      if (Array.isArray(block.ranges?.["1M"]?.points)) return block.ranges["1M"].points;
-      const dates = block.dates || [];
+      return rangePoints(block.ranges?.["1M"] || block);
+    }
+
+    function rangePoints(block) {
+      if (!block) return [];
+      if (Array.isArray(block.points) && block.points.length) return block.points;
+      const dates = block.dates || block.d || [];
+      const prices = block.prices || block.p || [];
+      const sold = block.sold || block.q || [];
       return dates.map((date, index) => ({
         date,
-        quantitySold: (block.sold || [])[index] ?? null,
-        marketPrice: (block.prices || [])[index] ?? null,
+        quantitySold: sold[index] ?? null,
+        marketPrice: prices[index] ?? null,
       }));
     }
 
@@ -874,7 +881,7 @@
       if (isSingles() && selectedCondition !== preferred) {
         return protectPriceSeries(expandConditionChart((product.conditionCharts || {})[selectedCondition]), "1M");
       }
-      return protectPriceSeries(product.ranges?.[selectedRange]?.points || [], selectedRange);
+      return protectPriceSeries(rangePoints(product.ranges?.[selectedRange]), selectedRange);
     }
 
     function listingHref(row) {
@@ -1292,7 +1299,7 @@
       let min = null;
       (chartHistory.products || []).forEach((product) => {
         ["1M", "3M", "1Y"].forEach((key) => {
-          ((product.ranges || {})[key]?.points || []).forEach((point) => {
+          (rangePoints((product.ranges || {})[key])).forEach((point) => {
             if (point && point.date && (!min || point.date < min)) min = point.date;
           });
         });
@@ -1541,13 +1548,13 @@
       const span = mode === "all" ? 400 : days;
       const ranges = product.ranges || {};
       let points = [];
-      if (span <= 35) points = ranges["1M"]?.points || [];
+      if (span <= 35) points = rangePoints(ranges["1M"]);
       if ((span > 35 && span <= 100) || points.length < 2) {
-        const quarterly = ranges["3M"]?.points || [];
+        const quarterly = rangePoints(ranges["3M"]);
         if (quarterly.length > points.length) points = quarterly;
       }
       if (span > 100 || points.length < 2) {
-        const annual = ranges["1Y"]?.points || [];
+        const annual = rangePoints(ranges["1Y"]);
         if (annual.length) points = annual;
       }
       return protectPriceSeries(points, span <= 35 ? "1M" : span <= 100 ? "3M" : "1Y")

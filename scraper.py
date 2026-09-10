@@ -335,6 +335,49 @@ def compact_condition_chart(sku):
     }
 
 
+def range_points(block):
+    """Dated chart rows from either full `points` or compact dates/prices/sold arrays."""
+    block = block or {}
+    points = block.get("points")
+    if isinstance(points, list) and points:
+        return points
+    dates = block.get("dates") or block.get("d") or []
+    prices = block.get("prices") or block.get("p") or []
+    sold = block.get("sold") or block.get("q") or []
+    rows = []
+    for index, date in enumerate(dates):
+        if not date:
+            continue
+        rows.append({
+            "date": date,
+            "marketPrice": prices[index] if index < len(prices) else None,
+            "quantitySold": sold[index] if index < len(sold) else None,
+        })
+    return rows
+
+
+def compact_range_block(block):
+    """Drop per-point extras so singles_chart_history.json stays under Cloudflare's 25 MiB file limit."""
+    block = block or {}
+    points = range_points(block)
+    return {
+        "interval": block.get("interval") or block.get("i") or "",
+        "label": block.get("label") or block.get("l") or "",
+        "dates": [point.get("date") for point in points],
+        "prices": [point.get("marketPrice") for point in points],
+        "sold": [point.get("quantitySold") for point in points],
+    }
+
+
+def compact_singles_chart_product(row):
+    out = dict(row or {})
+    ranges = {}
+    for key, block in (out.get("ranges") or {}).items():
+        ranges[key] = compact_range_block(block)
+    out["ranges"] = ranges
+    return out
+
+
 def parse_daily_buckets(history_data):
     """Daily 1M buckets used for the dated tracker archive."""
     return [
@@ -766,9 +809,9 @@ def merge_chart_product(previous, incoming):
     prev_ranges = (previous or {}).get("ranges") or {}
     new_ranges = dict((incoming or {}).get("ranges") or {})
     for key in ("1M", "3M", "1Y"):
-        new_pts = (new_ranges.get(key) or {}).get("points") or []
+        new_pts = range_points(new_ranges.get(key))
         old_block = prev_ranges.get(key) or {}
-        old_pts = old_block.get("points") or []
+        old_pts = range_points(old_block)
         if new_pts:
             continue
         if old_pts:
@@ -1612,6 +1655,9 @@ def main():
                 except (json.JSONDecodeError, OSError):
                     existing_singles = {}
             merged_singles = merge_chart_history(existing_singles, singles_charts, today_date)
+            merged_singles["products"] = [
+                compact_singles_chart_product(row) for row in (merged_singles.get("products") or [])
+            ]
             save_json(SINGLES_CHART_HISTORY_FILE, merged_singles, compact=True)
             print(f"Wrote chart history for {len(merged_singles.get('products') or [])} single(s) to {SINGLES_CHART_HISTORY_FILE}.")
     if latest_sales_rows:
