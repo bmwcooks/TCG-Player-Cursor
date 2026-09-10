@@ -196998,10 +196998,53 @@
     "marketPrice": 16.82,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 54,
+    "currentQuantity": 56,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91144/pokemon-xy-flashfire-charizard-ex-11?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91144/pokemon-xy-flashfire-charizard-ex-11?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 16.82,
+        "lastDaySales": 0,
+        "currentQuantity": 56,
+        "currentSellers": 54
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 9.16,
+        "lastDaySales": 0,
+        "currentQuantity": 85,
+        "currentSellers": 63
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 5.41,
+        "lastDaySales": 1,
+        "currentQuantity": 50,
+        "currentSellers": 37
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 3.6,
+        "lastDaySales": 2,
+        "currentQuantity": 41,
+        "currentSellers": 33
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 2.2,
+        "lastDaySales": 1,
+        "currentQuantity": 60,
+        "currentSellers": 39
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197013,10 +197056,53 @@
     "marketPrice": 19.18,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 29,
+    "currentQuantity": 43,
     "lastDaySales": 1,
-    "url": "https://www.tcgplayer.com/product/91145/pokemon-xy-flashfire-charizard-ex-12?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91145/pokemon-xy-flashfire-charizard-ex-12?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 19.18,
+        "lastDaySales": 1,
+        "currentQuantity": 43,
+        "currentSellers": 29
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 11.2,
+        "lastDaySales": 0,
+        "currentQuantity": 25,
+        "currentSellers": 22
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 8.83,
+        "lastDaySales": 2,
+        "currentQuantity": 9,
+        "currentSellers": 9
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 5.52,
+        "lastDaySales": 0,
+        "currentQuantity": 7,
+        "currentSellers": 6
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 4.15,
+        "lastDaySales": 0,
+        "currentQuantity": 15,
+        "currentSellers": 15
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197028,10 +197114,53 @@
     "marketPrice": 68.55,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 12,
+    "currentQuantity": 13,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91146/pokemon-xy-flashfire-m-charizard-ex-y?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91146/pokemon-xy-flashfire-m-charizard-ex-y?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 68.55,
+        "lastDaySales": 0,
+        "currentQuantity": 13,
+        "currentSellers": 12
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 49.99,
+        "lastDaySales": 0,
+        "currentQuantity": 23,
+        "currentSellers": 22
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 31.16,
+        "lastDaySales": 1,
+        "currentQuantity": 31,
+        "currentSellers": 29
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 22.32,
+        "lastDaySales": 0,
+        "currentQuantity": 28,
+        "currentSellers": 25
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 18.54,
+        "lastDaySales": 0,
+        "currentQuantity": 27,
+        "currentSellers": 26
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197043,10 +197172,53 @@
     "marketPrice": 2.95,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 24,
+    "currentQuantity": 37,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91168/pokemon-xy-flashfire-magnezone-ex?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91168/pokemon-xy-flashfire-magnezone-ex?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 2.95,
+        "lastDaySales": 0,
+        "currentQuantity": 37,
+        "currentSellers": 24
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 1.95,
+        "lastDaySales": 0,
+        "currentQuantity": 25,
+        "currentSellers": 21
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 2.04,
+        "lastDaySales": 0,
+        "currentQuantity": 19,
+        "currentSellers": 17
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 1.43,
+        "lastDaySales": 0,
+        "currentQuantity": 12,
+        "currentSellers": 12
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 1.04,
+        "lastDaySales": 1,
+        "currentQuantity": 10,
+        "currentSellers": 9
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197058,10 +197230,53 @@
     "marketPrice": 5.01,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 17,
+    "currentQuantity": 22,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91174/pokemon-xy-flashfire-toxicroak-ex?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91174/pokemon-xy-flashfire-toxicroak-ex?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 5.01,
+        "lastDaySales": 0,
+        "currentQuantity": 22,
+        "currentSellers": 17
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 2.72,
+        "lastDaySales": 0,
+        "currentQuantity": 32,
+        "currentSellers": 25
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 2.54,
+        "lastDaySales": 0,
+        "currentQuantity": 25,
+        "currentSellers": 22
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 1.92,
+        "lastDaySales": 0,
+        "currentQuantity": 17,
+        "currentSellers": 15
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 1.17,
+        "lastDaySales": 0,
+        "currentQuantity": 11,
+        "currentSellers": 11
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197073,10 +197288,53 @@
     "marketPrice": 280.51,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 13,
+    "currentQuantity": 13,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91206/pokemon-xy-flashfire-m-charizard-ex-x?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91206/pokemon-xy-flashfire-m-charizard-ex-x?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 280.51,
+        "lastDaySales": 0,
+        "currentQuantity": 13,
+        "currentSellers": 13
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 171.77,
+        "lastDaySales": 0,
+        "currentQuantity": 19,
+        "currentSellers": 16
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 111.52,
+        "lastDaySales": 0,
+        "currentQuantity": 36,
+        "currentSellers": 30
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 74.78,
+        "lastDaySales": 0,
+        "currentQuantity": 24,
+        "currentSellers": 24
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 47.75,
+        "lastDaySales": 0,
+        "currentQuantity": 27,
+        "currentSellers": 25
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197088,10 +197346,53 @@
     "marketPrice": 2.74,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 34,
+    "currentQuantity": 46,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91215/pokemon-xy-flashfire-kangaskhan-ex?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91215/pokemon-xy-flashfire-kangaskhan-ex?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 2.74,
+        "lastDaySales": 0,
+        "currentQuantity": 46,
+        "currentSellers": 34
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 1.86,
+        "lastDaySales": 1,
+        "currentQuantity": 51,
+        "currentSellers": 39
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 1.73,
+        "lastDaySales": 0,
+        "currentQuantity": 27,
+        "currentSellers": 25
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 1.04,
+        "lastDaySales": 0,
+        "currentQuantity": 27,
+        "currentSellers": 26
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 0.96,
+        "lastDaySales": 1,
+        "currentQuantity": 29,
+        "currentSellers": 25
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197103,10 +197404,53 @@
     "marketPrice": 19.39,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 29,
+    "currentQuantity": 41,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91216/pokemon-xy-flashfire-m-kangaskhan-ex?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91216/pokemon-xy-flashfire-m-kangaskhan-ex?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 19.39,
+        "lastDaySales": 0,
+        "currentQuantity": 41,
+        "currentSellers": 29
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 13.18,
+        "lastDaySales": 1,
+        "currentQuantity": 43,
+        "currentSellers": 37
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 8.84,
+        "lastDaySales": 0,
+        "currentQuantity": 21,
+        "currentSellers": 18
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 6.62,
+        "lastDaySales": 0,
+        "currentQuantity": 11,
+        "currentSellers": 11
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 5.13,
+        "lastDaySales": 0,
+        "currentQuantity": 18,
+        "currentSellers": 16
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197118,10 +197462,53 @@
     "marketPrice": 271.31,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 4,
+    "currentQuantity": 4,
     "lastDaySales": 1,
-    "url": "https://www.tcgplayer.com/product/91238/pokemon-xy-flashfire-charizard-ex-100-full-art?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91238/pokemon-xy-flashfire-charizard-ex-100-full-art?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 271.31,
+        "lastDaySales": 1,
+        "currentQuantity": 4,
+        "currentSellers": 4
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 178.5,
+        "lastDaySales": 0,
+        "currentQuantity": 21,
+        "currentSellers": 16
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 114.82,
+        "lastDaySales": 0,
+        "currentQuantity": 11,
+        "currentSellers": 11
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 75.5,
+        "lastDaySales": 1,
+        "currentQuantity": 11,
+        "currentSellers": 10
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 63.5,
+        "lastDaySales": 0,
+        "currentQuantity": 11,
+        "currentSellers": 11
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197133,10 +197520,53 @@
     "marketPrice": 18.39,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 7,
+    "currentQuantity": 11,
     "lastDaySales": 1,
-    "url": "https://www.tcgplayer.com/product/91239/pokemon-xy-flashfire-magnezone-ex-101-full-art?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91239/pokemon-xy-flashfire-magnezone-ex-101-full-art?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 18.39,
+        "lastDaySales": 1,
+        "currentQuantity": 11,
+        "currentSellers": 7
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 9.63,
+        "lastDaySales": 1,
+        "currentQuantity": 22,
+        "currentSellers": 19
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 7.5,
+        "lastDaySales": 0,
+        "currentQuantity": 10,
+        "currentSellers": 9
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 5.85,
+        "lastDaySales": 0,
+        "currentQuantity": 11,
+        "currentSellers": 10
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 4.2,
+        "lastDaySales": 0,
+        "currentQuantity": 10,
+        "currentSellers": 9
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197148,10 +197578,53 @@
     "marketPrice": 24.44,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 7,
+    "currentQuantity": 7,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91240/pokemon-xy-flashfire-toxicroak-ex-102-full-art?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91240/pokemon-xy-flashfire-toxicroak-ex-102-full-art?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 24.44,
+        "lastDaySales": 0,
+        "currentQuantity": 7,
+        "currentSellers": 7
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 12.5,
+        "lastDaySales": 1,
+        "currentQuantity": 31,
+        "currentSellers": 13
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 9.37,
+        "lastDaySales": 0,
+        "currentQuantity": 13,
+        "currentSellers": 12
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 6.73,
+        "lastDaySales": 0,
+        "currentQuantity": 13,
+        "currentSellers": 12
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 6.57,
+        "lastDaySales": 0,
+        "currentQuantity": 12,
+        "currentSellers": 12
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197163,10 +197636,53 @@
     "marketPrice": 31.36,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 14,
+    "currentQuantity": 23,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91241/pokemon-xy-flashfire-kangaskhan-ex-103-full-art?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91241/pokemon-xy-flashfire-kangaskhan-ex-103-full-art?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 31.36,
+        "lastDaySales": 0,
+        "currentQuantity": 23,
+        "currentSellers": 14
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 19.3,
+        "lastDaySales": 1,
+        "currentQuantity": 22,
+        "currentSellers": 19
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 11.24,
+        "lastDaySales": 0,
+        "currentQuantity": 20,
+        "currentSellers": 20
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 9.41,
+        "lastDaySales": 0,
+        "currentQuantity": 20,
+        "currentSellers": 20
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 7.45,
+        "lastDaySales": 2,
+        "currentQuantity": 9,
+        "currentSellers": 8
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197178,10 +197694,53 @@
     "marketPrice": 33.04,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 14,
+    "currentQuantity": 15,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91242/pokemon-xy-flashfire-lysandre-104-full-art?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91242/pokemon-xy-flashfire-lysandre-104-full-art?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 33.04,
+        "lastDaySales": 0,
+        "currentQuantity": 15,
+        "currentSellers": 14
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 19.62,
+        "lastDaySales": 0,
+        "currentQuantity": 39,
+        "currentSellers": 32
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 15.2,
+        "lastDaySales": 0,
+        "currentQuantity": 20,
+        "currentSellers": 19
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 12.99,
+        "lastDaySales": 0,
+        "currentQuantity": 15,
+        "currentSellers": 14
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 8.26,
+        "lastDaySales": 0,
+        "currentQuantity": 7,
+        "currentSellers": 7
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197193,10 +197752,53 @@
     "marketPrice": 57.02,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 9,
+    "currentQuantity": 10,
     "lastDaySales": 4,
-    "url": "https://www.tcgplayer.com/product/91243/pokemon-xy-flashfire-pokemon-center-lady-105-full-art?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91243/pokemon-xy-flashfire-pokemon-center-lady-105-full-art?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 57.02,
+        "lastDaySales": 4,
+        "currentQuantity": 10,
+        "currentSellers": 9
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 38.71,
+        "lastDaySales": 0,
+        "currentQuantity": 28,
+        "currentSellers": 22
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 26.6,
+        "lastDaySales": 0,
+        "currentQuantity": 20,
+        "currentSellers": 18
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 22.4,
+        "lastDaySales": 0,
+        "currentQuantity": 10,
+        "currentSellers": 9
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 15.48,
+        "lastDaySales": 0,
+        "currentQuantity": 8,
+        "currentSellers": 8
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197208,10 +197810,53 @@
     "marketPrice": 25.41,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 13,
+    "currentQuantity": 20,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91244/pokemon-xy-flashfire-pokemon-fan-club-106-full-art?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91244/pokemon-xy-flashfire-pokemon-fan-club-106-full-art?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 25.41,
+        "lastDaySales": 0,
+        "currentQuantity": 20,
+        "currentSellers": 13
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 14.42,
+        "lastDaySales": 0,
+        "currentQuantity": 20,
+        "currentSellers": 16
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 9.92,
+        "lastDaySales": 0,
+        "currentQuantity": 12,
+        "currentSellers": 10
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 8.15,
+        "lastDaySales": 0,
+        "currentQuantity": 8,
+        "currentSellers": 8
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 7.59,
+        "lastDaySales": 1,
+        "currentQuantity": 9,
+        "currentSellers": 9
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197223,10 +197868,53 @@
     "marketPrice": 321.89,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 8,
+    "currentQuantity": 12,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91245/pokemon-xy-flashfire-m-charizard-ex-y-secret?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91245/pokemon-xy-flashfire-m-charizard-ex-y-secret?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 321.89,
+        "lastDaySales": 0,
+        "currentQuantity": 12,
+        "currentSellers": 8
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 180.05,
+        "lastDaySales": 0,
+        "currentQuantity": 19,
+        "currentSellers": 18
+      },
+      "Moderately Played": {
+        "variant": "",
+        "language": "English",
+        "marketPrice": null,
+        "lastDaySales": null,
+        "currentQuantity": 14,
+        "currentSellers": 14
+      },
+      "Heavily Played": {
+        "variant": "",
+        "language": "English",
+        "marketPrice": null,
+        "lastDaySales": null,
+        "currentQuantity": 12,
+        "currentSellers": 12
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 49.47,
+        "lastDaySales": 0,
+        "currentQuantity": 11,
+        "currentSellers": 11
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197238,10 +197926,53 @@
     "marketPrice": 1501.23,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 11,
+    "currentQuantity": 12,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91246/pokemon-xy-flashfire-m-charizard-ex-x-secret?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91246/pokemon-xy-flashfire-m-charizard-ex-x-secret?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 1501.23,
+        "lastDaySales": 0,
+        "currentQuantity": 12,
+        "currentSellers": 11
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 511.61,
+        "lastDaySales": 0,
+        "currentQuantity": 12,
+        "currentSellers": 12
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 291.35,
+        "lastDaySales": 0,
+        "currentQuantity": 7,
+        "currentSellers": 7
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 206.0,
+        "lastDaySales": 0,
+        "currentQuantity": 1,
+        "currentSellers": 1
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 120.15,
+        "lastDaySales": 0,
+        "currentQuantity": 9,
+        "currentSellers": 9
+      }
+    }
   },
   {
     "date": "2026-09-10",
@@ -197253,10 +197984,53 @@
     "marketPrice": 67.49,
     "recentSale": null,
     "listedMedian": null,
-    "currentSellers": null,
-    "currentQuantity": null,
+    "currentSellers": 4,
+    "currentQuantity": 6,
     "lastDaySales": 0,
-    "url": "https://www.tcgplayer.com/product/91247/pokemon-xy-flashfire-m-kangaskhan-ex-109-secret-rare?page=1&Language=English"
+    "url": "https://www.tcgplayer.com/product/91247/pokemon-xy-flashfire-m-kangaskhan-ex-109-secret-rare?page=1&Language=English",
+    "preferredCondition": "Near Mint",
+    "conditions": {
+      "Near Mint": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 67.49,
+        "lastDaySales": 0,
+        "currentQuantity": 6,
+        "currentSellers": 4
+      },
+      "Lightly Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 38.07,
+        "lastDaySales": 1,
+        "currentQuantity": 14,
+        "currentSellers": 13
+      },
+      "Moderately Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 27.1,
+        "lastDaySales": 0,
+        "currentQuantity": 7,
+        "currentSellers": 7
+      },
+      "Heavily Played": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 19.11,
+        "lastDaySales": 0,
+        "currentQuantity": 7,
+        "currentSellers": 7
+      },
+      "Damaged": {
+        "variant": "Holofoil",
+        "language": "English",
+        "marketPrice": 13.64,
+        "lastDaySales": 1,
+        "currentQuantity": 17,
+        "currentSellers": 16
+      }
+    }
   },
   {
     "date": "2026-09-10",

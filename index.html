@@ -198,6 +198,30 @@
       background: #e8b86d;
       color: #1c232d;
     }
+    .condition-switch {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      border-radius: 0.6rem;
+      border: 1px solid rgb(226 232 240);
+      background: #fff;
+      padding: 0.15rem;
+    }
+    .dark .condition-switch {
+      border-color: rgba(255,255,255,0.1);
+      background: #12161d;
+    }
+    .condition-switch button {
+      border-radius: 0.45rem;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .condition-switch button[aria-pressed="true"] {
+      background: #e8b86d;
+      color: #1c232d;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-ink-50 text-ink-900 font-sans antialiased dark:bg-ink-950 dark:text-ink-50">
@@ -277,9 +301,15 @@
     </header>
 
     <div class="mx-auto max-w-7xl px-4 pt-4 sm:px-6">
-      <div class="inline-flex rounded-xl border border-slate-200 bg-white/90 p-1 dark:border-white/10 dark:bg-ink-900/80" role="tablist" aria-label="View">
-        <button type="button" data-tab="overview" class="tab-btn pill-active rounded-lg px-4 py-2 text-sm font-medium">Overview</button>
-        <button type="button" data-tab="sales" class="tab-btn rounded-lg px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300">Latest Sales</button>
+      <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div class="inline-flex rounded-xl border border-slate-200 bg-white/90 p-1 dark:border-white/10 dark:bg-ink-900/80" role="tablist" aria-label="View">
+          <button type="button" data-tab="overview" class="tab-btn pill-active rounded-lg px-4 py-2 text-sm font-medium">Overview</button>
+          <button type="button" data-tab="sales" class="tab-btn rounded-lg px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300">Latest Sales</button>
+        </div>
+        <div id="condition-switch-wrap" class="hidden items-center gap-2">
+          <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Condition</span>
+          <div id="condition-pills" class="condition-switch" role="group" aria-label="TCGPlayer condition"></div>
+        </div>
       </div>
     </div>
 
@@ -556,6 +586,16 @@
     let selectedProductId = "all";
     let selectedSet = "";
     let catalogKind = "sealed";
+    const CARD_CONDITIONS = ["Near Mint", "Lightly Played", "Moderately Played", "Heavily Played", "Damaged"];
+    const DEFAULT_CARD_CONDITION = "Near Mint";
+    const CONDITION_SHORT = {
+      "Near Mint": "NM",
+      "Lightly Played": "LP",
+      "Moderately Played": "MP",
+      "Heavily Played": "HP",
+      Damaged: "DMG",
+    };
+    let selectedCondition = DEFAULT_CARD_CONDITION;
     let selectedRange = "1M";
     let activeTab = "overview";
     let salesChart = null;
@@ -786,6 +826,113 @@
       return catalogKind === "singles";
     }
 
+    function loadSelectedCondition() {
+      try {
+        const stored = localStorage.getItem("singlesCondition");
+        if (CARD_CONDITIONS.includes(stored)) selectedCondition = stored;
+      } catch (error) {
+        selectedCondition = DEFAULT_CARD_CONDITION;
+      }
+    }
+
+    function conditionView(row) {
+      if (!row || !isSingles()) return row;
+      const block = (row.conditions || {})[selectedCondition];
+      if (block) {
+        return {
+          ...row,
+          marketPrice: block.marketPrice ?? null,
+          lastDaySales: block.lastDaySales ?? null,
+          currentQuantity: block.currentQuantity ?? null,
+          currentSellers: block.currentSellers ?? null,
+          variant: block.variant || row.variant,
+        };
+      }
+      if (selectedCondition === (row.preferredCondition || DEFAULT_CARD_CONDITION)) return row;
+      return {
+        ...row,
+        marketPrice: null,
+        lastDaySales: null,
+        currentQuantity: null,
+        currentSellers: null,
+      };
+    }
+
+    function expandConditionChart(block) {
+      if (!block) return [];
+      if (Array.isArray(block.ranges?.["1M"]?.points)) return block.ranges["1M"].points;
+      const dates = block.dates || [];
+      return dates.map((date, index) => ({
+        date,
+        quantitySold: (block.sold || [])[index] ?? null,
+        marketPrice: (block.prices || [])[index] ?? null,
+      }));
+    }
+
+    function chartPointsForProduct(product) {
+      const preferred = product.preferredCondition || DEFAULT_CARD_CONDITION;
+      if (isSingles() && selectedCondition !== preferred) {
+        return protectPriceSeries(expandConditionChart((product.conditionCharts || {})[selectedCondition]), "1M");
+      }
+      return protectPriceSeries(product.ranges?.[selectedRange]?.points || [], selectedRange);
+    }
+
+    function listingHref(row) {
+      if (!row?.url) return "";
+      if (!isSingles()) return row.url;
+      try {
+        const url = new URL(row.url);
+        url.searchParams.set("Language", "English");
+        url.searchParams.set("Condition", selectedCondition);
+        return url.toString();
+      } catch (error) {
+        return row.url;
+      }
+    }
+
+    function availableChartRanges() {
+      if (isSingles() && selectedCondition !== DEFAULT_CARD_CONDITION) return ["1M"];
+      return ["1M", "3M", "1Y"];
+    }
+
+    function renderConditionPills() {
+      const wrap = document.getElementById("condition-switch-wrap");
+      const host = document.getElementById("condition-pills");
+      if (!wrap || !host) return;
+      const show = isSingles();
+      wrap.classList.toggle("hidden", !show);
+      wrap.classList.toggle("flex", show);
+      if (!show) return;
+      host.innerHTML = CARD_CONDITIONS.map((condition) => `
+        <button type="button" data-condition="${escapeHtml(condition)}" aria-pressed="${selectedCondition === condition ? "true" : "false"}" title="${escapeHtml(condition)}">
+          <span class="sm:hidden">${escapeHtml(CONDITION_SHORT[condition] || condition)}</span>
+          <span class="hidden sm:inline">${escapeHtml(condition)}</span>
+        </button>
+      `).join("");
+      host.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => setSelectedCondition(button.dataset.condition));
+      });
+    }
+
+    function setSelectedCondition(next) {
+      if (!CARD_CONDITIONS.includes(next) || selectedCondition === next) return;
+      selectedCondition = next;
+      try { localStorage.setItem("singlesCondition", selectedCondition); } catch (error) { /* ignore */ }
+      if (selectedCondition !== DEFAULT_CARD_CONDITION) selectedRange = "1M";
+      const listingsSubtitle = document.getElementById("listings-subtitle");
+      if (listingsSubtitle && isSingles()) {
+        listingsSubtitle.textContent = `TCGPlayer ${selectedCondition} snapshots for this set — market price, last-day sales, listed quantity, and sellers`;
+      }
+      renderConditionPills();
+      renderRangePills();
+      if (latestByProduct.length) {
+        renderMetrics(latestByProduct.filter((row) => row.date), recordsInSet());
+        renderChart();
+        renderTable();
+      }
+      renderSalesTable();
+    }
+
     function setPageHref(gameId, familyId, setSlug, tab) {
       return routeHref([
         gameId,
@@ -818,6 +965,7 @@
       if (dashWrap) dashWrap.innerHTML = kindToggleMarkup();
       const showAll = document.getElementById("show-all-from-set");
       if (showAll) showAll.classList.toggle("hidden", !isSingles() || !currentCatalogSet);
+      renderConditionPills();
     }
 
     function setCatalogKind(kind) {
@@ -2102,6 +2250,8 @@
     }
 
     function renderMetrics(latest, all) {
+      latest = (latest || []).map(conditionView);
+      all = (all || []).map(conditionView);
       const asOf = latestSalesDate(all) || latestDate(all);
       const todayRows = all.filter((row) => row.date === asOf);
       document.getElementById("metric-tracked").textContent = integer.format(latest.length);
@@ -2138,7 +2288,7 @@
           sort.dataset.mode = "singles";
         }
         if (listingsTitle) listingsTitle.textContent = "Singles";
-        if (listingsSubtitle) listingsSubtitle.textContent = "TCGPlayer card pages for this set, with market snapshots from the daily scrape";
+        if (listingsSubtitle) listingsSubtitle.textContent = `TCGPlayer ${selectedCondition} snapshots for this set — market price, last-day sales, listed quantity, and sellers`;
       } else {
         if (sort && sort.dataset.mode === "singles") {
           sort.value = "sales-desc";
@@ -2195,6 +2345,8 @@
         badge.classList.remove("inline-flex");
       }
       if (hasListings) {
+        renderConditionPills();
+        renderRangePills();
         renderPills(uniqueProducts(latestByProduct));
         if (chartSection) chartSection.classList.remove("hidden");
         renderChart();
@@ -2225,7 +2377,9 @@
 
     function renderRangePills() {
       const host = document.getElementById("range-pills");
-      host.innerHTML = ["1M", "3M", "1Y"].map((range) => `
+      const ranges = availableChartRanges();
+      if (!ranges.includes(selectedRange)) selectedRange = ranges[0];
+      host.innerHTML = ranges.map((range) => `
         <button type="button" data-range="${range}" class="pill rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-gold-500 dark:border-white/10 dark:text-slate-300 ${selectedRange === range ? "pill-active" : "bg-ink-50 dark:bg-ink-950"}">
           ${range}
         </button>
@@ -2284,7 +2438,7 @@
         : products.filter((product) => String(product.productId) === selectedProductId);
       const byDate = new Map();
       selected.forEach((product) => {
-        const points = protectPriceSeries(product.ranges?.[selectedRange]?.points || [], selectedRange);
+        const points = chartPointsForProduct(product);
         points.forEach((point) => {
           if (!point.date) return;
           const current = byDate.get(point.date) || { quantitySold: 0, marketPriceSum: 0, priceCount: 0 };
@@ -2309,10 +2463,9 @@
 
     function renderChart() {
       const copy = RANGE_COPY[selectedRange] || RANGE_COPY["1M"];
-      document.getElementById("chart-title").textContent = copy.title;
-      document.getElementById("chart-subtitle").textContent = outlierProtectionOn()
-        ? `${copy.subtitle} · outlier protection on`
-        : copy.subtitle;
+      const conditionNote = isSingles() ? ` · ${selectedCondition}` : "";
+      document.getElementById("chart-title").textContent = copy.title + conditionNote;
+      document.getElementById("chart-subtitle").textContent = `${copy.subtitle}${conditionNote}${outlierProtectionOn() ? " · outlier protection on" : ""}`;
 
       const ctx = document.getElementById("sales-chart");
       const colors = chartColors();
@@ -2414,7 +2567,7 @@
       const query = document.getElementById("table-search").value.trim().toLowerCase();
       const sort = document.getElementById("table-sort").value;
       const [key, direction] = sort.split("-");
-      const rows = latestByProduct.filter((row) =>
+      const rows = latestByProduct.map(conditionView).filter((row) =>
         (row.productName || "").toLowerCase().includes(query)
       );
       const valueOf = (row) => {
@@ -2451,7 +2604,7 @@
               ${imageMarkup(row, "h-14 w-14")}
               <div>
                 <div class="font-medium">${escapeHtml(row.productName || "Unknown product")}</div>
-                <div class="text-xs text-slate-500">${escapeHtml(listingKindLabel(row))} · ID ${escapeHtml(row.productId || "—")}${row.date ? ` · ${escapeHtml(row.date)}` : ""}</div>
+                <div class="text-xs text-slate-500">${escapeHtml(listingKindLabel(row))}${row.variant ? ` · ${escapeHtml(row.variant)}` : ""} · ID ${escapeHtml(row.productId || "—")}${row.date ? ` · ${escapeHtml(row.date)}` : ""}</div>
               </div>
             </div>
           </td>
@@ -2460,7 +2613,7 @@
           <td class="px-3 py-3 tabular">${formatInt(row.currentQuantity)}</td>
           <td class="px-3 py-3 tabular">${formatInt(row.currentSellers)}</td>
           <td class="px-3 py-3">
-            ${row.url ? `<a href="${escapeHtml(row.url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-medium text-amber-700 hover:underline dark:text-gold-400">View <i data-lucide="external-link" class="h-3.5 w-3.5"></i></a>` : "—"}
+            ${row.url ? `<a href="${escapeHtml(listingHref(row))}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-medium text-amber-700 hover:underline dark:text-gold-400">View <i data-lucide="external-link" class="h-3.5 w-3.5"></i></a>` : "—"}
           </td>
         </tr>
       `).join("");
@@ -2492,6 +2645,7 @@
       const productId = document.getElementById("sales-product").value;
       return salesAfterOutliers().filter((row) => {
         if (productId !== "all" && String(row.productId) !== productId) return false;
+        if (isSingles() && (row.condition || "") !== selectedCondition) return false;
         if (!query) return true;
         const haystack = [row.productName, row.condition, row.variant, row.language].join(" ").toLowerCase();
         return haystack.includes(query);
@@ -2523,7 +2677,9 @@
         empty.classList.remove("hidden");
         const totalInSet = salesInSet().length;
         count.textContent = totalInSet
-          ? `Showing 0 of ${integer.format(totalInSet)} captured transactions in ${selectedSet || "this set"}`
+          ? (isSingles()
+            ? `Showing 0 ${selectedCondition} sales of ${integer.format(totalInSet)} captured transactions in ${selectedSet || "this set"}`
+            : `Showing 0 of ${integer.format(totalInSet)} captured transactions in ${selectedSet || "this set"}`)
           : "";
         updateSalesFilterNote();
         return;
@@ -2547,7 +2703,9 @@
           </tr>
         `;
       }).join("");
-      count.textContent = `Showing ${integer.format(rows.length)} of ${integer.format(salesInSet().length)} captured transactions in ${selectedSet || "this set"}`;
+      count.textContent = isSingles()
+        ? `Showing ${integer.format(rows.length)} ${selectedCondition} sales of ${integer.format(salesInSet().length)} captured transactions in ${selectedSet || "this set"}`
+        : `Showing ${integer.format(rows.length)} of ${integer.format(salesInSet().length)} captured transactions in ${selectedSet || "this set"}`;
       updateSalesFilterNote();
     }
 
@@ -2565,6 +2723,7 @@
       } catch (error) {
         catalogKind = "sealed";
       }
+      loadSelectedCondition();
       moversExclusions = loadExclusions();
       renderOutlierToggle();
       document.querySelectorAll(".theme-toggle").forEach((button) => {
