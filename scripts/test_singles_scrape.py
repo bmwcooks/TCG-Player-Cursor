@@ -123,6 +123,117 @@ def test_read_singles_entries():
     os.environ.pop("SCRAPE_SINGLES", None)
 
 
+def test_merge_condition_stats_keeps_prices():
+    previous = {
+        "Near Mint": {
+            "variant": "Holofoil",
+            "language": "English",
+            "marketPrice": 2.54,
+            "lastDaySales": 2,
+            "currentQuantity": 90,
+            "currentSellers": 70,
+        }
+    }
+    incoming = {
+        "Near Mint": {
+            "variant": "",
+            "language": "English",
+            "marketPrice": None,
+            "lastDaySales": None,
+            "currentQuantity": 106,
+            "currentSellers": 79,
+        },
+        "Lightly Played": {
+            "variant": "",
+            "language": "English",
+            "marketPrice": None,
+            "lastDaySales": None,
+            "currentQuantity": 27,
+            "currentSellers": 23,
+        },
+    }
+    merged = scraper.merge_condition_stats(previous, incoming)
+    assert merged["Near Mint"]["marketPrice"] == 2.54
+    assert merged["Near Mint"]["lastDaySales"] == 2
+    assert merged["Near Mint"]["currentQuantity"] == 106
+    assert merged["Near Mint"]["currentSellers"] == 79
+    assert merged["Near Mint"]["variant"] == "Holofoil"
+    assert merged["Lightly Played"]["currentQuantity"] == 27
+
+
+def test_upsert_does_not_wipe_condition_prices():
+    existing = [{
+        "date": "2026-09-10",
+        "productId": "201170",
+        "productKind": "single",
+        "preferredCondition": "Near Mint",
+        "marketPrice": 2.54,
+        "lastDaySales": 0,
+        "currentQuantity": 90,
+        "currentSellers": 70,
+        "conditions": {
+            "Near Mint": {
+                "variant": "Holofoil",
+                "marketPrice": 2.54,
+                "lastDaySales": 0,
+                "currentQuantity": 90,
+                "currentSellers": 70,
+            }
+        },
+    }]
+    incoming = [{
+        "date": "2026-09-10",
+        "productId": "201170",
+        "productKind": "single",
+        "preferredCondition": "Near Mint",
+        "marketPrice": 2.54,
+        "lastDaySales": None,
+        "currentQuantity": 106,
+        "currentSellers": 79,
+        "conditions": {
+            "Near Mint": {
+                "variant": "",
+                "marketPrice": None,
+                "lastDaySales": None,
+                "currentQuantity": 106,
+                "currentSellers": 79,
+            }
+        },
+    }]
+    merged = scraper.upsert_records(existing, incoming)
+    nm = merged[0]["conditions"]["Near Mint"]
+    assert merged[0]["marketPrice"] == 2.54
+    assert merged[0]["lastDaySales"] == 0
+    assert nm["marketPrice"] == 2.54
+    assert nm["lastDaySales"] == 0
+    assert nm["currentQuantity"] == 106
+    assert nm["variant"] == "Holofoil"
+
+
+def test_backfill_preferred_condition_copies_top_level():
+    row = {
+        "productKind": "single",
+        "preferredCondition": "Near Mint",
+        "marketPrice": 2.54,
+        "lastDaySales": 0,
+        "currentQuantity": 106,
+        "currentSellers": 79,
+        "conditions": {
+            "Near Mint": {
+                "variant": "",
+                "marketPrice": None,
+                "lastDaySales": None,
+                "currentQuantity": 106,
+                "currentSellers": 79,
+            }
+        },
+    }
+    filled = scraper.backfill_preferred_condition(row)
+    nm = filled["conditions"]["Near Mint"]
+    assert nm["marketPrice"] == 2.54
+    assert nm["lastDaySales"] == 0
+
+
 def test_discord_omits_single_card_names():
     games = [{"id": "pokemon", "name": "Pokemon", "families": [{"id": "xy", "name": "XY"}]}]
     set_index = {"Flashfire": {"game_id": "pokemon", "game_name": "Pokemon", "family_id": "xy", "family_name": "XY"}}
@@ -139,6 +250,9 @@ if __name__ == "__main__":
     test_listing_quantity_from_aggs()
     test_build_condition_stats_merges_listings_and_charts()
     test_merge_keeps_condition_charts()
+    test_merge_condition_stats_keeps_prices()
+    test_upsert_does_not_wipe_condition_prices()
+    test_backfill_preferred_condition_copies_top_level()
     test_select_chart_sku_still_prefers_unopened_sealed()
     test_read_singles_entries()
     test_discord_omits_single_card_names()

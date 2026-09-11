@@ -1169,6 +1169,49 @@ def send_discord_messages(webhook_url, messages):
             time.sleep(0.7)
 
 
+def merge_condition_stats(previous, incoming):
+    """Keep prior per-condition prices when this scrape's Infinite reply was empty."""
+    if not isinstance(incoming, dict):
+        return previous if isinstance(previous, dict) else incoming
+    merged = dict(previous) if isinstance(previous, dict) else {}
+    for condition, block in incoming.items():
+        if not isinstance(block, dict):
+            continue
+        old = merged.get(condition) if isinstance(merged.get(condition), dict) else {}
+        combined = dict(old)
+        for field, value in block.items():
+            if value is None:
+                continue
+            if field in ("variant", "language") and value == "" and combined.get(field):
+                continue
+            combined[field] = value
+        merged[condition] = combined
+    return merged
+
+
+def backfill_preferred_condition(record):
+    """Copy top-level Near Mint price/sales onto the preferred condition when Infinite omitted them."""
+    if not isinstance(record, dict) or record.get("productKind") != "single":
+        return record
+    conditions = record.get("conditions")
+    if not isinstance(conditions, dict):
+        return record
+    preferred = record.get("preferredCondition") or DEFAULT_CARD_CONDITION
+    block = conditions.get(preferred)
+    if not isinstance(block, dict):
+        block = {}
+        conditions[preferred] = block
+    if block.get("marketPrice") is None and record.get("marketPrice") is not None:
+        block["marketPrice"] = record.get("marketPrice")
+    if block.get("lastDaySales") is None and record.get("lastDaySales") is not None:
+        block["lastDaySales"] = record.get("lastDaySales")
+    if block.get("currentQuantity") is None and record.get("currentQuantity") is not None:
+        block["currentQuantity"] = record.get("currentQuantity")
+    if block.get("currentSellers") is None and record.get("currentSellers") is not None:
+        block["currentSellers"] = record.get("currentSellers")
+    return record
+
+
 def upsert_records(existing, new_records):
     """Merge snapshots by (date, productId). Nulls do not wipe richer live-scrape fields."""
     index = {(row.get("date"), str(row.get("productId"))): i for i, row in enumerate(existing)}
@@ -1177,11 +1220,13 @@ def upsert_records(existing, new_records):
         if key in index:
             merged = dict(existing[index[key]])
             for field, value in record.items():
-                if value is not None:
+                if field == "conditions":
+                    merged[field] = merge_condition_stats(merged.get("conditions"), value)
+                elif value is not None:
                     merged[field] = value
-            existing[index[key]] = merged
+            existing[index[key]] = backfill_preferred_condition(merged)
         else:
-            existing.append(record)
+            existing.append(backfill_preferred_condition(dict(record)))
             index[key] = len(existing) - 1
     existing.sort(key=lambda row: (row.get("date") or "", str(row.get("productId") or "")))
     return existing
@@ -1433,6 +1478,20 @@ def scrape_one_single(entry, ctx):
         conditions = build_condition_stats(payloads.get("month"), listing_stats, today_date)
         preferred_stats = conditions.get(preferred_condition) or conditions.get(DEFAULT_CARD_CONDITION) or {}
         chart_price = preferred_stats.get("marketPrice") or latest_chart_price(range_payload)
+        if preferred_stats.get("marketPrice") is None and chart_price is not None:
+            preferred_stats["marketPrice"] = usable_price(chart_price)
+        if preferred_stats.get("lastDaySales") is None:
+            chart_sales = parse_numeric(
+                latest_completed_sales(
+                    [
+                        {"date": point["date"], "quantitySold": point.get("quantitySold")}
+                        for point in (range_payload.get("1M") or {}).get("points") or []
+                    ],
+                    today_date,
+                )
+            )
+            if chart_sales is not None:
+                preferred_stats["lastDaySales"] = chart_sales
         captured_sales = fetch_latest_sales_http(product_id, url, limit=SINGLES_SALES_LIMIT)
         display_name = fallback_name
         set_name = fallback_set

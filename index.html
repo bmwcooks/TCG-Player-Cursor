@@ -835,20 +835,26 @@
       }
     }
 
+    function preferredConditionOf(row) {
+      return row?.preferredCondition || DEFAULT_CARD_CONDITION;
+    }
+
     function conditionView(row) {
       if (!row || !isSingles()) return row;
+      const preferred = preferredConditionOf(row);
       const block = (row.conditions || {})[selectedCondition];
+      const useRowFallback = selectedCondition === preferred;
       if (block) {
         return {
           ...row,
-          marketPrice: block.marketPrice ?? null,
-          lastDaySales: block.lastDaySales ?? null,
-          currentQuantity: block.currentQuantity ?? null,
-          currentSellers: block.currentSellers ?? null,
+          marketPrice: block.marketPrice ?? (useRowFallback ? row.marketPrice : null),
+          lastDaySales: block.lastDaySales ?? (useRowFallback ? row.lastDaySales : null),
+          currentQuantity: block.currentQuantity ?? (useRowFallback ? row.currentQuantity : null),
+          currentSellers: block.currentSellers ?? (useRowFallback ? row.currentSellers : null),
           variant: block.variant || row.variant,
         };
       }
-      if (selectedCondition === (row.preferredCondition || DEFAULT_CARD_CONDITION)) return row;
+      if (useRowFallback) return row;
       return {
         ...row,
         marketPrice: null,
