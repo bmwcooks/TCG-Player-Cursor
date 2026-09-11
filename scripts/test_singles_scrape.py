@@ -75,6 +75,30 @@ def test_build_condition_stats_merges_listings_and_charts():
     assert charts["Lightly Played"]["prices"] == [9.1, 9.1]
 
 
+def test_compact_range_block_fits_cloudflare_asset_limit():
+    block = {
+        "interval": "day",
+        "label": "1M · daily",
+        "points": [
+            {"date": "2026-09-01", "quantitySold": 4, "transactionCount": 3, "marketPrice": 15.91, "lowSalePrice": 14, "highSalePrice": 16},
+            {"date": "2026-09-02", "quantitySold": 1, "transactionCount": 1, "marketPrice": 16.1, "lowSalePrice": 16, "highSalePrice": 16.2},
+        ],
+    }
+    compact = scraper.compact_range_block(block)
+    assert "points" not in compact
+    points = scraper.range_points(compact)
+    assert points[0]["date"] == "2026-09-01"
+    assert points[0]["marketPrice"] == 15.91
+    assert points[1]["quantitySold"] == 1
+    incoming = {"productId": "1", "ranges": {"1M": block}}
+    compact_product = scraper.compact_singles_chart_product(incoming)
+    merged = scraper.merge_chart_product(
+        compact_product,
+        {"productId": "1", "ranges": {"1M": {"interval": "day", "points": []}}},
+    )
+    assert scraper.range_points(merged["ranges"]["1M"])[0]["quantitySold"] == 4
+
+
 def test_merge_keeps_condition_charts():
     previous = {
         "productId": "91144",
@@ -249,6 +273,7 @@ if __name__ == "__main__":
     test_select_chart_sku_filters_condition()
     test_listing_quantity_from_aggs()
     test_build_condition_stats_merges_listings_and_charts()
+    test_compact_range_block_fits_cloudflare_asset_limit()
     test_merge_keeps_condition_charts()
     test_merge_condition_stats_keeps_prices()
     test_upsert_does_not_wipe_condition_prices()
