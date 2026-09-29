@@ -39,6 +39,7 @@ jobs:
           SCRAPE_CONCURRENCY: "3"
           CHART_FETCH_CONCURRENCY: "1"
           SINGLES_FETCH_CONCURRENCY: "4"
+          INFINITE_FETCH_CONCURRENCY: "1"
         run: python -u scraper.py
 
       - name: Commit tracker data
@@ -52,6 +53,7 @@ jobs:
             echo "No tracker data changes to commit."
           else
             git commit -m "chore: update tracker data $(date -u +%Y-%m-%d)"
+            git pull --rebase origin main
             git push
           fi
 
