@@ -14,6 +14,10 @@ DATA_FILE = os.path.join(DATA_DIR, "tracker_data.json")
 CHART_HISTORY_FILE = os.path.join(DATA_DIR, "chart_history.json")
 SINGLES_CHART_HISTORY_FILE = os.path.join(DATA_DIR, "singles_chart_history.json")
 LATEST_SALES_FILE = os.path.join(DATA_DIR, "latest_sales.json")
+# GitHub rejects blobs at 100 MiB (the Sep 25 push died at 103.30 MB).
+# Keep a guard below that so a daily commit still has headroom.
+GITHUB_FILE_HARD_LIMIT_BYTES = 100 * 1024 * 1024
+DATA_FILE_PUSH_LIMIT_BYTES = 90 * 1024 * 1024
 PRODUCTS_FILES = [
     os.path.join(DATA_DIR, "pokemon_products.json"),
     os.path.join(DATA_DIR, "one_piece_products.json"),
@@ -402,7 +406,12 @@ def latest_completed_sales(buckets, today_date):
 
 
 def history_records_for_product(product_id, product_name, url, buckets, today_date, set_name=None, image_url=None, product_kind=None):
-    """Dated snapshots for every completed chart day so the dashboard can plot true daily volume."""
+    """Chart-day rows. save_records keeps the latest snapshot plus at most one older sales row.
+
+    The dashboard plots volume from chart_history.json / singles_chart_history.json.
+    The older sales row exists so the listings table can still show the last day that sold
+    when today's scrape has no completed volume. Those rows do not accumulate.
+    """
     records = []
     for bucket in buckets:
         if not bucket.get("date") or bucket["date"] >= today_date:
@@ -629,7 +638,42 @@ def save_json(path, payload, compact=False):
 
 
 def save_records(records):
-    save_json(DATA_FILE, records)
+    """Write a bounded tracker archive, compact, under GitHub's file cap."""
+    fitted = fit_tracker_records(records)
+    save_json(DATA_FILE, fitted, compact=True)
+    size = os.path.getsize(DATA_FILE)
+    print(f"Tracker archive: {len(fitted)} latest snapshot(s), {size} bytes ({DATA_FILE}).")
+    if size > DATA_FILE_PUSH_LIMIT_BYTES:
+        raise RuntimeError(
+            f"{DATA_FILE} is {size} bytes, over the {DATA_FILE_PUSH_LIMIT_BYTES} byte push guard "
+            f"(GitHub hard limit {GITHUB_FILE_HARD_LIMIT_BYTES})."
+        )
+    return fitted
+
+
+def assert_data_files_pushable(directory=None):
+    """Fail before git push if any committed JSON blob would exceed GitHub's file cap."""
+    directory = directory or DATA_DIR
+    if not os.path.isdir(directory):
+        return
+    lines = []
+    offenders = []
+    for name in sorted(os.listdir(directory)):
+        path = os.path.join(directory, name)
+        if not name.endswith(".json") or not os.path.isfile(path):
+            continue
+        size = os.path.getsize(path)
+        lines.append(f"{name}: {size / (1024 * 1024):.2f} MiB ({size} bytes)")
+        if size > DATA_FILE_PUSH_LIMIT_BYTES:
+            offenders.append(f"{name} is {size} bytes")
+    print("Data file sizes:\n" + "\n".join(lines))
+    if offenders:
+        raise RuntimeError(
+            "Refusing to commit data files over "
+            f"{DATA_FILE_PUSH_LIMIT_BYTES} bytes "
+            f"(GitHub hard limit is {GITHUB_FILE_HARD_LIMIT_BYTES} bytes): "
+            + "; ".join(offenders)
+        )
 
 
 def request_headers(referer=None):
@@ -1255,24 +1299,117 @@ def backfill_preferred_condition(record):
     return record
 
 
+def merge_snapshot_record(previous, incoming):
+    """Newer values win. Nulls keep previous fields; condition blocks merge field by field."""
+    if not isinstance(incoming, dict):
+        return previous
+    if not isinstance(previous, dict):
+        return backfill_preferred_condition(dict(incoming))
+    merged = dict(previous)
+    for field, value in incoming.items():
+        if field == "conditions":
+            merged[field] = merge_condition_stats(merged.get("conditions"), value)
+        elif value is not None:
+            merged[field] = value
+    return backfill_preferred_condition(merged)
+
+
 def upsert_records(existing, new_records):
     """Merge snapshots by (date, productId). Nulls do not wipe richer live-scrape fields."""
     index = {(row.get("date"), str(row.get("productId"))): i for i, row in enumerate(existing)}
     for record in new_records:
         key = (record.get("date"), str(record.get("productId")))
         if key in index:
-            merged = dict(existing[index[key]])
-            for field, value in record.items():
-                if field == "conditions":
-                    merged[field] = merge_condition_stats(merged.get("conditions"), value)
-                elif value is not None:
-                    merged[field] = value
-            existing[index[key]] = backfill_preferred_condition(merged)
+            existing[index[key]] = merge_snapshot_record(existing[index[key]], record)
         else:
-            existing.append(backfill_preferred_condition(dict(record)))
+            existing.append(merge_snapshot_record(None, record))
             index[key] = len(existing) - 1
     existing.sort(key=lambda row: (row.get("date") or "", str(row.get("productId") or "")))
     return existing
+
+
+def collapse_tracker_records(records):
+    """Keep at most two rows per product so the archive cannot grow by calendar day.
+
+    Daily scrapes appended every singles and sealed snapshot into one JSON array
+    until that file passed GitHub's 100 MB cap. Charts live in the chart-history
+    files. The dashboard reads the newest tracker row, and if that row has no
+    lastDaySales it falls back to the newest older row that does. Same-day nulls
+    still merge; a newer day does not inherit an older day's volume.
+    """
+    groups = {}
+    order = []
+    orphans = []
+    for row in records or []:
+        if not isinstance(row, dict):
+            continue
+        product_id = str(row.get("productId") or "")
+        if not product_id:
+            orphans.append(dict(row))
+            continue
+        if product_id not in groups:
+            groups[product_id] = []
+            order.append(product_id)
+        groups[product_id].append(row)
+    collapsed = []
+    for product_id in order:
+        by_date = {}
+        for row in groups[product_id]:
+            day = row.get("date") or ""
+            if day in by_date:
+                by_date[day] = merge_snapshot_record(by_date[day], row)
+            else:
+                by_date[day] = merge_snapshot_record(None, row)
+        days = sorted(by_date)
+        if not days:
+            continue
+        newest = by_date[days[-1]]
+        kept = [newest]
+        if newest.get("lastDaySales") is None:
+            older = next(
+                (
+                    by_date[day]
+                    for day in reversed(days[:-1])
+                    if by_date[day].get("lastDaySales") is not None
+                ),
+                None,
+            )
+            if older:
+                kept.append(older)
+        collapsed.extend(kept)
+    collapsed.extend(orphans)
+    collapsed.sort(key=lambda row: (row.get("date") or "", str(row.get("productId") or "")))
+    return collapsed
+
+
+def tracker_json_size(records):
+    return len(json.dumps(records, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
+
+
+def fit_tracker_records(records, limit=None):
+    """Collapse the archive and stay under the push-size guard."""
+    limit = DATA_FILE_PUSH_LIMIT_BYTES if limit is None else limit
+    collapsed = collapse_tracker_records(records)
+    if tracker_json_size(collapsed) <= limit:
+        return collapsed
+    slim = []
+    for row in collapsed:
+        trimmed = dict(row)
+        # The dashboard falls back to the catalog image, then the TCGPlayer CDN path.
+        trimmed.pop("imageUrl", None)
+        slim.append(trimmed)
+    if tracker_json_size(slim) <= limit:
+        print(
+            "WARNING: tracker archive exceeded "
+            f"{limit} bytes; omitted imageUrl so the daily commit can still push."
+        )
+        return slim
+    raise RuntimeError(
+        "tracker archive is "
+        f"{tracker_json_size(slim)} bytes after keeping at most two snapshots per product, "
+        f"over the {limit} byte push guard "
+        f"(GitHub hard limit {GITHUB_FILE_HARD_LIMIT_BYTES})."
+    )
 
 
 def empty_scrape_result(entry, listed, error=None):
@@ -1684,8 +1821,11 @@ def main():
         print("\nWriting tracker data to local JSON...")
         existing_records = load_records()
         merged_records = upsert_records(existing_records, all_data_rows)
-        save_records(merged_records)
-        print(f"Saved {len(all_data_rows)} snapshot(s). Archive now has {len(merged_records)} record(s) in {DATA_FILE}.")
+        saved = save_records(merged_records)
+        print(
+            f"Saved {len(all_data_rows)} snapshot(s). "
+            f"Archive kept {len(saved)} latest record(s) in {DATA_FILE}."
+        )
     else:
         print("\nNo data was successfully scraped.")
 

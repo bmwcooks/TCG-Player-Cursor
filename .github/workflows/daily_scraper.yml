@@ -43,6 +43,8 @@ jobs:
 
       - name: Commit tracker data
         run: |
+          # GitHub rejects any blob at 100 MiB. Fail here, before push, if a data file is over 90 MiB.
+          python -c "import scraper; scraper.assert_data_files_pushable()"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/tracker_data.json data/chart_history.json data/singles_chart_history.json data/latest_sales.json

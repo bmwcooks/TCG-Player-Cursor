@@ -92,7 +92,7 @@ def main() -> None:
         time.sleep(0.12)
 
     merged = scraper.upsert_records(existing, new_records)
-    scraper.save_records(merged)
+    saved = scraper.save_records(merged)
 
     chart_path = Path(scraper.CHART_HISTORY_FILE)
     existing_chart = {"products": []}
@@ -109,7 +109,7 @@ def main() -> None:
     for row in chart_products:
         by_id[str(row["productId"])] = row
     scraper.save_json(scraper.CHART_HISTORY_FILE, {"updatedAt": today, "products": list(by_id.values())})
-    print(f"Seeded {len(chart_products)} products. Archive {len(merged)} rows.")
+    print(f"Seeded {len(chart_products)} products. Archive {len(saved)} latest rows.")
 
 
 if __name__ == "__main__":
