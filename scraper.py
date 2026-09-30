@@ -2,6 +2,7 @@ import asyncio
 import inspect
 import json
 import os
+import threading
 import time
 import requests
 import datetime
@@ -42,6 +43,8 @@ EMPTY_PAGE_RETRIES = 1
 DEFAULT_SCRAPE_CONCURRENCY = 3
 MAX_SCRAPE_CONCURRENCY = 8
 DEFAULT_CHART_FETCH_CONCURRENCY = 1
+DEFAULT_INFINITE_FETCH_CONCURRENCY = 1
+MAX_INFINITE_FETCH_CONCURRENCY = 2
 BLOCKED_PAGE_MARKERS = (
     "just a moment",
     "attention required",
@@ -405,6 +408,179 @@ def latest_completed_sales(buckets, today_date):
     return str(completed[-1]["quantitySold"])
 
 
+def yesterday_date(today_date):
+    return (datetime.date.fromisoformat(today_date) - datetime.timedelta(days=1)).isoformat()
+
+
+def median_price(prices):
+    if not prices:
+        return None
+    ordered = sorted(prices)
+    mid = len(ordered) // 2
+    if len(ordered) % 2:
+        return round(ordered[mid], 2)
+    return round((ordered[mid - 1] + ordered[mid]) / 2, 2)
+
+
+def summarize_sales_day(sales, today_date, condition=None, page_limit=None):
+    """Completed-day volume from captured transactions.
+
+    Returns None when a full page never reaches yesterday, so a card that sold
+    out the page today is not stored as zero. Returns quantity 0 when the page
+    covers yesterday and that condition did not sell.
+    """
+    try:
+        yesterday = yesterday_date(today_date)
+    except ValueError:
+        return None
+    source = [row for row in (sales or []) if isinstance(row, dict)]
+    page_full = page_limit is not None and len(source) >= page_limit
+    days = []
+    for row in source:
+        day = str(row.get("orderDate") or "")[:10]
+        if len(day) == 10:
+            days.append(day)
+    oldest = min(days) if days else None
+    reaches_yesterday = (not page_full) or (oldest is not None and oldest <= yesterday)
+    if not reaches_yesterday:
+        return None
+    rows = source
+    if condition:
+        wanted = str(condition).strip().lower()
+        rows = [row for row in source if str(row.get("condition") or "").strip().lower() == wanted]
+    quantity = 0
+    prices = []
+    for row in rows:
+        if str(row.get("orderDate") or "")[:10] != yesterday:
+            continue
+        copies = parse_numeric(row.get("quantity")) or 1
+        if copies < 1:
+            copies = 1
+        quantity += copies
+        price = usable_price(row.get("purchasePrice"))
+        if price is not None:
+            prices.extend([price] * copies)
+    return {
+        "date": yesterday,
+        "quantitySold": quantity,
+        "medianPrice": median_price(prices),
+    }
+
+
+def range_last_date(product, key="1M"):
+    points = range_points(((product or {}).get("ranges") or {}).get(key))
+    dates = [row.get("date") for row in points if row.get("date")]
+    return dates[-1] if dates else ""
+
+
+def infinite_through_date(product):
+    """Last day Infinite itself returned. Synthetic sales points do not advance this."""
+    if not isinstance(product, dict):
+        return ""
+    marked = str(product.get("infiniteThrough") or "")
+    if marked:
+        return marked
+    return range_last_date(product, "1M")
+
+
+def infinite_range_names(product_id, product, today):
+    """Every card gets the daily month range. 3M and 1Y refresh one day a week, spread by product id."""
+    names = ["month"]
+    try:
+        weekday = datetime.date.fromisoformat(today).weekday()
+    except ValueError:
+        weekday = 0
+    try:
+        shard = int(str(product_id)) % 7
+    except (TypeError, ValueError):
+        shard = 0
+    for key, range_name in (("3M", "quarter"), ("1Y", "annual")):
+        if not range_last_date(product, key) or shard == weekday:
+            names.append(range_name)
+    return names
+
+
+def singles_queue(entries, charts_by_id):
+    """Stalest Infinite chart first, so the scarce calls are not spent on cards refreshed yesterday."""
+    def sort_key(entry):
+        product_id = str(extract_product_id((entry or {}).get("url") or "") or "")
+        return (infinite_through_date((charts_by_id or {}).get(product_id)), product_id)
+    return sorted(entries or [], key=sort_key)
+
+
+def apply_sales_fallback(conditions, sales, today_date, previous=None, preferred=None, page_limit=None):
+    """Fill last-day sales from captured transactions when Infinite omitted them.
+
+    An existing official market price is carried forward. A sale median is used
+    only when this card has never had an official price, so one odd sale does
+    not replace TCGPlayer's market price.
+    """
+    conditions = conditions if isinstance(conditions, dict) else {}
+    previous = previous if isinstance(previous, dict) else {}
+    previous_conditions = previous.get("conditions") if isinstance(previous.get("conditions"), dict) else {}
+    preferred = preferred or previous.get("preferredCondition") or DEFAULT_CARD_CONDITION
+    sales_point = None
+    for condition in CARD_CONDITIONS:
+        block = conditions.get(condition)
+        if not isinstance(block, dict):
+            block = {
+                "variant": "",
+                "language": "English",
+                "marketPrice": None,
+                "lastDaySales": None,
+                "currentQuantity": None,
+                "currentSellers": None,
+            }
+            conditions[condition] = block
+        stats = summarize_sales_day(sales, today_date, condition=condition, page_limit=page_limit)
+        if stats is not None and block.get("lastDaySales") is None:
+            block["lastDaySales"] = stats["quantitySold"]
+        if block.get("marketPrice") is not None:
+            block["priceSource"] = block.get("priceSource") or "infinite"
+        else:
+            prev_block = previous_conditions.get(condition) if isinstance(previous_conditions.get(condition), dict) else {}
+            carried = None
+            if prev_block.get("marketPrice") is not None and prev_block.get("priceSource") != "sales":
+                carried = prev_block.get("marketPrice")
+            elif (
+                condition == preferred
+                and previous.get("marketPrice") is not None
+                and previous.get("priceSource") != "sales"
+            ):
+                carried = previous.get("marketPrice")
+            if carried is not None:
+                block["marketPrice"] = carried
+                block["priceSource"] = "carried"
+            elif stats and stats.get("medianPrice") is not None and stats.get("quantitySold"):
+                block["marketPrice"] = stats["medianPrice"]
+                block["priceSource"] = "sales"
+        if condition == preferred and stats is not None:
+            sales_point = {
+                "date": stats["date"],
+                "quantitySold": stats["quantitySold"],
+                "marketPrice": block.get("marketPrice"),
+            }
+    return conditions, sales_point
+
+
+def append_range_point(block, point):
+    """Add one completed day onto a chart series without dropping the days already stored."""
+    if not point or not point.get("date"):
+        return block or {}
+    points = list(range_points(block))
+    if any(row.get("date") == point["date"] for row in points):
+        return block or {}
+    points.append({
+        "date": point["date"],
+        "marketPrice": point.get("marketPrice"),
+        "quantitySold": point.get("quantitySold"),
+    })
+    points.sort(key=lambda row: row["date"])
+    updated = dict(block or {})
+    updated["points"] = points
+    return updated
+
+
 def history_records_for_product(product_id, product_name, url, buckets, today_date, set_name=None, image_url=None, product_kind=None):
     """Chart-day rows. save_records keeps the latest snapshot plus at most one older sales row.
 
@@ -616,6 +792,35 @@ def singles_fetch_concurrency(raw=None):
     return max(1, min(count, MAX_SINGLES_FETCH_CONCURRENCY))
 
 
+def load_latest_tracker_by_id(records=None):
+    latest = {}
+    for row in load_records() if records is None else records:
+        if not isinstance(row, dict):
+            continue
+        product_id = str(row.get("productId") or "")
+        if not product_id:
+            continue
+        previous = latest.get(product_id)
+        if not previous or (row.get("date") or "") >= (previous.get("date") or ""):
+            latest[product_id] = row
+    return latest
+
+
+def load_singles_charts_by_id():
+    if not os.path.exists(SINGLES_CHART_HISTORY_FILE):
+        return {}
+    try:
+        payload = json.load(open(SINGLES_CHART_HISTORY_FILE, encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    charts = {}
+    for row in (payload or {}).get("products") or []:
+        product_id = str((row or {}).get("productId") or "")
+        if product_id:
+            charts[product_id] = row
+    return charts
+
+
 def load_records():
     if not os.path.exists(DATA_FILE):
         return []
@@ -683,6 +888,18 @@ def request_headers(referer=None):
     return headers
 
 
+def infinite_fetch_concurrency(raw=None):
+    """How many Infinite chart calls may run at once. Keep this at 1 or 2."""
+    value = os.environ.get("INFINITE_FETCH_CONCURRENCY") if raw is None else raw
+    if value is None or str(value).strip() == "":
+        return DEFAULT_INFINITE_FETCH_CONCURRENCY
+    try:
+        count = int(value)
+    except (TypeError, ValueError):
+        return DEFAULT_INFINITE_FETCH_CONCURRENCY
+    return max(1, min(count, MAX_INFINITE_FETCH_CONCURRENCY))
+
+
 def chart_fetch_concurrency(raw=None):
     """How many Infinite chart HTTP calls may run at once. Keep this low; empty replies wipe Movers."""
     value = os.environ.get("CHART_FETCH_CONCURRENCY") if raw is None else raw
@@ -696,7 +913,11 @@ def chart_fetch_concurrency(raw=None):
 
 
 def fetch_price_history_json(product_id, range_name, referer, attempts=4, verbose=True):
-    """Raw Infinite detailed history (all SKUs/conditions) for one chart range."""
+    """Raw Infinite detailed history (all SKUs/conditions) for one chart range.
+
+    An empty 200 or a 403/429 is a throttle, not a blip. Retrying it burns the
+    rest of the run. Timeouts and 5xx still retry.
+    """
     api_url = f"https://infinite-api.tcgplayer.com/price/history/{product_id}/detailed?range={range_name}"
     if verbose:
         print(f"DEBUG: Requesting {range_name} chart data from {api_url}")
@@ -708,6 +929,8 @@ def fetch_price_history_json(product_id, range_name, referer, attempts=4, verbos
                 last_error = f"status {response.status_code}"
                 if verbose:
                     print(f"DEBUG: {range_name} chart request failed with status {response.status_code} (attempt {attempt}/{attempts})")
+                if response.status_code in (403, 429):
+                    break
             else:
                 payload = response.json()
                 if history_skus(payload):
@@ -715,6 +938,7 @@ def fetch_price_history_json(product_id, range_name, referer, attempts=4, verbos
                 last_error = "empty SKUs"
                 if verbose:
                     print(f"DEBUG: {range_name} chart returned no SKUs (attempt {attempt}/{attempts})")
+                break
         except Exception as exc:
             last_error = shorten_error(exc)
             if verbose:
@@ -861,6 +1085,15 @@ def merge_chart_product(previous, incoming):
         if old_pts:
             new_ranges[key] = old_block
             print(f"DEBUG: kept previous {key} chart for {merged.get('productId')} ({len(old_pts)} points)")
+    incoming_month = range_points(((incoming or {}).get("ranges") or {}).get("1M"))
+    if incoming_month:
+        merged["infiniteThrough"] = incoming_month[-1].get("date") or ""
+    else:
+        merged["infiniteThrough"] = infinite_through_date(previous)
+        sales_point = (incoming or {}).get("salesPoint")
+        if sales_point:
+            new_ranges["1M"] = append_range_point(new_ranges.get("1M"), sales_point)
+    merged.pop("salesPoint", None)
     merged["ranges"] = new_ranges
     if not merged.get("productName") and previous:
         merged["productName"] = previous.get("productName")
@@ -1195,6 +1428,18 @@ def format_scrape_status(results, games, set_index, family_index):
     return blocks
 
 
+def singles_status_line(singles_status):
+    total = len(singles_status or [])
+    fresh = sum(1 for row in singles_status or [] if row.get("chart") == "infinite")
+    sales = sum(1 for row in singles_status or [] if row.get("chart") == "sales")
+    carried = sum(1 for row in singles_status or [] if row.get("chart") == "carried")
+    return (
+        f"**Pokémon singles:** {fresh}/{total} fresh Infinite charts, "
+        f"{sales} last-day sales from captured transactions, "
+        f"{carried} carried the last official price."
+    )
+
+
 def discord_header(part, total):
     if total <= 1:
         return ""
@@ -1432,10 +1677,12 @@ def empty_scrape_result(entry, listed, error=None):
     }
 
 
-def fetch_history_payloads(product_id, url, verbose=True):
+def fetch_history_payloads(product_id, url, verbose=True, attempts=4, ranges=None):
     payloads = {}
-    for range_name in CHART_RANGES:
-        payloads[range_name] = fetch_price_history_json(product_id, range_name, url, verbose=verbose)
+    for range_name in list(ranges or CHART_RANGES):
+        payloads[range_name] = fetch_price_history_json(
+            product_id, range_name, url, attempts=attempts, verbose=verbose
+        )
     return payloads
 
 
@@ -1529,6 +1776,7 @@ async def scrape_one_entry(session, entry, ctx):
         daily_buckets = []
         range_payload = {}
         chart_price = None
+        last_day_sales = "N/A"
         display_name = fallback_name
         latest_sales = []
         chart_product = None
@@ -1578,6 +1826,11 @@ async def scrape_one_entry(session, entry, ctx):
             }
 
         parsed_market = usable_price(market_price)
+        parsed_sales = parse_numeric(last_day_sales) if last_day_sales != "N/A" else None
+        if parsed_sales is None and latest_sales:
+            sales_day = summarize_sales_day(latest_sales, today_date, page_limit=LATEST_SALES_LIMIT)
+            if sales_day is not None:
+                parsed_sales = sales_day["quantitySold"]
         record = {
             "date": today_date,
             "productId": product_id,
@@ -1590,15 +1843,10 @@ async def scrape_one_entry(session, entry, ctx):
             "listedMedian": parse_numeric(listed_median, as_float=True),
             "currentSellers": parse_numeric(current_sellers),
             "currentQuantity": parse_numeric(current_quantity),
-            "lastDaySales": None,
+            "lastDaySales": parsed_sales,
             "url": url,
         }
         records = [record]
-        records.extend(
-            history_records_for_product(
-                product_id, display_name, url, daily_buckets, today_date, set_name or fallback_set, image_url, product_kind
-            )
-        )
         ok, reason = classify_scrape(
             html_name,
             html_price,
@@ -1649,35 +1897,33 @@ def scrape_one_single(entry, ctx):
         return empty_scrape_result(entry, listed, error=RuntimeError("missing product id"))
 
     try:
-        payloads = fetch_history_payloads(product_id, url, verbose=False)
+        previous_chart = (ctx.get("singles_charts_by_id") or {}).get(str(product_id))
+        previous_row = (ctx.get("previous_by_id") or {}).get(str(product_id))
+        range_names = infinite_range_names(product_id, previous_chart, today_date)
+
+        def load_payloads():
+            return fetch_history_payloads(
+                product_id, url, verbose=False, attempts=1, ranges=range_names
+            )
+
+        infinite_sema = ctx.get("infinite_sema")
+        if infinite_sema is not None:
+            with infinite_sema:
+                payloads = load_payloads()
+        else:
+            payloads = load_payloads()
+        fresh_infinite = bool(history_skus(payloads.get("month")))
         range_payload = range_payload_from_histories(payloads)
         preferred_sku = select_chart_sku(payloads.get("month"))
         preferred_condition = (preferred_sku or {}).get("condition") or DEFAULT_CARD_CONDITION
         printing = (preferred_sku or {}).get("variant") or None
         listing_stats = fetch_listing_stats(product_id, url, printing=printing)
         conditions = build_condition_stats(payloads.get("month"), listing_stats, today_date)
-        preferred_stats = conditions.get(preferred_condition) or conditions.get(DEFAULT_CARD_CONDITION) or {}
-        chart_price = preferred_stats.get("marketPrice") or latest_chart_price(range_payload)
-        if preferred_stats.get("marketPrice") is None and chart_price is not None:
-            preferred_stats["marketPrice"] = usable_price(chart_price)
-        if preferred_stats.get("lastDaySales") is None:
-            chart_sales = parse_numeric(
-                latest_completed_sales(
-                    [
-                        {"date": point["date"], "quantitySold": point.get("quantitySold")}
-                        for point in (range_payload.get("1M") or {}).get("points") or []
-                    ],
-                    today_date,
-                )
-            )
-            if chart_sales is not None:
-                preferred_stats["lastDaySales"] = chart_sales
-        captured_sales = fetch_latest_sales_http(product_id, url, limit=SINGLES_SALES_LIMIT)
+        captured_sales = fetch_latest_sales_http(product_id, url, limit=LATEST_SALES_LIMIT)
         display_name = fallback_name
         set_name = fallback_set
         image_url = listed.get("imageUrl") or ctx["image_lookup"].get(str(product_id))
         product_kind = "single"
-        market_price = chart_price
 
         normalized = [
             sale for sale in (
@@ -1687,6 +1933,27 @@ def scrape_one_single(entry, ctx):
             if sale and sale.get("orderDate")
         ]
         normalized.sort(key=lambda row: row.get("orderDate") or "", reverse=True)
+        conditions, sales_point = apply_sales_fallback(
+            conditions,
+            normalized,
+            today_date,
+            previous=previous_row,
+            preferred=preferred_condition,
+            page_limit=LATEST_SALES_LIMIT,
+        )
+        if fresh_infinite:
+            sales_point = None
+        preferred_stats = conditions.get(preferred_condition) or conditions.get(DEFAULT_CARD_CONDITION) or {}
+        chart_price = preferred_stats.get("marketPrice") or latest_chart_price(range_payload)
+        market_price = usable_price(chart_price)
+        if fresh_infinite:
+            chart_status = "infinite"
+        elif sales_point is not None:
+            chart_status = "sales"
+        elif market_price is not None:
+            chart_status = "carried"
+        else:
+            chart_status = "miss"
         latest_sales = normalized[:SINGLES_SALES_LIMIT]
 
         record = {
@@ -1696,7 +1963,8 @@ def scrape_one_single(entry, ctx):
             "setName": set_name,
             "productKind": product_kind,
             "imageUrl": image_url,
-            "marketPrice": usable_price(market_price),
+            "marketPrice": market_price,
+            "priceSource": preferred_stats.get("priceSource"),
             "recentSale": None,
             "listedMedian": None,
             "currentSellers": preferred_stats.get("currentSellers"),
@@ -1716,7 +1984,14 @@ def scrape_one_single(entry, ctx):
             "ranges": range_payload,
             "preferredCondition": preferred_condition,
             "conditionCharts": condition_charts_from_month(payloads.get("month")),
+            "infiniteThrough": (
+                range_last_date({"ranges": range_payload}, "1M")
+                if fresh_infinite
+                else infinite_through_date(previous_chart)
+            ),
         }
+        if sales_point:
+            chart_product["salesPoint"] = sales_point
         ok, reason = classify_scrape(
             display_name,
             market_price if market_price is not None else "N/A",
@@ -1729,6 +2004,7 @@ def scrape_one_single(entry, ctx):
             "scrape_result": {
                 "ok": ok,
                 "reason": reason,
+                "chart": chart_status,
                 "setName": set_name or "Other",
                 "productName": display_name,
                 "familyId": fallback_family,
@@ -1791,6 +2067,10 @@ def main():
     }
     games_order, set_index, family_index = load_set_catalog()
     ctx["products_by_id"], ctx["products_by_url"] = product_lookups()
+    ctx["previous_by_id"] = load_latest_tracker_by_id()
+    ctx["singles_charts_by_id"] = load_singles_charts_by_id()
+    ctx["infinite_sema"] = threading.Semaphore(infinite_fetch_concurrency())
+    singles_entries = singles_queue(singles_entries, ctx["singles_charts_by_id"])
 
     results = []
     if sealed_entries:
@@ -1802,7 +2082,8 @@ def main():
     if singles_entries:
         print(
             f"Scraping {len(singles_entries)} Pokémon single(s) via Infinite/HTTP "
-            f"(concurrency {singles_concurrency}, no Chrome tabs)."
+            f"(listings concurrency {singles_concurrency}, "
+            f"Infinite concurrency {infinite_fetch_concurrency()}, stalest chart first, no Chrome tabs)."
         )
         results.extend(asyncio.run(scrape_all_singles(singles_entries, ctx, singles_concurrency)))
 
@@ -1884,10 +2165,7 @@ def main():
     singles_status = [row for row in scrape_results if row.get("productKind") == "single"]
     status_blocks = format_scrape_status(sealed_status, games_order, set_index, family_index)
     if singles_status:
-        ok = sum(1 for row in singles_status if row.get("ok"))
-        status_blocks.append(
-            f"**Pokémon singles:** {ok}/{len(singles_status)} cards updated (Infinite API, not Chrome)."
-        )
+        status_blocks.append(singles_status_line(singles_status))
     messages_to_send = pack_discord_messages(status_blocks)
     print(
         f"Packed scrape status into {len(messages_to_send)} "

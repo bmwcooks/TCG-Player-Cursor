@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Unit checks for Pokémon singles scrape wiring (network optional)."""
 import json
+import datetime
 import os
 import sys
 
@@ -436,6 +437,190 @@ def test_committed_tracker_archive_is_bounded():
     assert max(counts.values()) <= 2
 
 
+def _sale(day, price, condition="Near Mint", quantity=1):
+    return {
+        "orderDate": f"{day}T15:00:00",
+        "purchasePrice": price,
+        "quantity": quantity,
+        "condition": condition,
+    }
+
+
+def test_summarize_sales_day_counts_yesterday():
+    sales = [
+        _sale("2026-09-10", 3.00),
+        _sale("2026-09-09", 2.00, quantity=1),
+        _sale("2026-09-09", 4.00, quantity=1),
+        _sale("2026-09-09", 1.50, condition="Lightly Played"),
+    ]
+    near_mint = scraper.summarize_sales_day(sales, "2026-09-10", condition="Near Mint", page_limit=100)
+    assert near_mint["date"] == "2026-09-09"
+    assert near_mint["quantitySold"] == 2
+    assert near_mint["medianPrice"] == 3.0
+    lightly = scraper.summarize_sales_day(sales, "2026-09-10", condition="Lightly Played", page_limit=100)
+    assert lightly["quantitySold"] == 1
+    assert lightly["medianPrice"] == 1.5
+    quiet = scraper.summarize_sales_day(
+        [_sale("2026-09-08", 9.0)],
+        "2026-09-10",
+        condition="Near Mint",
+        page_limit=100,
+    )
+    assert quiet["quantitySold"] == 0
+    assert quiet["medianPrice"] is None
+
+
+def test_summarize_sales_day_unknown_when_page_is_still_today():
+    sales = [_sale("2026-09-10", 5.0) for _ in range(25)]
+    assert scraper.summarize_sales_day(sales, "2026-09-10", condition="Near Mint", page_limit=25) is None
+
+
+def test_sales_fallback_keeps_official_price_and_uses_median_only_when_missing():
+    conditions = {
+        "Near Mint": {
+            "variant": "Holofoil",
+            "marketPrice": None,
+            "lastDaySales": None,
+            "currentQuantity": 10,
+            "currentSellers": 8,
+        }
+    }
+    sales = [_sale("2026-09-09", 9.0), _sale("2026-09-09", 11.0)]
+    previous = {
+        "marketPrice": 2.54,
+        "priceSource": "infinite",
+        "preferredCondition": "Near Mint",
+        "conditions": {"Near Mint": {"marketPrice": 2.54, "priceSource": "infinite"}},
+    }
+    filled, point = scraper.apply_sales_fallback(
+        conditions, sales, "2026-09-10", previous=previous, preferred="Near Mint", page_limit=100
+    )
+    assert filled["Near Mint"]["marketPrice"] == 2.54
+    assert filled["Near Mint"]["priceSource"] == "carried"
+    assert filled["Near Mint"]["lastDaySales"] == 2
+    assert point["marketPrice"] == 2.54
+    assert point["quantitySold"] == 2
+
+    blank, point = scraper.apply_sales_fallback(
+        {"Near Mint": {"marketPrice": None, "lastDaySales": None}},
+        sales,
+        "2026-09-10",
+        previous={},
+        preferred="Near Mint",
+        page_limit=100,
+    )
+    assert blank["Near Mint"]["marketPrice"] == 10.0
+    assert blank["Near Mint"]["priceSource"] == "sales"
+    assert point["marketPrice"] == 10.0
+
+
+def test_merge_appends_sales_point_without_advancing_infinite_date():
+    previous = {
+        "productId": "201170",
+        "ranges": {"1M": {"points": [
+            {"date": "2026-09-08", "marketPrice": 2.50, "quantitySold": 1},
+            {"date": "2026-09-09", "marketPrice": 2.54, "quantitySold": 0},
+        ]}},
+    }
+    incoming = {
+        "productId": "201170",
+        "ranges": {"1M": {"interval": "day", "points": []}},
+        "salesPoint": {"date": "2026-09-09", "marketPrice": 2.54, "quantitySold": 2},
+    }
+    merged = scraper.merge_chart_product(previous, incoming)
+    points = scraper.range_points(merged["ranges"]["1M"])
+    assert [row["date"] for row in points] == ["2026-09-08", "2026-09-09"]
+    assert points[-1]["quantitySold"] == 0
+    assert merged["infiniteThrough"] == "2026-09-09"
+    assert "salesPoint" not in merged
+
+    incoming["salesPoint"] = {"date": "2026-09-10", "marketPrice": 2.54, "quantitySold": 4}
+    merged = scraper.merge_chart_product(previous, incoming)
+    points = scraper.range_points(merged["ranges"]["1M"])
+    assert points[-1]["date"] == "2026-09-10"
+    assert points[-1]["quantitySold"] == 4
+    assert points[0]["marketPrice"] == 2.50
+    assert merged["infiniteThrough"] == "2026-09-09"
+
+
+def test_fresh_infinite_chart_replaces_series():
+    previous = {
+        "productId": "201170",
+        "infiniteThrough": "2026-09-01",
+        "ranges": {"1M": {"points": [{"date": "2026-09-01", "marketPrice": 1, "quantitySold": 1}]}},
+    }
+    incoming = {
+        "productId": "201170",
+        "ranges": {"1M": {"points": [{"date": "2026-09-10", "marketPrice": 2.54, "quantitySold": 3}]}},
+        "salesPoint": {"date": "2026-09-10", "marketPrice": 9, "quantitySold": 9},
+    }
+    merged = scraper.merge_chart_product(previous, incoming)
+    points = scraper.range_points(merged["ranges"]["1M"])
+    assert len(points) == 1
+    assert points[0]["quantitySold"] == 3
+    assert merged["infiniteThrough"] == "2026-09-10"
+
+
+def test_infinite_ranges_are_month_daily_and_long_ranges_weekly():
+    product = {"ranges": {"3M": {"dates": ["2026-09-01"]}, "1Y": {"dates": ["2026-09-01"]}}}
+    monday = "2026-09-28"
+    assert datetime.date.fromisoformat(monday).weekday() == 0
+    assert scraper.infinite_range_names("7", product, monday) == ["month", "quarter", "annual"]
+    tuesday = "2026-09-29"
+    assert scraper.infinite_range_names("7", product, tuesday) == ["month"]
+    assert scraper.infinite_range_names("8", product, tuesday) == ["month", "quarter", "annual"]
+    assert scraper.infinite_range_names("8", {"ranges": {}}, tuesday) == ["month", "quarter", "annual"]
+
+
+def test_singles_queue_is_stalest_first():
+    charts = {
+        "2": {"infiniteThrough": "2026-09-24"},
+        "1": {"infiniteThrough": "2026-09-10"},
+    }
+    entries = [
+        {"url": "https://www.tcgplayer.com/product/2/fresh"},
+        {"url": "https://www.tcgplayer.com/product/1/stale"},
+        {"url": "https://www.tcgplayer.com/product/3/missing"},
+    ]
+    queued = scraper.singles_queue(entries, charts)
+    assert [scraper.extract_product_id(row["url"]) for row in queued] == ["3", "1", "2"]
+
+
+def test_empty_infinite_reply_is_not_retried():
+    calls = {"n": 0}
+
+    class Response:
+        status_code = 200
+
+        def json(self):
+            return {"result": []}
+
+    def fake_get(*args, **kwargs):
+        calls["n"] += 1
+        return Response()
+
+    original = scraper.requests.get
+    scraper.requests.get = fake_get
+    try:
+        payload = scraper.fetch_price_history_json("1", "month", "https://example.test", attempts=4, verbose=False)
+    finally:
+        scraper.requests.get = original
+    assert payload == {}
+    assert calls["n"] == 1
+
+
+def test_singles_status_line_splits_chart_sources():
+    text = scraper.singles_status_line([
+        {"chart": "infinite"},
+        {"chart": "sales"},
+        {"chart": "sales"},
+        {"chart": "carried"},
+    ])
+    assert "1/4 fresh Infinite charts" in text
+    assert "2 last-day sales" in text
+    assert "1 carried" in text
+
+
 def test_discord_omits_single_card_names():
     games = [{"id": "pokemon", "name": "Pokemon", "families": [{"id": "xy", "name": "XY"}]}]
     set_index = {"Flashfire": {"game_id": "pokemon", "game_name": "Pokemon", "family_id": "xy", "family_name": "XY"}}
@@ -462,6 +647,15 @@ if __name__ == "__main__":
     test_fit_tracker_records_omits_images_only_when_over_budget()
     test_save_records_writes_compact_latest_snapshot()
     test_committed_tracker_archive_is_bounded()
+    test_summarize_sales_day_counts_yesterday()
+    test_summarize_sales_day_unknown_when_page_is_still_today()
+    test_sales_fallback_keeps_official_price_and_uses_median_only_when_missing()
+    test_merge_appends_sales_point_without_advancing_infinite_date()
+    test_fresh_infinite_chart_replaces_series()
+    test_infinite_ranges_are_month_daily_and_long_ranges_weekly()
+    test_singles_queue_is_stalest_first()
+    test_empty_infinite_reply_is_not_retried()
+    test_singles_status_line_splits_chart_sources()
     test_select_chart_sku_still_prefers_unopened_sealed()
     test_read_singles_entries()
     test_discord_omits_single_card_names()
