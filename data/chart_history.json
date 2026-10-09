@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-08",
+  "updatedAt": "2026-10-09",
   "products": [
     {
       "productId": "91601",
@@ -13,14 +13,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 3728.0,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -252,6 +244,14 @@
               "marketPrice": 3900.0,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 3900.0,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
             }
           ]
         },
@@ -259,14 +259,6 @@
           "interval": "3-day",
           "label": "3M · 3-day totals",
           "points": [
-            {
-              "date": "2026-07-11",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 3728.0,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-07-14",
               "quantitySold": 0,
@@ -493,6 +485,14 @@
             },
             {
               "date": "2026-10-06",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 3785.33,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 3785.33,
@@ -924,7 +924,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "97747",
@@ -3349,14 +3349,6 @@
           "label": "1M · daily",
           "points": [
             {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 4384.73,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-09-10",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -3582,6 +3574,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 4362.23,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 4362.23,
@@ -4259,7 +4259,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "98028",
@@ -5668,14 +5668,6 @@
           "label": "1M · daily",
           "points": [
             {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 3208.55,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-09-10",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -5906,6 +5898,14 @@
               "marketPrice": 3238.35,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 3238.35,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
             }
           ]
         },
@@ -5913,14 +5913,6 @@
           "interval": "3-day",
           "label": "3M · 3-day totals",
           "points": [
-            {
-              "date": "2026-07-11",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 3138.46,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-07-14",
               "quantitySold": 0,
@@ -6147,6 +6139,14 @@
             },
             {
               "date": "2026-10-06",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 3244.98,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 3244.98,
@@ -6578,7 +6578,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "107106",
@@ -7523,14 +7523,6 @@
           "label": "3M · 3-day totals",
           "points": [
             {
-              "date": "2026-07-11",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 990.0,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-07-14",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -7756,6 +7748,14 @@
             },
             {
               "date": "2026-10-06",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1244.5,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1244.5,
@@ -11622,14 +11622,6 @@
           "label": "1M · daily",
           "points": [
             {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1241.99,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-09-10",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -11855,6 +11847,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1299.99,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1299.99,
@@ -12532,7 +12532,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "120697",
@@ -12990,14 +12990,6 @@
           "label": "1M · daily",
           "points": [
             {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 2537.44,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-09-10",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -13223,6 +13215,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 2585.75,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 2585.75,
@@ -13900,7 +13900,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "123448",
@@ -13914,14 +13914,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 635.89,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -14151,6 +14143,14 @@
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 690.06,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 700.78,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             }
@@ -14396,7 +14396,7 @@
               "date": "2026-10-07",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 667.73,
+              "marketPrice": 693.63,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             }
@@ -14818,14 +14818,14 @@
               "date": "2026-10-05",
               "quantitySold": 2,
               "transactionCount": 2,
-              "marketPrice": 690.06,
+              "marketPrice": 700.78,
               "lowSalePrice": 833.9,
               "highSalePrice": 875.0
             }
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "123447",
@@ -14839,14 +14839,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 839.99,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -15073,6 +15065,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 870.98,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 870.98,
@@ -15750,7 +15750,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "126048",
@@ -15764,14 +15764,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 973.15,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -15998,6 +15990,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 998.99,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 998.99,
@@ -16675,7 +16675,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "126091",
@@ -16689,14 +16689,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 249.98,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 1,
@@ -16923,6 +16915,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 248.69,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 248.69,
@@ -17600,7 +17600,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "126089",
@@ -17614,14 +17614,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 247.93,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -17848,6 +17840,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 249.23,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 249.23,
@@ -18525,7 +18525,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "129888",
@@ -18539,14 +18539,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1824.5,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -18773,6 +18765,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1881.33,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1881.33,
@@ -19450,7 +19450,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "129890",
@@ -19464,14 +19464,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 429.59,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 1,
@@ -19698,6 +19690,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 453.95,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 453.95,
@@ -20375,7 +20375,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "133773",
@@ -20389,14 +20389,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1243.1,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -20628,6 +20620,14 @@
               "marketPrice": 1270.62,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1282.68,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
             }
           ]
         },
@@ -20636,15 +20636,15 @@
           "label": "3M · 3-day totals",
           "points": [
             {
-              "date": "2026-07-11",
+              "date": "2026-07-12",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 1217.22,
+              "marketPrice": 1220.0,
               "lowSalePrice": 1269.99,
               "highSalePrice": 1269.99
             },
             {
-              "date": "2026-07-14",
+              "date": "2026-07-15",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1220.0,
@@ -20652,7 +20652,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-07-17",
+              "date": "2026-07-18",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1220.0,
@@ -20660,7 +20660,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-07-20",
+              "date": "2026-07-21",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1220.0,
@@ -20668,23 +20668,15 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-07-23",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1220.0,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-07-26",
+              "date": "2026-07-24",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 1225.99,
+              "marketPrice": 1222.0,
               "lowSalePrice": 1267.99,
               "highSalePrice": 1267.99
             },
             {
-              "date": "2026-07-29",
+              "date": "2026-07-27",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1225.99,
@@ -20692,15 +20684,15 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-01",
+              "date": "2026-07-30",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 1228.66,
+              "marketPrice": 1226.88,
               "lowSalePrice": 1249.99,
               "highSalePrice": 1249.99
             },
             {
-              "date": "2026-08-04",
+              "date": "2026-08-02",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1228.66,
@@ -20708,7 +20700,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-07",
+              "date": "2026-08-05",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1228.66,
@@ -20716,7 +20708,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-10",
+              "date": "2026-08-08",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1228.66,
@@ -20724,7 +20716,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-13",
+              "date": "2026-08-11",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1228.66,
@@ -20732,7 +20724,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-16",
+              "date": "2026-08-14",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1228.66,
@@ -20740,7 +20732,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-19",
+              "date": "2026-08-17",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1228.66,
@@ -20748,15 +20740,15 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-22",
+              "date": "2026-08-20",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 1226.88,
+              "marketPrice": 1228.66,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-25",
+              "date": "2026-08-23",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1225.99,
@@ -20764,15 +20756,23 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-28",
+              "date": "2026-08-26",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 1224.85,
+              "marketPrice": 1225.99,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-31",
+              "date": "2026-08-29",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1223.7,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-09-01",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1222.56,
@@ -20780,31 +20780,23 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-03",
+              "date": "2026-09-04",
               "quantitySold": 2,
               "transactionCount": 2,
-              "marketPrice": 1230.14,
+              "marketPrice": 1237.71,
               "lowSalePrice": 1279.99,
               "highSalePrice": 1349.99
             },
             {
-              "date": "2026-09-06",
+              "date": "2026-09-07",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 1245.29,
+              "marketPrice": 1244.56,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1243.1,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-09-12",
+              "date": "2026-09-10",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1243.1,
@@ -20812,7 +20804,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-15",
+              "date": "2026-09-13",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1243.1,
@@ -20820,7 +20812,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-18",
+              "date": "2026-09-16",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1243.1,
@@ -20828,7 +20820,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-21",
+              "date": "2026-09-19",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1243.1,
@@ -20836,7 +20828,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-24",
+              "date": "2026-09-22",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1243.1,
@@ -20844,7 +20836,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-27",
+              "date": "2026-09-25",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1243.1,
@@ -20852,7 +20844,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-30",
+              "date": "2026-09-28",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1243.1,
@@ -20860,18 +20852,26 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-10-03",
-              "quantitySold": 2,
-              "transactionCount": 2,
-              "marketPrice": 1262.73,
-              "lowSalePrice": 1388.88,
+              "date": "2026-10-01",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 1248.33,
+              "lowSalePrice": 1399.99,
               "highSalePrice": 1399.99
             },
             {
-              "date": "2026-10-06",
+              "date": "2026-10-04",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 1266.68,
+              "lowSalePrice": 1388.88,
+              "highSalePrice": 1388.88
+            },
+            {
+              "date": "2026-10-07",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 1262.73,
+              "marketPrice": 1274.64,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             }
@@ -21293,14 +21293,14 @@
               "date": "2026-10-05",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 1270.62,
+              "marketPrice": 1282.68,
               "lowSalePrice": 1388.88,
               "highSalePrice": 1388.88
             }
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "133776",
@@ -21314,14 +21314,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 325.63,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 1,
@@ -21452,11 +21444,11 @@
             },
             {
               "date": "2026-09-26",
-              "quantitySold": 1,
-              "transactionCount": 1,
+              "quantitySold": 0,
+              "transactionCount": 0,
               "marketPrice": 324.38,
-              "lowSalePrice": 318.0,
-              "highSalePrice": 318.0
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
             },
             {
               "date": "2026-09-27",
@@ -21553,6 +21545,14 @@
               "marketPrice": 335.09,
               "lowSalePrice": 345.95,
               "highSalePrice": 400.0
+            },
+            {
+              "date": "2026-10-09",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 335.17,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
             }
           ]
         },
@@ -21561,47 +21561,47 @@
           "label": "3M · 3-day totals",
           "points": [
             {
-              "date": "2026-07-11",
+              "date": "2026-07-12",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 318.87,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-07-15",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 318.87,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-07-18",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 318.87,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-07-21",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 318.87,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-07-24",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 318.87,
-              "lowSalePrice": 317.33,
-              "highSalePrice": 317.33
-            },
-            {
-              "date": "2026-07-14",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 318.87,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-07-17",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 318.87,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-07-20",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 318.87,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-07-23",
-              "quantitySold": 1,
-              "transactionCount": 1,
-              "marketPrice": 319.73,
+              "marketPrice": 320.16,
               "lowSalePrice": 332.32,
               "highSalePrice": 332.32
             },
             {
-              "date": "2026-07-26",
+              "date": "2026-07-27",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 320.16,
@@ -21609,7 +21609,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-07-29",
+              "date": "2026-07-30",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 320.16,
@@ -21617,23 +21617,15 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-01",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 320.16,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-08-04",
+              "date": "2026-08-02",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 322.0,
+              "marketPrice": 320.77,
               "lowSalePrice": 345.0,
               "highSalePrice": 345.0
             },
             {
-              "date": "2026-08-07",
+              "date": "2026-08-05",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 322.0,
@@ -21641,7 +21633,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-10",
+              "date": "2026-08-08",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 322.0,
@@ -21649,7 +21641,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-13",
+              "date": "2026-08-11",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 322.0,
@@ -21657,7 +21649,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-16",
+              "date": "2026-08-14",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 322.0,
@@ -21665,31 +21657,39 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-19",
+              "date": "2026-08-17",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 322.33,
+              "marketPrice": 322.0,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-22",
+              "date": "2026-08-20",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 322.44,
+              "marketPrice": 322.48,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-25",
+              "date": "2026-08-23",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 323.4,
+              "marketPrice": 322.77,
               "lowSalePrice": 345.95,
               "highSalePrice": 345.95
             },
             {
-              "date": "2026-08-28",
+              "date": "2026-08-26",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 323.37,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-08-29",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 323.35,
@@ -21697,7 +21697,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-31",
+              "date": "2026-09-01",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 323.35,
@@ -21705,7 +21705,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-03",
+              "date": "2026-09-04",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 323.35,
@@ -21713,39 +21713,31 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-06",
+              "date": "2026-09-07",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 324.11,
+              "marketPrice": 324.87,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-09",
+              "date": "2026-09-10",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 324.85,
+              "marketPrice": 324.46,
               "lowSalePrice": 300.0,
               "highSalePrice": 300.0
             },
             {
-              "date": "2026-09-12",
+              "date": "2026-09-13",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 324.46,
+              "marketPrice": 324.53,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-15",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 324.68,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-09-18",
+              "date": "2026-09-16",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 324.68,
@@ -21753,7 +21745,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-21",
+              "date": "2026-09-19",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 324.68,
@@ -21761,44 +21753,52 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-24",
+              "date": "2026-09-22",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 324.68,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-09-25",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 324.48,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-09-28",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 324.69,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-01",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 324.58,
-              "lowSalePrice": 318.0,
-              "highSalePrice": 318.0
-            },
-            {
-              "date": "2026-09-27",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 324.38,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-09-30",
-              "quantitySold": 1,
-              "transactionCount": 1,
-              "marketPrice": 325.22,
+              "marketPrice": 325.3,
               "lowSalePrice": 315.0,
               "highSalePrice": 315.0
             },
             {
-              "date": "2026-10-03",
+              "date": "2026-10-04",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 325.46,
+              "marketPrice": 325.37,
               "lowSalePrice": 320.0,
               "highSalePrice": 320.0
             },
             {
-              "date": "2026-10-06",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 325.46,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
+              "date": "2026-10-07",
+              "quantitySold": 26,
+              "transactionCount": 6,
+              "marketPrice": 331.85,
+              "lowSalePrice": 345.95,
+              "highSalePrice": 400.0
             }
           ]
         },
@@ -22200,11 +22200,11 @@
             },
             {
               "date": "2026-09-21",
-              "quantitySold": 1,
-              "transactionCount": 1,
+              "quantitySold": 0,
+              "transactionCount": 0,
               "marketPrice": 324.38,
-              "lowSalePrice": 318.0,
-              "highSalePrice": 318.0
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
             },
             {
               "date": "2026-09-28",
@@ -22218,14 +22218,14 @@
               "date": "2026-10-05",
               "quantitySold": 27,
               "transactionCount": 7,
-              "marketPrice": 335.09,
+              "marketPrice": 335.17,
               "lowSalePrice": 320.0,
               "highSalePrice": 400.0
             }
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "145847",
@@ -22239,14 +22239,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1016.29,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -22473,6 +22465,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1179.79,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1179.79,
@@ -23150,7 +23150,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "146995",
@@ -23164,14 +23164,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 2,
-              "transactionCount": 2,
-              "marketPrice": 680.35,
-              "lowSalePrice": 669.99,
-              "highSalePrice": 679.5
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -23398,9 +23390,17 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 676.91,
+              "lowSalePrice": 672.99,
+              "highSalePrice": 672.99
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 677.35,
+              "marketPrice": 676.91,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             }
@@ -23411,47 +23411,39 @@
           "label": "3M · 3-day totals",
           "points": [
             {
-              "date": "2026-07-12",
+              "date": "2026-07-14",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 569.58,
+              "marketPrice": 571.23,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-07-15",
+              "date": "2026-07-17",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 572.05,
+              "marketPrice": 586.03,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-07-18",
+              "date": "2026-07-20",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 600.02,
+              "marketPrice": 619.93,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-07-21",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 622.9,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-07-24",
+              "date": "2026-07-23",
               "quantitySold": 2,
               "transactionCount": 1,
-              "marketPrice": 625.26,
+              "marketPrice": 624.47,
               "lowSalePrice": 648.85,
               "highSalePrice": 648.85
             },
             {
-              "date": "2026-07-27",
+              "date": "2026-07-26",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 625.26,
@@ -23459,23 +23451,15 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-07-30",
+              "date": "2026-07-29",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 634.25,
+              "marketPrice": 629.76,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-02",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 638.75,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-08-05",
+              "date": "2026-08-01",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 638.75,
@@ -23483,7 +23467,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-08",
+              "date": "2026-08-04",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 638.75,
@@ -23491,15 +23475,23 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-11",
+              "date": "2026-08-07",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 649.43,
+              "marketPrice": 638.75,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-14",
+              "date": "2026-08-10",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 642.04,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-08-13",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 660.94,
@@ -23507,7 +23499,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-17",
+              "date": "2026-08-16",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 660.94,
@@ -23515,15 +23507,15 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-20",
+              "date": "2026-08-19",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 663.84,
+              "marketPrice": 660.94,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-23",
+              "date": "2026-08-22",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 668.41,
@@ -23531,15 +23523,23 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-26",
+              "date": "2026-08-25",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 669.64,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-08-28",
               "quantitySold": 2,
               "transactionCount": 2,
-              "marketPrice": 667.44,
+              "marketPrice": 663.05,
               "lowSalePrice": 639.99,
               "highSalePrice": 640.0
             },
             {
-              "date": "2026-08-29",
+              "date": "2026-08-31",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 663.05,
@@ -23547,15 +23547,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-01",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 669.35,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-09-04",
+              "date": "2026-09-03",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 681.95,
@@ -23563,15 +23555,23 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-07",
+              "date": "2026-09-06",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 681.95,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-09-09",
               "quantitySold": 2,
               "transactionCount": 2,
-              "marketPrice": 681.42,
+              "marketPrice": 680.35,
               "lowSalePrice": 669.99,
               "highSalePrice": 679.5
             },
             {
-              "date": "2026-09-10",
+              "date": "2026-09-12",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 680.35,
@@ -23579,15 +23579,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-13",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 679.53,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-09-16",
+              "date": "2026-09-15",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 677.89,
@@ -23595,7 +23587,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-19",
+              "date": "2026-09-18",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 677.89,
@@ -23603,7 +23595,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-22",
+              "date": "2026-09-21",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 677.89,
@@ -23611,7 +23603,7 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-25",
+              "date": "2026-09-24",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 677.89,
@@ -23619,34 +23611,42 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-28",
+              "date": "2026-09-27",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 677.89,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-09-30",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 677.71,
+              "marketPrice": 677.35,
               "lowSalePrice": 672.99,
               "highSalePrice": 672.99
             },
             {
-              "date": "2026-10-01",
+              "date": "2026-10-03",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 677.71,
+              "marketPrice": 677.35,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-10-04",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 677.71,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
+              "date": "2026-10-06",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 677.2,
+              "lowSalePrice": 672.99,
+              "highSalePrice": 672.99
             },
             {
-              "date": "2026-10-07",
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 677.71,
+              "marketPrice": 677.2,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             }
@@ -24066,16 +24066,16 @@
             },
             {
               "date": "2026-10-05",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 677.35,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 676.91,
+              "lowSalePrice": 672.99,
+              "highSalePrice": 672.99
             }
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "149377",
@@ -24089,14 +24089,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 220.52,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 1,
@@ -24323,6 +24315,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 221.27,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 221.27,
@@ -25000,7 +25000,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "155661",
@@ -25014,14 +25014,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1450.0,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -25253,6 +25245,14 @@
               "marketPrice": 1516.62,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1516.62,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
             }
           ]
         },
@@ -25260,14 +25260,6 @@
           "interval": "3-day",
           "label": "3M · 3-day totals",
           "points": [
-            {
-              "date": "2026-07-11",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1526.28,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-07-14",
               "quantitySold": 0,
@@ -25494,6 +25486,14 @@
             },
             {
               "date": "2026-10-06",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1494.86,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1494.86,
@@ -25925,7 +25925,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "155663",
@@ -28474,14 +28474,6 @@
           "label": "1M · daily",
           "points": [
             {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 686.16,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-09-10",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -28707,6 +28699,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 686.16,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 686.16,
@@ -29384,7 +29384,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "170273",
@@ -29398,14 +29398,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 2487.85,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -29637,6 +29629,14 @@
               "marketPrice": 2559.28,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 2559.28,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
             }
           ]
         },
@@ -29644,14 +29644,6 @@
           "interval": "3-day",
           "label": "3M · 3-day totals",
           "points": [
-            {
-              "date": "2026-07-11",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 2432.66,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-07-14",
               "quantitySold": 0,
@@ -29878,6 +29870,14 @@
             },
             {
               "date": "2026-10-06",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 2510.31,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 2510.31,
@@ -30309,7 +30309,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "170277",
@@ -31249,14 +31249,6 @@
           "label": "1M · daily",
           "points": [
             {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1256.49,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-09-10",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -31482,6 +31474,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1237.66,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1237.66,
@@ -32159,7 +32159,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "175509",
@@ -32173,14 +32173,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1484.36,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -32407,6 +32399,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1582.5,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1582.5,
@@ -33084,7 +33084,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "175511",
@@ -33098,14 +33098,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 681.55,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -33332,6 +33324,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 690.38,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 690.38,
@@ -34009,7 +34009,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "181698",
@@ -35633,14 +35633,6 @@
           "label": "1M · daily",
           "points": [
             {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 2544.31,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-09-10",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -35866,6 +35858,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 2580.08,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 2580.08,
@@ -36543,7 +36543,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "185719",
@@ -36557,14 +36557,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 0.0,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -36791,6 +36783,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1899.99,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1899.99,
@@ -37468,7 +37468,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "191882",
@@ -37482,14 +37482,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 3077.91,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -37716,6 +37708,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 2991.18,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 2991.18,
@@ -38393,7 +38393,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "193052",
@@ -38654,14 +38654,6 @@
           "label": "3M · 3-day totals",
           "points": [
             {
-              "date": "2026-07-11",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1820.0,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-07-14",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -38887,6 +38879,14 @@
             },
             {
               "date": "2026-10-06",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1782.13,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1782.13,
@@ -39333,14 +39333,6 @@
           "label": "1M · daily",
           "points": [
             {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 562.18,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-09-10",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -39566,9 +39558,17 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 553.43,
+              "lowSalePrice": 548.09,
+              "highSalePrice": 548.09
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 554.22,
+              "marketPrice": 553.43,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             }
@@ -39579,15 +39579,15 @@
           "label": "3M · 3-day totals",
           "points": [
             {
-              "date": "2026-07-13",
+              "date": "2026-07-14",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 551.98,
+              "marketPrice": 552.44,
               "lowSalePrice": 574.99,
               "highSalePrice": 574.99
             },
             {
-              "date": "2026-07-16",
+              "date": "2026-07-17",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 552.91,
@@ -39595,31 +39595,31 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-07-19",
+              "date": "2026-07-20",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 551.26,
+              "marketPrice": 549.71,
               "lowSalePrice": 540.0,
               "highSalePrice": 540.0
             },
             {
-              "date": "2026-07-22",
+              "date": "2026-07-23",
               "quantitySold": 4,
               "transactionCount": 3,
-              "marketPrice": 548.37,
+              "marketPrice": 548.44,
               "lowSalePrice": 540.0,
               "highSalePrice": 550.0
             },
             {
-              "date": "2026-07-25",
+              "date": "2026-07-26",
               "quantitySold": 4,
               "transactionCount": 4,
-              "marketPrice": 550.11,
+              "marketPrice": 551.55,
               "lowSalePrice": 554.97,
               "highSalePrice": 599.99
             },
             {
-              "date": "2026-07-28",
+              "date": "2026-07-29",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 552.76,
@@ -39627,47 +39627,39 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-07-31",
+              "date": "2026-08-01",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 548.11,
+              "marketPrice": 545.78,
               "lowSalePrice": 375.49,
               "highSalePrice": 375.49
             },
             {
-              "date": "2026-08-03",
+              "date": "2026-08-04",
               "quantitySold": 2,
               "transactionCount": 2,
-              "marketPrice": 548.37,
+              "marketPrice": 550.17,
               "lowSalePrice": 599.99,
               "highSalePrice": 650.0
             },
             {
-              "date": "2026-08-06",
+              "date": "2026-08-07",
               "quantitySold": 4,
               "transactionCount": 3,
-              "marketPrice": 553.58,
+              "marketPrice": 555.26,
               "lowSalePrice": 570.0,
               "highSalePrice": 599.95
             },
             {
-              "date": "2026-08-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 556.21,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-08-12",
+              "date": "2026-08-10",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 556.59,
+              "marketPrice": 556.34,
               "lowSalePrice": 577.5,
               "highSalePrice": 577.5
             },
             {
-              "date": "2026-08-15",
+              "date": "2026-08-13",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 556.59,
@@ -39675,47 +39667,55 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-08-18",
+              "date": "2026-08-16",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 556.99,
+              "marketPrice": 556.72,
               "lowSalePrice": 565.0,
               "highSalePrice": 565.0
             },
             {
-              "date": "2026-08-21",
-              "quantitySold": 2,
-              "transactionCount": 2,
-              "marketPrice": 557.15,
+              "date": "2026-08-19",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 556.9,
               "lowSalePrice": 567.99,
               "highSalePrice": 567.99
             },
             {
-              "date": "2026-08-24",
+              "date": "2026-08-22",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 558.24,
+              "marketPrice": 557.59,
+              "lowSalePrice": 567.99,
+              "highSalePrice": 567.99
+            },
+            {
+              "date": "2026-08-25",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 558.46,
               "lowSalePrice": 562.8,
               "highSalePrice": 562.8
             },
             {
-              "date": "2026-08-27",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 558.67,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
+              "date": "2026-08-28",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 558.48,
+              "lowSalePrice": 560.59,
+              "highSalePrice": 560.59
             },
             {
-              "date": "2026-08-30",
-              "quantitySold": 8,
-              "transactionCount": 6,
-              "marketPrice": 559.34,
+              "date": "2026-08-31",
+              "quantitySold": 7,
+              "transactionCount": 5,
+              "marketPrice": 560.36,
               "lowSalePrice": 550.0,
               "highSalePrice": 567.99
             },
             {
-              "date": "2026-09-02",
+              "date": "2026-09-03",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 561.17,
@@ -39723,63 +39723,63 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-05",
-              "quantitySold": 2,
-              "transactionCount": 2,
-              "marketPrice": 561.51,
+              "date": "2026-09-06",
+              "quantitySold": 3,
+              "transactionCount": 3,
+              "marketPrice": 561.84,
               "lowSalePrice": 543.9,
               "highSalePrice": 555.69
             },
             {
-              "date": "2026-09-08",
+              "date": "2026-09-09",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 562.18,
-              "lowSalePrice": 555.68,
-              "highSalePrice": 555.68
+              "marketPrice": 562.16,
+              "lowSalePrice": 548.5,
+              "highSalePrice": 548.5
             },
             {
-              "date": "2026-09-11",
-              "quantitySold": 3,
-              "transactionCount": 2,
-              "marketPrice": 562.06,
-              "lowSalePrice": 548.5,
+              "date": "2026-09-12",
+              "quantitySold": 2,
+              "transactionCount": 1,
+              "marketPrice": 562.0,
+              "lowSalePrice": 555.39,
               "highSalePrice": 555.39
             },
             {
-              "date": "2026-09-14",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 561.94,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
-              "date": "2026-09-17",
+              "date": "2026-09-15",
               "quantitySold": 2,
               "transactionCount": 2,
-              "marketPrice": 561.52,
+              "marketPrice": 561.8,
               "lowSalePrice": 554.8,
               "highSalePrice": 554.8
             },
             {
-              "date": "2026-09-20",
+              "date": "2026-09-18",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 561.52,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-09-21",
               "quantitySold": 2,
               "transactionCount": 2,
-              "marketPrice": 562.59,
+              "marketPrice": 564.29,
               "lowSalePrice": 551.59,
               "highSalePrice": 551.9
             },
             {
-              "date": "2026-09-23",
+              "date": "2026-09-24",
               "quantitySold": 1,
               "transactionCount": 1,
-              "marketPrice": 565.34,
+              "marketPrice": 564.69,
               "lowSalePrice": 551.27,
               "highSalePrice": 551.27
             },
             {
-              "date": "2026-09-26",
+              "date": "2026-09-27",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 564.69,
@@ -39787,34 +39787,34 @@
               "highSalePrice": 0.0
             },
             {
-              "date": "2026-09-29",
-              "quantitySold": 3,
-              "transactionCount": 3,
-              "marketPrice": 562.21,
-              "lowSalePrice": 549.19,
+              "date": "2026-09-30",
+              "quantitySold": 4,
+              "transactionCount": 4,
+              "marketPrice": 559.32,
+              "lowSalePrice": 539.98,
               "highSalePrice": 549.3
             },
             {
-              "date": "2026-10-02",
-              "quantitySold": 2,
-              "transactionCount": 2,
-              "marketPrice": 555.28,
-              "lowSalePrice": 539.98,
+              "date": "2026-10-03",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 554.9,
+              "lowSalePrice": 548.89,
               "highSalePrice": 548.89
             },
             {
-              "date": "2026-10-05",
-              "quantitySold": 1,
-              "transactionCount": 1,
-              "marketPrice": 554.67,
-              "lowSalePrice": 548.19,
+              "date": "2026-10-06",
+              "quantitySold": 2,
+              "transactionCount": 2,
+              "marketPrice": 554.18,
+              "lowSalePrice": 548.09,
               "highSalePrice": 548.19
             },
             {
-              "date": "2026-10-08",
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
-              "marketPrice": 554.67,
+              "marketPrice": 554.18,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
             }
@@ -40234,16 +40234,16 @@
             },
             {
               "date": "2026-10-05",
-              "quantitySold": 1,
-              "transactionCount": 1,
-              "marketPrice": 554.22,
-              "lowSalePrice": 548.19,
+              "quantitySold": 2,
+              "transactionCount": 2,
+              "marketPrice": 553.43,
+              "lowSalePrice": 548.09,
               "highSalePrice": 548.19
             }
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "199261",
@@ -40257,14 +40257,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 4148.34,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -40491,6 +40483,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 4216.67,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 4216.67,
@@ -41168,7 +41168,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "199308",
@@ -41429,14 +41429,6 @@
           "label": "3M · 3-day totals",
           "points": [
             {
-              "date": "2026-07-11",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 1883.0,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-07-14",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -41662,6 +41654,14 @@
             },
             {
               "date": "2026-10-06",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 1880.17,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 1880.17,
@@ -42108,14 +42108,6 @@
           "label": "1M · daily",
           "points": [
             {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 689.62,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
-            {
               "date": "2026-09-10",
               "quantitySold": 0,
               "transactionCount": 0,
@@ -42341,6 +42333,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 688.99,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 688.99,
@@ -43018,7 +43018,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "206038",
@@ -43032,14 +43032,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 167.34,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 1,
@@ -43266,6 +43258,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 173.21,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 173.21,
@@ -43943,7 +43943,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "206039",
@@ -43957,14 +43957,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 161.86,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -44196,6 +44188,14 @@
               "marketPrice": 171.03,
               "lowSalePrice": 0.0,
               "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 170.97,
+              "lowSalePrice": 170.0,
+              "highSalePrice": 170.0
             }
           ]
         },
@@ -44437,11 +44437,11 @@
             },
             {
               "date": "2026-10-07",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 170.25,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 171.01,
+              "lowSalePrice": 170.0,
+              "highSalePrice": 170.0
             }
           ]
         },
@@ -44859,16 +44859,16 @@
             },
             {
               "date": "2026-10-05",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 171.03,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
+              "quantitySold": 1,
+              "transactionCount": 1,
+              "marketPrice": 170.97,
+              "lowSalePrice": 170.0,
+              "highSalePrice": 170.0
             }
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "210561",
@@ -44882,14 +44882,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 486.27,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -45121,6 +45113,14 @@
               "marketPrice": 483.38,
               "lowSalePrice": 474.98,
               "highSalePrice": 474.98
+            },
+            {
+              "date": "2026-10-09",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 483.38,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
             }
           ]
         },
@@ -45128,14 +45128,6 @@
           "interval": "3-day",
           "label": "3M · 3-day totals",
           "points": [
-            {
-              "date": "2026-07-11",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 495.76,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-07-14",
               "quantitySold": 0,
@@ -45367,6 +45359,14 @@
               "marketPrice": 483.78,
               "lowSalePrice": 474.98,
               "highSalePrice": 474.98
+            },
+            {
+              "date": "2026-10-09",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 483.78,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
             }
           ]
         },
@@ -45793,7 +45793,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "210572",
@@ -45807,14 +45807,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 342.79,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 1,
@@ -46041,6 +46033,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 327.82,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 327.82,
@@ -46718,7 +46718,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "216853",
@@ -46732,14 +46732,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 371.51,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 0,
@@ -46966,6 +46958,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 358.26,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 358.26,
@@ -47643,7 +47643,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "216856",
@@ -47657,14 +47657,6 @@
           "interval": "day",
           "label": "1M · daily",
           "points": [
-            {
-              "date": "2026-09-09",
-              "quantitySold": 0,
-              "transactionCount": 0,
-              "marketPrice": 111.3,
-              "lowSalePrice": 0.0,
-              "highSalePrice": 0.0
-            },
             {
               "date": "2026-09-10",
               "quantitySold": 3,
@@ -47891,6 +47883,14 @@
             },
             {
               "date": "2026-10-08",
+              "quantitySold": 0,
+              "transactionCount": 0,
+              "marketPrice": 118.5,
+              "lowSalePrice": 0.0,
+              "highSalePrice": 0.0
+            },
+            {
+              "date": "2026-10-09",
               "quantitySold": 0,
               "transactionCount": 0,
               "marketPrice": 118.5,
@@ -48568,7 +48568,7 @@
           ]
         }
       },
-      "infiniteThrough": "2026-10-08"
+      "infiniteThrough": "2026-10-09"
     },
     {
       "productId": "218791",
@@ -179922,7 +179922,7 @@
     },
     {
       "productId": "455866",
-      "productName": "Paramount War - Booster Box - Paramount War (OP02)",
+      "productName": "- -",
       "setName": "Paramount War",
       "productKind": "booster-box",
       "imageUrl": "https://tcgplayer-cdn.tcgplayer.com/product/455866_200w.jpg",
